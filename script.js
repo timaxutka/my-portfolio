@@ -193,3 +193,39 @@ window.addEventListener('resize', () => {
     Graph.width(container.offsetWidth);
     Graph.height(container.offsetHeight);
 });
+
+const contactForm = document.getElementById('email-form');
+
+if (contactForm) {
+    contactForm.addEventListener('submit', async function(e) {
+        // Если используешь Formspree, не вызывай e.preventDefault() здесь, 
+        // иначе форма не отправится без дополнительного JS-кода Fetch API.
+        
+        const submitBtn = contactForm.querySelector('button');
+        const originalText = submitBtn.innerText;
+        
+        // Меняем текст на кнопке для фидбэка
+        submitBtn.innerText = "ОТПРАВЛЯЮ...";
+        submitBtn.style.opacity = "0.5";
+        submitBtn.style.pointerEvents = "none";
+
+        // Если хочешь оставить пользователя на странице без перезагрузки (AJAX):
+        /*
+        e.preventDefault();
+        const data = new FormData(event.target);
+        fetch(event.target.action, {
+            method: contactForm.method,
+            body: data,
+            headers: { 'Accept': 'application/json' }
+        }).then(response => {
+            if (response.ok) {
+                submitBtn.innerText = "ОТПРАВЛЕНО ✓";
+                submitBtn.style.background = "#222";
+                submitBtn.style.color = "#fff";
+                contactForm.reset();
+                setTimeout(closeContactForm, 2000); // Закрываем через 2 сек
+            }
+        });
+        */
+    });
+}
