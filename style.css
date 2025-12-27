@@ -42,12 +42,25 @@ body {
     position: fixed; top: 50%; left: 50%; 
     transform: translate(-50%, -50%);
     background: #111; 
-    border: 2px solid #fff; /* Белая рамка */
     padding: 40px;
-    border-radius: 8px; 
     display: none; 
     z-index: 1000; 
     min-width: 350px;
+
+    /* Применяем Corner Smoothing через clip-path */
+    /* Мы используем суперэллипс, который создает мягкие углы */
+    clip-path: url(#squircle-mask);
+    border: 1px solid #fff; /* Граница может обрезаться маской, поэтому добавим псевдоэлемент для рамки */
+}
+
+/* Создаем белую рамку поверх маскированного окна */
+#modal::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border: 2px solid #fff;
+    pointer-events: none;
+    clip-path: url(#squircle-mask);
 }
 
 #modal.active { display: block; }

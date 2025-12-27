@@ -79,8 +79,8 @@ const Graph = ForceGraph()(document.getElementById('graph'))
     .onNodeClick(node => showModal(node));
 
 // Настройка сил (Увеличенное расстояние)
-Graph.d3Force('charge').strength(-400); // Сильнее отталкивание
-Graph.d3Force('link').distance(100);    // Длиннее связи
+Graph.d3Force('charge').strength(-250); // Сильнее отталкивание
+Graph.d3Force('link').distance(70);    // Длиннее связи
 
 function showModal(node) {
     const modal = document.getElementById('modal');
@@ -102,6 +102,6 @@ function animate() {
 animate();
 
 Graph.onEngineStop(() => {
-    Graph.zoom(2, 1000);
+    Graph.zoom(2.2, 1000);
     Graph.centerAt(0, 0, 1000);
 });
