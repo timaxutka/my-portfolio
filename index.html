@@ -4,30 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portfolio Graph</title>
+    <link rel="stylesheet" href="style.css">
     <script src="https://unpkg.com/force-graph"></script>
-    <style>
-        body { margin: 0; background: #000; color: #fff; font-family: 'Inter', sans-serif; overflow-x: hidden; }
-        
-        /* Главный экран */
-        .hero { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
-        
-        /* Секция с картой */
-        #graph-container { height: 100vh; width: 100vw; position: relative; background: #050505; border-top: 1px solid #222; }
-        
-        /* Модальное окно (всплывашка) */
-        #modal {
-            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            background: rgba(20, 20, 20, 0.95); border: 1px solid #444; padding: 30px;
-            border-radius: 15px; display: none; z-index: 100; max-width: 400px;
-            box-shadow: 0 0 30px rgba(0,255,150, 0.2); backdrop-filter: blur(10px);
-        }
-        #modal.active { display: block; }
-        .close-btn { cursor: pointer; color: #888; float: right; }
-        .project-link { display: inline-block; margin-top: 15px; color: #00ff96; text-decoration: none; font-weight: bold; }
-    </style>
 </head>
 <body>
-
     <section class="hero">
         <h1>ПОРТФОЛИО</h1>
         <p>Скрольте вниз, чтобы увидеть карту проектов</p>
@@ -44,62 +24,6 @@
         <a href="#" id="m-link" class="project-link" target="_blank">Перейти к проекту →</a>
     </div>
 
-    <script>
-        // Твои данные: добавь сюда свои проекты
-        const myData = {
-            nodes: [
-                { id: 1, name: "Project Virus", type: "WebApp", desc: "Игра внутри Telegram. Срок: 2 месяца.", link: "https://example.com/1" },
-                { id: 2, name: "Virus Infographics", type: "Design", desc: "Оформление канала. Срок: 1 неделя.", link: "https://example.com/2" },
-                { id: 3, name: "Desktop Trading App", type: "Desktop", desc: "Приложение для трейдеров.", link: "https://example.com/3" },
-                { id: 4, name: "Promo Landing", type: "Web", desc: "Лендинг для рекламы.", link: "https://example.com/4" }
-            ],
-            links: [
-                { source: 1, target: 2 }, // Связь Virus App и Инфографики
-                { source: 1, target: 4 }, // Связь App и Лендинга
-                { source: 3, target: 1 }  // Пример другой связи
-            ]
-        };
-
-        const Graph = ForceGraph()
-            (document.getElementById('graph'))
-            .graphData(myData)
-            .nodeId('id')
-            .nodeLabel('name') // Подсказка при наведении
-            .nodeColor(node => node.type === 'WebApp' ? '#00ff96' : '#00a2ff') // Разные цвета по типу
-            .nodeCanvasObject((node, ctx, globalScale) => {
-                const label = node.name;
-                const fontSize = 14/globalScale;
-                ctx.font = `${fontSize}px Sans-Serif`;
-                ctx.fillStyle = node.color;
-                
-                // Рисуем кружок
-                ctx.beginPath();
-                ctx.arc(node.x, node.y, 5, 0, 2 * Math.PI, false);
-                ctx.fill();
-                
-                // Рисуем текст под кружком
-                ctx.textAlign = 'center';
-                ctx.textBaseline = 'middle';
-                ctx.fillStyle = '#ccc';
-                ctx.fillText(label, node.x, node.y + 10);
-            })
-            .linkColor(() => '#333') // Цвет линий
-            .linkDirectionalParticles(2) // Бегающие точки по линиям (эффектно!)
-            .linkDirectionalParticleSpeed(0.005)
-            .onNodeClick(node => {
-                showModal(node);
-            });
-
-        function showModal(node) {
-            document.getElementById('m-title').innerText = node.name;
-            document.getElementById('m-desc').innerText = node.desc;
-            document.getElementById('m-link').href = node.link;
-            document.getElementById('modal').classList.add('active');
-        }
-
-        function closeModal() {
-            document.getElementById('modal').classList.remove('active');
-        }
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
