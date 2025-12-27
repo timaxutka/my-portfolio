@@ -14,6 +14,7 @@ const myData = {
 
 const container = document.getElementById('graph-container');
 let dashOffset = 0;
+let mousePos = { x: null, y: null };
 
 const Graph = ForceGraph()(document.getElementById('graph'))
     .graphData(myData)
@@ -24,13 +25,13 @@ const Graph = ForceGraph()(document.getElementById('graph'))
     .minZoom(1)
     .maxZoom(5)
 
-    // --- СЕТКА (Ч/Б) ---
+    // --- СЕТКА ---
     .onRenderFramePre((ctx, globalScale) => {
         const size = 50; 
         const range = 3000; 
         ctx.save();
         ctx.beginPath();
-        ctx.strokeStyle = 'rgba(255, 255, 255, 0.05)'; // Тускло-белая сетка
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
         ctx.lineWidth = 1 / globalScale; 
         for (let i = -range; i <= range; i += size) {
             ctx.moveTo(i, -range); ctx.lineTo(i, range);
@@ -40,7 +41,7 @@ const Graph = ForceGraph()(document.getElementById('graph'))
         ctx.restore();
     })
 
-    // --- ЛИНИИ (Белый пунктир) ---
+    // --- ЛИНИИ ---
     .linkCanvasObject((link, ctx) => {
         const start = link.source;
         const end = link.target;
@@ -54,33 +55,75 @@ const Graph = ForceGraph()(document.getElementById('graph'))
         ctx.lineDashOffset = -dashOffset;
         ctx.moveTo(start.x, start.y);
         ctx.lineTo(end.x, end.y);
-        ctx.globalAlpha = 0.3; // Едва заметные линии
+        ctx.globalAlpha = 0.2; 
         ctx.stroke();
         ctx.restore();
     })
 
-    // --- УЗЛЫ (Белые точки) ---
+    // --- УЗЛЫ С ЭФФЕКТОМ "ТОЧЕЧНЫЙ РЫБИЙ ГЛАЗ" ---
     .nodeCanvasObject((node, ctx, globalScale) => {
         const label = node.name;
-        const fontSize = 12/globalScale;
         
+        // 1. Расчет дистанции до курсора
+        let dist = 10000;
+        if (mousePos.x !== null) {
+            const dx = node.x - mousePos.x;
+            const dy = node.y - mousePos.y;
+            dist = Math.sqrt(dx*dx + dy*dy);
+        }
+
+        // 2. Параметры точечной линзы
+        // Уменьшаем порог до 40px (было 80), чтобы эффект был локальным
+        const threshold = 50; 
+        const maxScale = 1.2; 
+        
+        // Математика экспоненциального роста (чтобы всплывало резко в конце)
+        let magnification = 1;
+        if (dist < threshold) {
+            // Используем степень 2 для более "острого" эффекта в центре
+            const power = Math.pow((threshold - dist) / threshold, 2);
+            magnification = 1 + (maxScale - 1) * power;
+        }
+        
+        const baseRadius = 3.5;
+        const radius = baseRadius * magnification;
+        const fontSize = (12 * magnification) / globalScale;
+
         ctx.save(); 
+        
+        // Рисуем точку
         ctx.beginPath();
-        ctx.arc(node.x, node.y, 3.5, 0, 2 * Math.PI);
-        ctx.fillStyle = '#fff'; // Чисто белый цвет
+        ctx.arc(node.x, node.y, radius, 0, 2 * Math.PI);
+        
+        // Цвет: узел становится белым только при близком наведении
+        ctx.fillStyle = magnification > 1.4 ? '#fff' : 'rgba(255, 255, 255, 0.4)';
         ctx.fill();
         
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
-        ctx.font = `${fontSize}px Inter`;
+        // Название проекта: проявляется только под линзой
+        const alpha = magnification > 1.1 ? 1 : 0.3;
+        ctx.fillStyle = `rgba(255, 255, 255, ${alpha})`;
+        ctx.font = `${magnification > 1.2 ? 'bold' : 'normal'} ${fontSize}px Inter`;
         ctx.textAlign = 'center';
-        ctx.fillText(label, node.x, node.y + 12);
+        
+        // Смещение текста учитывает новый радиус
+        ctx.fillText(label, node.x, node.y + radius + (16 / globalScale));
+        
         ctx.restore(); 
     })
     .onNodeClick(node => showModal(node));
 
-// Настройка сил (Увеличенное расстояние)
-Graph.d3Force('charge').strength(-250); // Сильнее отталкивание
-Graph.d3Force('link').distance(70);    // Длиннее связи
+// Отслеживание мыши
+container.addEventListener('mousemove', (e) => {
+    const rect = container.getBoundingClientRect();
+    mousePos = Graph.screen2GraphCoords(e.clientX - rect.left, e.clientY - rect.top);
+});
+container.addEventListener('mouseleave', () => {
+    mousePos = { x: null, y: null };
+});
+
+// Настройки сил
+Graph.d3Force('charge').strength(-250);
+Graph.d3Force('link').distance(70);
 
 function showModal(node) {
     const modal = document.getElementById('modal');
