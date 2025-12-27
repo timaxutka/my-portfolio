@@ -1,39 +1,54 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&family=JetBrains+Mono:wght@300;400;700&display=swap');
 
 body {
     margin: 0; padding: 0;
     background: #000; color: #fff;
-    font-family: 'Inter', sans-serif;
+    /* Весь сайт теперь на JetBrains Mono */
+    font-family: 'JetBrains Mono', monospace;
+    -webkit-font-smoothing: antialiased;
 }
 
+/* Hero секция */
 .hero {
     height: 100vh;
     display: flex; flex-direction: column;
     justify-content: center; align-items: center;
 }
 
-/* Внешняя обертка карты — теперь просто прямоугольник с рамкой */
+.hero h1 {
+    font-family: 'Inter', sans-serif; /* Акцентный заголовок */
+    font-weight: 700;
+    font-size: 5rem;
+    letter-spacing: -0.02em;
+    margin: 0;
+}
+
+.hero p {
+    color: #555;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    font-size: 0.8rem;
+    margin-top: 10px;
+}
+
+/* Карта проектов */
 #graph-wrapper {
     width: 80vw; 
     height: 80vh;
     margin: 10vh auto;
     position: relative;
-    padding: 1px; /* Толщина рамки (можно сделать 1px для минимализма) */
-    background: #333; /* Цвет рамки (сделал чуть приглушеннее белого) */
-    /* clip-path удален */
+    padding: 1px;
+    background: #333;
 }
 
-/* Контейнер самой карты */
 #graph-container {
     width: 100%; 
     height: 100%;
     background: #000;
     position: relative;
     overflow: hidden;
-    /* clip-path удален */
 }
 
-/* Виньетка поверх карты */
 #graph-container::after {
     content: '';
     position: absolute;
@@ -43,7 +58,7 @@ body {
     z-index: 2;
 }
 
-/* Стили модального окна проекта (теперь простое) */
+/* Модальное окно */
 #project-modal {
     position: fixed; top: 50%; left: 50%; 
     transform: translate(-50%, -50%);
@@ -53,12 +68,18 @@ body {
     z-index: 1000; 
     min-width: 350px;
     border: 1px solid #333;
-    border-radius: 8px; /* Обычное скругление */
 }
 
 #project-modal.active { display: block; }
+#project-modal h2 { font-family: 'Inter', sans-serif; margin-top: 0; }
 
-#m-date { color: #aaa; font-size: 0.9em; margin-bottom: 10px; }
+#m-date { 
+    color: #555; 
+    font-size: 0.7rem; 
+    text-transform: uppercase; 
+    margin-bottom: 20px; 
+    display: block;
+}
 
 .close-btn { 
     position: absolute; top: 20px; right: 20px;
@@ -69,136 +90,119 @@ body {
     display: inline-block; margin-top: 20px;
     color: #fff; text-decoration: none;
     font-weight: bold; border: 1px solid #fff;
-    padding: 10px 20px; border-radius: 4px;
+    padding: 10px 20px; font-size: 0.8rem;
+    transition: 0.3s;
 }
 .project-link:hover { background: #fff; color: #000; }
 
+/* Раздел Skills */
+.skills-section {
+    padding: 10vh 10vw;
+    background: #000;
+}
+
 .about-intro {
-    margin-bottom: 5vh; /* Отступ до сетки */
+    margin-bottom: 8vh;
+    max-width: 900px;
 }
 
 .about-intro .label {
     display: block;
     color: #555;
-    font-size: 0.7rem;
+    font-size: 0.9rem;
     letter-spacing: 0.4em;
     margin-bottom: 15px;
+    text-transform: uppercase;
 }
 
 .about-intro h1 {
-    font-size: 2.5rem;
+    font-family: 'Inter', sans-serif; /* Второй акцент на заголовке интро */
+    font-size: 3rem;
     font-weight: 300;
-    line-height: 1.2;
+    line-height: 1.1;
     margin: 0;
     color: #eee;
 }
 
-.skills-section {
-    padding: 10vh 10vw; /* 10% отступы по бокам */
-    background: #000;
-}
-
-.about-intro {
-    margin-bottom: 5vh;
-    max-width: 800px;
-}
-
 .skills-grid {
     display: grid;
-    /* 4 равных колонки */
     grid-template-columns: repeat(4, 1fr); 
-    /* Автоматическая высота строки равна ширине одной колонки */
-    grid-auto-rows: 1fr; 
     gap: 20px; 
     width: 100%;
+    /* Высота строк равна ширине одной колонки для идеальных квадратов */
+    grid-auto-rows: calc((80vw - (3 * 20px)) / 4);
 }
 
-/* Магия пропорций теперь работает через grid-column */
 .skill-card {
     position: relative;
     background: #0a0a0a;
     border: 1px solid #1a1a1a;
     overflow: hidden;
-    display: flex;
-    align-items: center;
-    /* Заставляем блок всегда быть квадратным по высоте базовой ячейки */
-    aspect-ratio: auto; 
+    transition: border-color 0.3s ease;
 }
 
-/* Контролируем только ширину, высота подтянется из grid-auto-rows */
 .ratio-1-1 { grid-column: span 1; }
 .ratio-3-1 { grid-column: span 3; }
 .ratio-4-1 { grid-column: span 4; }
 
-/* Чтобы блоки по высоте всегда были как 1-1, используем этот хак для контейнера: */
-.skills-grid {
-    /* Эта строчка гарантирует, что высота ячейки будет равна её ширине */
-    grid-auto-rows: calc((80vw - (3 * 20px)) / 4);
-}
-
-/* Слой заполнения */
-/* Изменения для слоя заполнения */
 .skill-progress {
     position: absolute;
-    left: 0; 
-    right: 0; 
-    bottom: 0; /* Закрепляем внизу */
-    width: 100%; /* Всегда на всю ширину */
-    height: 0;   /* Начальная высота для анимации */
+    left: 0; right: 0; bottom: 0;
+    width: 100%;
+    height: 0;
     background: #161616; 
-    /* Анимируем теперь свойство height */
     transition: height 1.5s cubic-bezier(0.16, 1, 0.3, 1);
     z-index: 1;
 }
 
-/* На случай ховера, если хочешь подсветить всё заполнение */
-.skill-card:hover .skill-progress {
-    background: #222;
-}
-
 .skill-content {
-    position: relative;
+    position: absolute;
+    inset: 0;
     z-index: 2;
-    width: 100%;
     padding: 20px;
-    display: flex;
-    flex-direction: column; /* Текст теперь друг под другом для квадратов */
-    justify-content: center;
-    align-items: flex-start;
-    gap: 8px;
-}
-
-/* Для длинных блоков возвращаем текст в строку */
-.ratio-3-1 .skill-content, 
-.ratio-4-1 .skill-content {
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
 }
 
 .skill-name {
-    font-size: 0.75rem;
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    font-size: 1rem;
     text-transform: uppercase;
     letter-spacing: 0.15em;
     color: #fff;
 }
 
 .skill-val {
-    font-family: monospace;
-    color: #444;
-    font-size: 0.9rem;
+    position: absolute;
+    bottom: -10px; /* Немного притопил для эффекта обрезки */
+    right: 5px;
+    font-family: 'JetBrains Mono', monospace;
+    color: #222; /* Темнее в обычном состоянии */
+    font-size: 8rem; /* Уменьшил с 10rem, чтобы не ломало верстку */
+    font-weight: 700;
+    line-height: 0.8;
+    letter-spacing: -0.05em;
+    opacity: 0.3;
+    pointer-events: none;
+    transition: 0.3s;
 }
 
-/* Ховер эффект для дизайнерского лоска */
-.skill-card:hover {
-    border-color: #333;
-}
-.skill-card:hover .skill-progress {
-    background: #222;
+.skill-card:hover { border-color: #333; }
+.skill-card:hover .skill-val { color: #fff; opacity: 1; }
+.skill-card:hover .skill-progress { background: #1a1a1a; }
+
+/* Адаптив */
+@media (max-width: 1024px) {
+    .skill-val { font-size: 5rem; }
+    .about-intro h1 { font-size: 2rem; }
 }
 
-/* Адаптив для мобильных устройств */
 @media (max-width: 768px) {
-    .skills-grid { grid-template-columns: 1fr; }
+    .skills-grid { 
+        grid-template-columns: 1fr; 
+        grid-auto-rows: 150px; /* Фиксированная высота на мобилках */
+    }
     .ratio-1-1, .ratio-3-1, .ratio-4-1 { grid-column: span 1; }
+    .hero h1 { font-size: 3rem; }
+    .skill-val { font-size: 4rem; }
 }

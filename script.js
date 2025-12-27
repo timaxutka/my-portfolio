@@ -81,7 +81,7 @@ const Graph = ForceGraph()(graphDiv)
         ctx.fill();
         const alpha = magnification > 1.1 ? 1 : 0.3;
         ctx.fillStyle = `rgba(255, 255, 255, ${alpha})`;
-        ctx.font = `${magnification > 1.1 ? 'bold' : 'normal'} ${fontSize}px Inter`;
+        ctx.font = `${magnification > 1.1 ? 'bold' : 'normal'} ${fontSize}px 'JetBrains Mono'`;
         ctx.textAlign = 'center';
         ctx.fillText(label, node.x, node.y + radius + (16 / globalScale));
         ctx.restore(); 
