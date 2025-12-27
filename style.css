@@ -16,30 +16,19 @@ body {
     width: 80vw; height: 80vh;
     margin: 10vh auto;
     background: #000;
-    border-radius: 24px;
+    border-radius: 12px;
     position: relative;
     overflow: hidden;
-    z-index: 1;
+    border: 1px solid #333; /* Простая серая рамка вместо луча */
 }
 
-/* Рамка с бегающим лучом */
-#graph-container::before {
-    content: '';
-    position: absolute;
-    width: 400%; height: 400%;
-    top: -150%; left: -150%;
-    background: conic-gradient(from 0deg, transparent 0%, #00ff96 15%, transparent 30%);
-    animation: rotate-beam 10s linear infinite;
-    z-index: -2; 
-}
-
-/* Виньетка для глубины */
+/* Виньетка (оставляем для объема, но в ч/б) */
 #graph-container::after {
     content: '';
     position: absolute;
     inset: 0;
     pointer-events: none;
-    background: radial-gradient(circle, transparent 20%, rgba(0,0,0,0.9) 100%);
+    background: radial-gradient(circle, transparent 40%, rgba(0,0,0,1) 100%);
     z-index: 2;
 }
 
@@ -48,38 +37,30 @@ body {
     z-index: 0;
 }
 
-@keyframes rotate-beam {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
-}
-
+/* Модальное окно: теперь строгое белое */
 #modal {
     position: fixed; top: 50%; left: 50%; 
     transform: translate(-50%, -50%);
-    background: rgba(15, 15, 15, 0.95); 
-    border: 1px solid rgba(0, 255, 150, 0.3); 
+    background: #111; 
+    border: 2px solid #fff; /* Белая рамка */
     padding: 40px;
-    border-radius: 24px; 
+    border-radius: 8px; 
     display: none; 
     z-index: 1000; 
-    backdrop-filter: blur(20px);
-    min-width: 300px;
-    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    min-width: 350px;
 }
 
 #modal.active { display: block; }
 
 .close-btn { 
     position: absolute; top: 20px; right: 20px;
-    cursor: pointer; color: #666; transition: 0.3s;
+    cursor: pointer; color: #fff; font-size: 1.5em;
 }
-.close-btn:hover { color: #00ff96; }
 
 .project-link {
     display: inline-block; margin-top: 20px;
-    color: #00ff96; text-decoration: none;
-    font-weight: bold; border: 1px solid #00ff96;
-    padding: 10px 20px; border-radius: 10px;
-    transition: 0.3s;
+    color: #fff; text-decoration: none;
+    font-weight: bold; border: 1px solid #fff;
+    padding: 10px 20px; border-radius: 4px;
 }
-.project-link:hover { background: #00ff96; color: #000; }
+.project-link:hover { background: #fff; color: #000; }
