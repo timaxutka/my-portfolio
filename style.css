@@ -3,38 +3,122 @@
 body {
     margin: 0; padding: 0;
     background: #000; color: #fff;
-    /* Весь сайт теперь на JetBrains Mono */
     font-family: 'JetBrains Mono', monospace;
     -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
 }
 
-/* Hero секция */
+/* Эффект шума для текстуры сайта */
+body::after {
+    content: "";
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background-image: url("https://grainy-gradients.vercel.app/noise.svg");
+    opacity: 0.04;
+    pointer-events: none;
+    z-index: 9999;
+}
+
+/* Hero секция - НОВАЯ СТРУКТУРА */
 .hero {
     height: 100vh;
-    display: flex; flex-direction: column;
-    justify-content: center; align-items: center;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    overflow: hidden;
+    padding: 0 8vw;
+}
+
+.hero-grid {
+    position: absolute;
+    inset: 0;
+    background-image: 
+        linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+    background-size: 50px 50px;
+    mask-image: radial-gradient(circle at center, black, transparent 80%);
+    z-index: -1;
+}
+
+/* Контейнер фото слева */
+.hero-photo {
+    width: 45vw;
+    height: 100vh;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    transition: transform 0.1s ease-out; /* Для плавного параллакса */
+}
+
+.hero-photo img {
+    max-width: 100%;
+    height: 90vh; /* Фото почти на всю высоту */
+    object-fit: cover;
+    /* Маска, чтобы фото плавно растворялось в черном фоне по бокам и снизу */
+    mask-image: linear-gradient(to top, transparent, black 15%, black 85%, transparent);
+}
+
+/* Контент справа */
+.hero-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding-left: 5vw;
+    z-index: 10;
 }
 
 .hero h1 {
-    font-family: 'Inter', sans-serif; /* Акцентный заголовок */
+    font-family: 'Inter', sans-serif;
     font-weight: 700;
     font-size: 5rem;
     letter-spacing: -0.02em;
-    margin: 0;
+    margin: 0 0 40px 0;
+    text-shadow: 0 0 25px rgba(255, 255, 255, 0.15);
+}
+
+/* Навигация в столбик */
+.hero-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.nav-item {
+    color: #fff;
+    text-decoration: none;
+    font-size: 1.1rem;
+    letter-spacing: 0.1em;
+    display: flex;
+    align-items: center;
+    transition: 0.3s;
+}
+
+.nav-item span {
+    font-size: 0.7rem;
+    color: #444;
+    margin-right: 15px;
+    font-family: 'JetBrains Mono', monospace;
+}
+
+.nav-item:hover {
+    color: #888;
+    transform: translateX(10px);
 }
 
 .hero p {
-    color: #555;
+    color: #333;
     text-transform: uppercase;
     letter-spacing: 0.2em;
-    font-size: 0.8rem;
-    margin-top: 10px;
+    font-size: 0.7rem;
+    margin-top: 60px;
 }
 
 /* Карта проектов */
 #graph-wrapper {
-    width: 80vw; 
-    height: 80vh;
+    width: 80vw; height: 80vh;
     margin: 10vh auto;
     position: relative;
     padding: 1px;
@@ -42,8 +126,7 @@ body {
 }
 
 #graph-container {
-    width: 100%; 
-    height: 100%;
+    width: 100%; height: 100%;
     background: #000;
     position: relative;
     overflow: hidden;
@@ -62,147 +145,58 @@ body {
 #project-modal {
     position: fixed; top: 50%; left: 50%; 
     transform: translate(-50%, -50%);
-    background: #111; 
-    padding: 40px;
-    display: none; 
-    z-index: 1000; 
-    min-width: 350px;
-    border: 1px solid #333;
+    background: #111; padding: 40px;
+    display: none; z-index: 1000; 
+    min-width: 350px; border: 1px solid #333;
 }
-
 #project-modal.active { display: block; }
 #project-modal h2 { font-family: 'Inter', sans-serif; margin-top: 0; }
-
-#m-date { 
-    color: #555; 
-    font-size: 0.7rem; 
-    text-transform: uppercase; 
-    margin-bottom: 20px; 
-    display: block;
-}
-
-.close-btn { 
-    position: absolute; top: 20px; right: 20px;
-    cursor: pointer; color: #fff; font-size: 1.5em;
-}
-
+#m-date { color: #555; font-size: 0.7rem; text-transform: uppercase; margin-bottom: 20px; display: block; }
+.close-btn { position: absolute; top: 20px; right: 20px; cursor: pointer; color: #fff; font-size: 1.5em; }
 .project-link {
-    display: inline-block; margin-top: 20px;
-    color: #fff; text-decoration: none;
-    font-weight: bold; border: 1px solid #fff;
-    padding: 10px 20px; font-size: 0.8rem;
-    transition: 0.3s;
+    display: inline-block; margin-top: 20px; color: #fff; text-decoration: none;
+    font-weight: bold; border: 1px solid #fff; padding: 10px 20px; font-size: 0.8rem; transition: 0.3s;
 }
 .project-link:hover { background: #fff; color: #000; }
 
 /* Раздел Skills */
-.skills-section {
-    padding: 10vh 10vw;
-    background: #000;
-}
-
-.about-intro {
-    margin-bottom: 8vh;
-    max-width: 900px;
-}
-
-.about-intro .label {
-    display: block;
-    color: #555;
-    font-size: 0.9rem;
-    letter-spacing: 0.4em;
-    margin-bottom: 15px;
-    text-transform: uppercase;
-}
-
-.about-intro h1 {
-    font-family: 'Inter', sans-serif; /* Второй акцент на заголовке интро */
-    font-size: 3rem;
-    font-weight: 300;
-    line-height: 1.1;
-    margin: 0;
-    color: #eee;
-}
-
+.skills-section { padding: 10vh 10vw; background: #000; }
+.about-intro { margin-bottom: 8vh; max-width: 900px; }
+.about-intro .label { display: block; color: #555; font-size: 0.9rem; letter-spacing: 0.4em; margin-bottom: 15px; text-transform: uppercase; }
+.about-intro h1 { font-family: 'Inter', sans-serif; font-size: 3rem; font-weight: 300; line-height: 1.1; margin: 0; color: #eee; }
 .skills-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr); 
-    gap: 20px; 
-    width: 100%;
-    /* Высота строк равна ширине одной колонки для идеальных квадратов */
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; width: 100%;
     grid-auto-rows: calc((80vw - (3 * 20px)) / 4);
 }
-
-.skill-card {
-    position: relative;
-    background: #0a0a0a;
-    border: 1px solid #1a1a1a;
-    overflow: hidden;
-    transition: border-color 0.3s ease;
-}
-
+.skill-card { position: relative; background: #0a0a0a; border: 1px solid #1a1a1a; overflow: hidden; transition: border-color 0.3s ease; }
 .ratio-1-1 { grid-column: span 1; }
 .ratio-3-1 { grid-column: span 3; }
 .ratio-4-1 { grid-column: span 4; }
 
 .skill-progress {
-    position: absolute;
-    left: 0; right: 0; bottom: 0;
-    width: 100%;
-    height: 0;
-    background: #161616; 
-    transition: height 1.5s cubic-bezier(0.16, 1, 0.3, 1);
-    z-index: 1;
+    position: absolute; left: 0; right: 0; bottom: 0; width: 100%; height: 0;
+    background: #161616; transition: height 1.5s cubic-bezier(0.16, 1, 0.3, 1); z-index: 1;
 }
-
-.skill-content {
-    position: absolute;
-    inset: 0;
-    z-index: 2;
-    padding: 20px;
-}
-
-.skill-name {
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    font-size: 1rem;
-    text-transform: uppercase;
-    letter-spacing: 0.15em;
-    color: #fff;
-}
-
+.skill-content { position: absolute; inset: 0; z-index: 2; padding: 20px; }
+.skill-name { position: absolute; top: 20px; left: 20px; font-size: 1rem; text-transform: uppercase; letter-spacing: 0.15em; color: #fff; }
 .skill-val {
-    position: absolute;
-    bottom: -10px; /* Немного притопил для эффекта обрезки */
-    right: 5px;
-    font-family: 'JetBrains Mono', monospace;
-    color: #222; /* Темнее в обычном состоянии */
-    font-size: 8rem; /* Уменьшил с 10rem, чтобы не ломало верстку */
-    font-weight: 700;
-    line-height: 0.8;
-    letter-spacing: -0.05em;
-    opacity: 0.3;
-    pointer-events: none;
-    transition: 0.3s;
+    position: absolute; bottom: -10px; right: 5px; font-family: 'JetBrains Mono', monospace;
+    color: #222; font-size: 8rem; font-weight: 700; line-height: 0.8; letter-spacing: -0.05em; opacity: 0.3; pointer-events: none; transition: 0.3s;
 }
-
 .skill-card:hover { border-color: #333; }
 .skill-card:hover .skill-val { color: #fff; opacity: 1; }
 .skill-card:hover .skill-progress { background: #1a1a1a; }
 
-/* Адаптив */
-@media (max-width: 1024px) {
-    .skill-val { font-size: 5rem; }
+@media (max-width: 1024px) { 
+    .skill-val { font-size: 5rem; } 
     .about-intro h1 { font-size: 2rem; }
+    .hero h1 { font-size: 3.5rem; }
 }
-
 @media (max-width: 768px) {
-    .skills-grid { 
-        grid-template-columns: 1fr; 
-        grid-auto-rows: 150px; /* Фиксированная высота на мобилках */
-    }
+    .hero { flex-direction: column; padding-top: 50px; text-align: center; }
+    .hero-photo { width: 100vw; height: 50vh; order: 2; }
+    .hero-content { order: 1; padding-left: 0; align-items: center; }
+    .skills-grid { grid-template-columns: 1fr; grid-auto-rows: 150px; }
     .ratio-1-1, .ratio-3-1, .ratio-4-1 { grid-column: span 1; }
-    .hero h1 { font-size: 3rem; }
-    .skill-val { font-size: 4rem; }
+    .hero h1 { font-size: 3rem; } .skill-val { font-size: 4rem; }
 }
