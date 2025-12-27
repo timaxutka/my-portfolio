@@ -72,3 +72,133 @@ body {
     padding: 10px 20px; border-radius: 4px;
 }
 .project-link:hover { background: #fff; color: #000; }
+
+.about-intro {
+    margin-bottom: 5vh; /* Отступ до сетки */
+}
+
+.about-intro .label {
+    display: block;
+    color: #555;
+    font-size: 0.7rem;
+    letter-spacing: 0.4em;
+    margin-bottom: 15px;
+}
+
+.about-intro h1 {
+    font-size: 2.5rem;
+    font-weight: 300;
+    line-height: 1.2;
+    margin: 0;
+    color: #eee;
+}
+
+.skills-section {
+    padding: 10vh 10vw; /* 10% отступы по бокам */
+    background: #000;
+}
+
+.about-intro {
+    margin-bottom: 5vh;
+    max-width: 800px;
+}
+
+.skills-grid {
+    display: grid;
+    /* 4 равных колонки */
+    grid-template-columns: repeat(4, 1fr); 
+    /* Автоматическая высота строки равна ширине одной колонки */
+    grid-auto-rows: 1fr; 
+    gap: 20px; 
+    width: 100%;
+}
+
+/* Магия пропорций теперь работает через grid-column */
+.skill-card {
+    position: relative;
+    background: #0a0a0a;
+    border: 1px solid #1a1a1a;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    /* Заставляем блок всегда быть квадратным по высоте базовой ячейки */
+    aspect-ratio: auto; 
+}
+
+/* Контролируем только ширину, высота подтянется из grid-auto-rows */
+.ratio-1-1 { grid-column: span 1; }
+.ratio-3-1 { grid-column: span 3; }
+.ratio-4-1 { grid-column: span 4; }
+
+/* Чтобы блоки по высоте всегда были как 1-1, используем этот хак для контейнера: */
+.skills-grid {
+    /* Эта строчка гарантирует, что высота ячейки будет равна её ширине */
+    grid-auto-rows: calc((80vw - (3 * 20px)) / 4);
+}
+
+/* Слой заполнения */
+/* Изменения для слоя заполнения */
+.skill-progress {
+    position: absolute;
+    left: 0; 
+    right: 0; 
+    bottom: 0; /* Закрепляем внизу */
+    width: 100%; /* Всегда на всю ширину */
+    height: 0;   /* Начальная высота для анимации */
+    background: #161616; 
+    /* Анимируем теперь свойство height */
+    transition: height 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 1;
+}
+
+/* На случай ховера, если хочешь подсветить всё заполнение */
+.skill-card:hover .skill-progress {
+    background: #222;
+}
+
+.skill-content {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    padding: 20px;
+    display: flex;
+    flex-direction: column; /* Текст теперь друг под другом для квадратов */
+    justify-content: center;
+    align-items: flex-start;
+    gap: 8px;
+}
+
+/* Для длинных блоков возвращаем текст в строку */
+.ratio-3-1 .skill-content, 
+.ratio-4-1 .skill-content {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.skill-name {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: #fff;
+}
+
+.skill-val {
+    font-family: monospace;
+    color: #444;
+    font-size: 0.9rem;
+}
+
+/* Ховер эффект для дизайнерского лоска */
+.skill-card:hover {
+    border-color: #333;
+}
+.skill-card:hover .skill-progress {
+    background: #222;
+}
+
+/* Адаптив для мобильных устройств */
+@media (max-width: 768px) {
+    .skills-grid { grid-template-columns: 1fr; }
+    .ratio-1-1, .ratio-3-1, .ratio-4-1 { grid-column: span 1; }
+}

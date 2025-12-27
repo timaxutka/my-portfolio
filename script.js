@@ -123,3 +123,39 @@ Graph.onEngineStop(() => {
         Graph._initialZoomDone = true;
     }
 });
+
+const observerOptions = {
+    threshold: 0.2 // Анимация начнется, когда 20% сетки будет видно
+};
+
+const skillObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            const cards = entry.target.querySelectorAll('.skill-card');
+            
+            cards.forEach((card, index) => {
+                const progress = card.querySelector('.skill-progress');
+                const style = card.getAttribute('style');
+                
+                if (style) {
+                    const match = style.match(/--percent:\s*(\d+%)/);
+                    if (match) {
+                        const targetHeight = match[1];
+                        // Добавляем небольшую задержку для каждой следующей карточки (эффект лесенки)
+                        setTimeout(() => {
+                            progress.style.height = targetHeight;
+                        }, index * 100); 
+                    }
+                }
+            });
+            // Выключаем наблюдение после того, как анимация один раз проигралась
+            skillObserver.unobserve(entry.target);
+        }
+    });
+}, observerOptions);
+
+// Начинаем следить за сеткой
+const skillsGrid = document.querySelector('.skills-grid');
+if (skillsGrid) {
+    skillObserver.observe(skillsGrid);
+}
