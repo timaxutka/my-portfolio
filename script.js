@@ -1,10 +1,9 @@
-// 1. ДАННЫЕ (Теперь они живут здесь)
 const myData = {
     nodes: [
-        { id: 1, name: "Project Virus", type: "WebApp", desc: "Игра внутри Telegram.", link: "#" },
-        { id: 2, name: "Virus Infographics", type: "Design", desc: "Оформление канала.", link: "#" },
-        { id: 3, name: "Desktop Trading App", type: "Desktop", desc: "Приложение для трейдеров.", link: "#" },
-        { id: 4, name: "Promo Landing", type: "Web", desc: "Лендинг для рекламы.", link: "#" }
+        { id: 1, name: "Project Virus", date: "Октябрь 2023", desc: "Масштабная игра внутри Telegram с элементами стратегии.", link: "https://google.com" },
+        { id: 2, name: "Virus Infographics", date: "Ноябрь 2023", desc: "Полный брендинг и оформление медиа-ресурсов.", link: "#" },
+        { id: 3, name: "Desktop Trading App", date: "Январь 2024", desc: "Терминал для высокочастотной торговли.", link: "#" },
+        { id: 4, name: "Promo Landing", date: "Февраль 2024", desc: "Высококонверсионная посадочная страница.", link: "#" }
     ],
     links: [
         { source: 1, target: 2 },
@@ -14,57 +13,104 @@ const myData = {
 };
 
 const container = document.getElementById('graph-container');
+let dashOffset = 0;
 
-// 2. ИНИЦИАЛИЗАЦИЯ
-const Graph = ForceGraph()
-    (document.getElementById('graph'))
+const Graph = ForceGraph()(document.getElementById('graph'))
     .graphData(myData)
     .width(container.offsetWidth)
     .height(container.offsetHeight)
     .backgroundColor('#000000')
-    
-    // --- ПОВЕДЕНИЕ И ЗУМ ---
     .enableNodeDrag(false)
-    // minZoom: насколько далеко можно отдалиться (0.5 - в два раза дальше базы)
-    // maxZoom: насколько близко можно подойти (4 - очень близко)
-    .minZoom(2) 
+    .minZoom(2)
     .maxZoom(4)
-    
-    // --- ЛИНИИ (Переливание) ---
-    // Отключаем частицы (Particles), так как они создают эффект паутины
-    .linkDirectionalParticles(0) 
-    // Делаем линии чуть толще и мягче
-    .linkWidth(1.5)
-    .linkColor(() => 'rgba(0, 255, 150, 0.2)') // Цвет в тон рамки, но полупрозрачный
-    
-    // Отрисовка узлов (оставляем твою красивую с Inter)
+
+    // --- СЕТКА (Рисуется под объектами и двигается вместе с ними) ---
+    .onRenderFramePre((ctx, globalScale) => {
+        const size = 50; 
+        const range = 2000; 
+        ctx.save();
+        ctx.beginPath();
+        ctx.strokeStyle = 'rgba(0, 255, 150, 0.08)'; 
+        ctx.lineWidth = 1 / globalScale; 
+        for (let i = -range; i <= range; i += size) {
+            ctx.moveTo(i, -range); ctx.lineTo(i, range);
+            ctx.moveTo(-range, i); ctx.lineTo(range, i);
+        }
+        ctx.stroke();
+        ctx.restore();
+    })
+
+    // --- ЛИНИИ: БЕГУЩИЙ ЗАТУХАЮЩИЙ ПУНКТИР ---
+    .linkCanvasObject((link, ctx) => {
+        const start = link.source;
+        const end = link.target;
+        if (typeof start !== 'object' || typeof end !== 'object') return;
+
+        ctx.save();
+        // Основная линия (прозрачная)
+        ctx.beginPath();
+        ctx.strokeStyle = 'transparent'; 
+        ctx.moveTo(start.x, start.y);
+        ctx.lineTo(end.x, end.y);
+        ctx.stroke();
+
+        // Бегущий импульс
+        ctx.beginPath();
+        ctx.strokeStyle = '#00ff96'; 
+        ctx.lineWidth = 1.2; 
+        ctx.setLineDash([40, 80]); 
+        ctx.lineDashOffset = -dashOffset;
+        ctx.moveTo(start.x, start.y);
+        ctx.lineTo(end.x, end.y);
+        ctx.globalAlpha = 0.6; 
+        ctx.stroke();
+        ctx.restore();
+    })
+
+    // --- УЗЛЫ: КРАСИВАЯ ЗЕЛЕНАЯ ТОЧКА ---
     .nodeCanvasObject((node, ctx, globalScale) => {
         const label = node.name;
         const fontSize = 14/globalScale;
-        ctx.font = `${fontSize}px Inter`;
         
+        ctx.save(); 
+        ctx.beginPath();
+        ctx.arc(node.x, node.y, 4, 0, 2 * Math.PI);
         ctx.shadowBlur = 15;
         ctx.shadowColor = '#00ff96';
         ctx.fillStyle = '#00ff96';
-        
-        ctx.beginPath();
-        ctx.arc(node.x, node.y, 4, 0, 2 * Math.PI);
         ctx.fill();
         
         ctx.shadowBlur = 0;
         ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+        ctx.font = `${fontSize}px Inter`;
         ctx.textAlign = 'center';
         ctx.fillText(label, node.x, node.y + 12);
+        ctx.restore(); 
     })
     .onNodeClick(node => showModal(node));
 
-// --- ЦЕНТРИРОВАНИЕ И АВТО-ЗУМ ПРИ ЗАГРУЗКЕ ---
-// Эта функция сработает, когда граф отрисуется, и "приблизит" камеру на нужный уровень
+function showModal(node) {
+    const modal = document.getElementById('modal');
+    document.getElementById('m-title').innerText = node.name;
+    document.getElementById('m-date').innerText = `Срок: ${node.date}`;
+    document.getElementById('m-desc').innerText = node.desc;
+    document.getElementById('m-link').href = node.link;
+    modal.classList.add('active');
+}
+
+function closeModal() {
+    document.getElementById('modal').classList.remove('active');
+}
+
+function animate() {
+    dashOffset += 0.4; 
+    requestAnimationFrame(animate);
+}
+animate();
+
 Graph.onEngineStop(() => {
-    Graph.zoom(2.5, 1000); // Устанавливаем масштаб 2.5 (близко) плавно за 1 сек
-    Graph.centerAt(0, 0, 1000); // Центрируем
+    Graph.zoom(2.5, 1000);
+    Graph.centerAt(0, 0, 1000);
 });
 
-// Физика (чуть меньше расталкивание, чтобы карта была компактнее)
-Graph.d3Force('charge').strength(-100); 
-Graph.d3Force('center').strength(0.1);
+Graph.d3Force('charge').strength(-150);
