@@ -11,14 +11,21 @@
     <section class="hero">
         <div class="hero-grid"></div>
         <div class="hero-photo" id="parallax-photo">
-            <img src="me.png" alt="Profile Photo"> </div>
+            <img src="me.png" alt="Profile Photo"> 
+        </div>
         <div class="hero-content">
             <h1 id="hero-title">ПОРТФОЛИО</h1>
             <nav class="hero-nav">
                 <a href="#graph-wrapper" class="nav-item"><span>01</span> ПРОЕКТЫ</a>
                 <a href="#skills" class="nav-item"><span>02</span> НАВЫКИ</a>
-                <a href="#" class="nav-item"><span>03</span> КОНТАКТЫ</a>
+                <a href="#contact" class="nav-item"><span>03</span> КОНТАКТЫ</a>
             </nav>
+            
+            <div class="hero-btns">
+                <button class="cta-btn primary" onclick="openContactForm()">СВЯЗАТЬСЯ</button>
+                <a href="resume.pdf" download class="cta-btn secondary">СКАЧАТЬ CV</a>
+            </div>
+
             <p>Скрольте вниз, чтобы увидеть карту</p>
         </div>
     </section>
@@ -29,13 +36,12 @@
             <h2 class="label-title">PROJECT_ECOSYSTEM</h2>
             <p class="label-hint">// Интерактивная карта: кликните на узел для деталей</p>
         </div>
-
         <div id="graph-container">
             <div id="graph"></div>
         </div>
     </div>
 
-    <section class="skills-section">
+    <section class="skills-section" id="skills">
         <div class="about-intro">
             <span class="label">UX/UI DESIGNER & ANALYST</span>
             <h1>Я создаю цифровые продукты, <br>используя опыт в дизайне, AI и коде.</h1>
@@ -55,7 +61,6 @@
                     <span class="skill-val">89%</span>
                 </div>
             </div>
-
             <div class="skill-card ratio-4-1" style="--percent: 77%;">
                 <div class="skill-progress"></div>
                 <div class="skill-content">
@@ -63,7 +68,6 @@
                     <span class="skill-val">77%</span>
                 </div>
             </div>
-
             <div class="skill-card ratio-3-1" style="--percent: 57%;">
                 <div class="skill-progress"></div>
                 <div class="skill-content">
@@ -81,6 +85,17 @@
         </div>
     </section>
 
+    <section class="skills-section" id="contact" style="border-top: 1px solid #1a1a1a; min-height: 50vh;">
+        <div class="about-intro">
+            <span class="label">CONTACT</span>
+            <h1>Давайте создадим что-то <br>выдающееся вместе.</h1>
+            <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+                <a href="mailto:your@email.com" class="project-link" style="margin-top: 40px;">EMAIL →</a>
+                <a href="https://t.me/yourusername" target="_blank" class="project-link" style="margin-top: 40px;">TELEGRAM →</a>
+            </div>
+        </div>
+    </section>
+
     <div id="project-modal">
         <span class="close-btn" onclick="closeModal()">✕</span>
         <h2 id="m-title">Название проекта</h2>
@@ -88,6 +103,32 @@
         <p id="m-desc">Описание...</p>
         <a href="#" id="m-link" class="project-link" target="_blank">Перейти к проекту →</a>
     </div>
+
+    <div id="contact-drawer" class="drawer">
+        <div class="drawer-header">
+            <span class="close-drawer" onclick="closeContactForm()">✕</span>
+        </div>
+        <div class="drawer-content">
+            <span class="label">CONTACT FORM</span>
+            <h1 style="font-family: 'Inter', sans-serif; font-size: 2.5rem; margin-top: 10px;">Новое сообщение</h1>
+            <form action="https://formspree.io/f/ваша_почта" method="POST" id="email-form">
+                <div class="input-group">
+                    <label>ОТ КОГО</label>
+                    <input type="text" name="name" placeholder="Имя или Email" required>
+                </div>
+                <div class="input-group">
+                    <label>ТЕМА ПИСЬМА</label>
+                    <input type="text" name="subject" placeholder="Тема сообщения">
+                </div>
+                <div class="input-group">
+                    <label>ТЕКСТ ПИСЬМА</label>
+                    <textarea name="message" rows="5" placeholder="Ваше сообщение..." required></textarea>
+                </div>
+                <button type="submit" class="project-link">ОТПРАВИТЬ →</button>
+            </form>
+        </div>
+    </div>
+    <div id="drawer-overlay" onclick="closeContactForm()"></div>
    
     <script src="script.js"></script>
 </body>

@@ -122,6 +122,7 @@ Graph.onEngineStop(() => {
     }
 });
 
+// Анимация скиллов
 const skillObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
         if (entry.isIntersecting) {
@@ -145,7 +146,7 @@ const skillObserver = new IntersectionObserver((entries) => {
 const skillsGrid = document.querySelector('.skills-grid');
 if (skillsGrid) { skillObserver.observe(skillsGrid); }
 
-// --- НОВАЯ ФИЧА: SCRAMBLE TEXT ---
+// Scramble Text
 const heroTitle = document.getElementById('hero-title');
 const glyphs = "ABCDEFGHIKLMNOPQRSTVXYZ0123456789+=/-_";
 
@@ -165,12 +166,30 @@ window.addEventListener('DOMContentLoaded', () => scramble(heroTitle, "ПОРТ�
 heroTitle.onmouseover = () => scramble(heroTitle, "DEVELOPER");
 heroTitle.onmouseleave = () => scramble(heroTitle, "ПОРТФОЛИО");
 
-
-// Мягкий параллакс для фото
+// Параллакс
 document.addEventListener('mousemove', (e) => {
     const photo = document.getElementById('parallax-photo');
     if (!photo) return;
     const x = (window.innerWidth - e.pageX * 2) / 100;
     const y = (window.innerHeight - e.pageY * 2) / 100;
     photo.style.transform = `translateX(${x}px) translateY(${y}px)`;
+});
+
+// НОВОЕ: Функции для выдвижной формы
+function openContactForm() {
+    document.getElementById('contact-drawer').classList.add('active');
+    document.getElementById('drawer-overlay').style.display = 'block';
+    document.body.style.overflow = 'hidden';
+}
+
+function closeContactForm() {
+    document.getElementById('contact-drawer').classList.remove('active');
+    document.getElementById('drawer-overlay').style.display = 'none';
+    document.body.style.overflow = 'auto';
+}
+
+// Обновление размера графа при ресайзе
+window.addEventListener('resize', () => {
+    Graph.width(container.offsetWidth);
+    Graph.height(container.offsetHeight);
 });

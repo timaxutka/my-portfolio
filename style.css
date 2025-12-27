@@ -8,7 +8,7 @@ body {
     overflow-x: hidden;
 }
 
-/* Эффект шума для текстуры сайта */
+/* Эффект шума */
 body::after {
     content: "";
     position: fixed;
@@ -20,7 +20,6 @@ body::after {
     z-index: 9999;
 }
 
-/* Hero секция - НОВАЯ СТРУКТУРА */
 .hero {
     height: 100vh;
     display: flex;
@@ -42,25 +41,22 @@ body::after {
     z-index: -1;
 }
 
-/* Контейнер фото слева */
 .hero-photo {
     width: 45vw;
     height: 100vh;
     display: flex;
     align-items: flex-end;
     justify-content: center;
-    transition: transform 0.1s ease-out; /* Для плавного параллакса */
+    transition: transform 0.1s ease-out;
 }
 
 .hero-photo img {
     max-width: 100%;
-    height: 90vh; /* Фото почти на всю высоту */
+    height: 90vh;
     object-fit: cover;
-    /* Маска, чтобы фото плавно растворялось в черном фоне по бокам и снизу */
     mask-image: linear-gradient(to top, transparent, black 15%, black 85%, transparent);
 }
 
-/* Контент справа */
 .hero-content {
     flex: 1;
     display: flex;
@@ -79,7 +75,6 @@ body::after {
     text-shadow: 0 0 25px rgba(255, 255, 255, 0.15);
 }
 
-/* Навигация в столбик */
 .hero-nav {
     display: flex;
     flex-direction: column;
@@ -100,13 +95,37 @@ body::after {
     font-size: 0.7rem;
     color: #444;
     margin-right: 15px;
-    font-family: 'JetBrains Mono', monospace;
 }
 
 .nav-item:hover {
     color: #888;
     transform: translateX(10px);
 }
+
+/* НОВОЕ: CTA Кнопки */
+.hero-btns {
+    margin-top: 40px;
+    display: flex;
+    gap: 15px;
+}
+
+.cta-btn {
+    padding: 14px 28px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.3s;
+    text-decoration: none;
+    border: 1px solid #fff;
+    letter-spacing: 0.1em;
+}
+
+.cta-btn.primary { background: #fff; color: #000; }
+.cta-btn.primary:hover { background: transparent; color: #fff; }
+
+.cta-btn.secondary { background: transparent; color: #fff; }
+.cta-btn.secondary:hover { background: #fff; color: #000; }
 
 .hero p {
     color: #333;
@@ -116,114 +135,78 @@ body::after {
     margin-top: 60px;
 }
 
-.graph-label {
-    position: absolute;
-    top: 30px;
-    left: 30px;
-    z-index: 10;
-    pointer-events: none; /* Чтобы не мешала кликать по графу */
-}
-
-.label-tech {
-    display: block;
-    font-size: 0.9rem;
-    color: #444;
-    letter-spacing: 0.3em;
-    margin-bottom: 5px;
-}
-
-.label-title {
-    font-family: 'Inter', sans-serif;
-    font-size: 1.5rem;
-    font-weight: 700;
-    margin: 0;
-    color: #fff;
-    letter-spacing: -0.01em;
-}
-
-.label-hint {
-    font-size: 0.8rem;
-    color: #555;
-    margin-top: 8px;
-    font-family: 'JetBrains Mono', monospace;
-}
-
-/* Карта проектов */
-#graph-wrapper {
-    width: 80vw; height: 80vh;
-    margin: 10vh auto;
-    position: relative;
-    padding: 1px;
-    background: #333;
-}
-
-#graph-container {
-    width: 100%; height: 100%;
+/* Выдвижная форма (Drawer) */
+.drawer {
+    position: fixed;
+    top: 0; right: -500px;
+    width: 450px;
+    max-width: 100vw;
+    height: 100vh;
     background: #000;
-    position: relative;
-    overflow: hidden;
+    border-left: 1px solid #1a1a1a;
+    z-index: 2000;
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    padding: 60px 40px;
+    box-sizing: border-box;
 }
 
-#graph-container::after {
-    content: '';
-    position: absolute;
+.drawer.active { transform: translateX(-500px); }
+
+#drawer-overlay {
+    position: fixed;
     inset: 0;
-    pointer-events: none;
-    background: radial-gradient(circle, transparent 40%, rgba(0,0,0,1) 100%);
-    z-index: 2;
+    background: rgba(0,0,0,0.8);
+    backdrop-filter: blur(8px);
+    z-index: 1999;
+    display: none;
 }
 
-/* Модальное окно */
-#project-modal {
-    position: fixed; top: 50%; left: 50%; 
-    transform: translate(-50%, -50%);
-    background: #111; padding: 40px;
-    display: none; z-index: 1000; 
-    min-width: 350px; border: 1px solid #333;
+.drawer-header { margin-bottom: 40px; text-align: right; }
+.close-drawer { cursor: pointer; font-size: 1.5rem; color: #555; transition: 0.3s; }
+.close-drawer:hover { color: #fff; }
+
+.input-group { margin-bottom: 30px; border-bottom: 1px solid #222; padding-bottom: 10px; transition: 0.3s; }
+.input-group:focus-within { border-color: #fff; }
+.input-group label { display: block; font-size: 0.65rem; color: #444; margin-bottom: 8px; letter-spacing: 0.2em; }
+.input-group input, .input-group textarea {
+    width: 100%; background: transparent; border: none; color: #fff;
+    font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; outline: none;
 }
+
+/* Остальные стили из твоего файла */
+.graph-label { position: absolute; top: 30px; left: 30px; z-index: 10; pointer-events: none; }
+.label-tech { display: block; font-size: 0.9rem; color: #444; letter-spacing: 0.3em; margin-bottom: 5px; }
+.label-title { font-family: 'Inter', sans-serif; font-size: 1.5rem; font-weight: 700; margin: 0; color: #fff; }
+.label-hint { font-size: 0.8rem; color: #555; margin-top: 8px; }
+
+#graph-wrapper { width: 80vw; height: 80vh; margin: 10vh auto; position: relative; padding: 1px; background: #333; }
+#graph-container { width: 100%; height: 100%; background: #000; position: relative; overflow: hidden; }
+#graph-container::after { content: ''; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(circle, transparent 40%, rgba(0,0,0,1) 100%); z-index: 2; }
+
+#project-modal { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #111; padding: 40px; display: none; z-index: 1000; min-width: 350px; border: 1px solid #333; }
 #project-modal.active { display: block; }
-#project-modal h2 { font-family: 'Inter', sans-serif; margin-top: 0; }
-#m-date { color: #555; font-size: 0.7rem; text-transform: uppercase; margin-bottom: 20px; display: block; }
 .close-btn { position: absolute; top: 20px; right: 20px; cursor: pointer; color: #fff; font-size: 1.5em; }
-.project-link {
-    display: inline-block; margin-top: 20px; color: #fff; text-decoration: none;
-    font-weight: bold; border: 1px solid #fff; padding: 10px 20px; font-size: 0.8rem; transition: 0.3s;
-}
+.project-link { display: inline-block; margin-top: 20px; color: #fff; text-decoration: none; font-weight: bold; border: 1px solid #fff; padding: 10px 20px; font-size: 0.8rem; transition: 0.3s; cursor: pointer; background: transparent; }
 .project-link:hover { background: #fff; color: #000; }
 
-/* Раздел Skills */
 .skills-section { padding: 10vh 10vw; background: #000; }
 .about-intro { margin-bottom: 8vh; max-width: 900px; }
 .about-intro .label { display: block; color: #555; font-size: 0.9rem; letter-spacing: 0.4em; margin-bottom: 15px; text-transform: uppercase; }
 .about-intro h1 { font-family: 'Inter', sans-serif; font-size: 3rem; font-weight: 300; line-height: 1.1; margin: 0; color: #eee; }
-.skills-grid {
-    display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; width: 100%;
-    grid-auto-rows: calc((80vw - (3 * 20px)) / 4);
-}
+.skills-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; width: 100%; grid-auto-rows: calc((80vw - (3 * 20px)) / 4); }
 .skill-card { position: relative; background: #0a0a0a; border: 1px solid #1a1a1a; overflow: hidden; transition: border-color 0.3s ease; }
 .ratio-1-1 { grid-column: span 1; }
 .ratio-3-1 { grid-column: span 3; }
 .ratio-4-1 { grid-column: span 4; }
 
-.skill-progress {
-    position: absolute; left: 0; right: 0; bottom: 0; width: 100%; height: 0;
-    background: #161616; transition: height 1.5s cubic-bezier(0.16, 1, 0.3, 1); z-index: 1;
-}
+.skill-progress { position: absolute; left: 0; right: 0; bottom: 0; width: 100%; height: 0; background: #161616; transition: height 1.5s cubic-bezier(0.16, 1, 0.3, 1); z-index: 1; }
 .skill-content { position: absolute; inset: 0; z-index: 2; padding: 20px; }
 .skill-name { position: absolute; top: 20px; left: 20px; font-size: 1rem; text-transform: uppercase; letter-spacing: 0.15em; color: #fff; }
-.skill-val {
-    position: absolute; bottom: -10px; right: 5px; font-family: 'JetBrains Mono', monospace;
-    color: #222; font-size: 8rem; font-weight: 700; line-height: 0.8; letter-spacing: -0.05em; opacity: 0.3; pointer-events: none; transition: 0.3s;
-}
+.skill-val { position: absolute; bottom: -10px; right: 5px; font-family: 'JetBrains Mono', monospace; color: #222; font-size: 8rem; font-weight: 700; line-height: 0.8; letter-spacing: -0.05em; opacity: 0.3; pointer-events: none; transition: 0.3s; }
 .skill-card:hover { border-color: #333; }
 .skill-card:hover .skill-val { color: #fff; opacity: 1; }
-.skill-card:hover .skill-progress { background: #1a1a1a; }
 
-@media (max-width: 1024px) { 
-    .skill-val { font-size: 5rem; } 
-    .about-intro h1 { font-size: 2rem; }
-    .hero h1 { font-size: 3.5rem; }
-}
+@media (max-width: 1024px) { .skill-val { font-size: 5rem; } .about-intro h1 { font-size: 2rem; } .hero h1 { font-size: 3.5rem; } }
 @media (max-width: 768px) {
     .hero { flex-direction: column; padding-top: 50px; text-align: center; }
     .hero-photo { width: 100vw; height: 50vh; order: 2; }
@@ -231,4 +214,7 @@ body::after {
     .skills-grid { grid-template-columns: 1fr; grid-auto-rows: 150px; }
     .ratio-1-1, .ratio-3-1, .ratio-4-1 { grid-column: span 1; }
     .hero h1 { font-size: 3rem; } .skill-val { font-size: 4rem; }
+    .drawer { width: 100%; }
 }
+
+html { scroll-behavior: smooth; }
