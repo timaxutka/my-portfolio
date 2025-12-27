@@ -13,14 +13,16 @@
         <p>Скрольте вниз, чтобы увидеть карту проектов</p>
     </section>
 
-    <div id="graph-container">
-        <div id="graph"></div>
+    <div id="graph-wrapper">
+        <div id="graph-container">
+            <div id="graph"></div>
+        </div>
     </div>
 
-    <div id="modal">
+    <div id="project-modal">
         <span class="close-btn" onclick="closeModal()">✕</span>
         <h2 id="m-title">Название проекта</h2>
-        <p id="m-date" style="color: #ffffff; font-size: 0.9em;"></p> 
+        <p id="m-date"></p> 
         <p id="m-desc">Описание...</p>
         <a href="#" id="m-link" class="project-link" target="_blank">Перейти к проекту →</a>
     </div>
