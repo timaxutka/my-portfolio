@@ -1032,4 +1032,105 @@ body::after {
         width: 100%;
         text-align: center;
     }
+
+    /* ЦЕНТРИРОВАНИЕ СТАТУСА В КОНТАКТАХ */
+    .info-item .active-status {
+        justify-content: center; /* Центрируем содержимое (точку и текст) */
+        width: 100%;
+    }
+
+    .info-item {
+        align-items: center;    /* Центрируем заголовки (STATUS, EMAIL и т.д.) */
+        text-align: center;
+    }
+
+    /* ЦЕНТРИРОВАНИЕ СТАТУСА В ФУТЕРЕ */
+    .status-block {
+        display: flex;
+        justify-content: center; /* Центрируем точку и текст кофе */
+        align-items: center;
+        width: 100%;
+    }
+
+    .footer-left {
+        align-items: center;     /* Центрируем все блоки в левой части футера */
+        text-align: center;
+    }
+    
+    .joke-block {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+    }
+
+    /* ФИКС ФУТЕРА */
+    .footer-content {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important; /* Центрируем всё содержимое по горизонтали */
+        text-align: center;
+        gap: 25px;
+    }
+
+    .footer-left, .footer-right {
+        width: 100% !important; /* Каждый блок занимает всю ширину экрана */
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important; /* Центрируем внутренние элементы (статус, шутку) */
+        gap: 15px;
+    }
+
+    /* ФИКС СТАТУСА КОФЕ (чтобы не зависел от длины шутки) */
+    .status-block {
+        width: 100%;
+        display: flex;
+        justify-content: center; /* Точка и текст теперь всегда в центре своей строки */
+        align-items: center;
+        margin: 0 auto;
+    }
+
+    /* ФИКС КОНТАКТОВ (READY_TO_WORK) */
+    .info-item {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center !important; /* Центрируем лейбл и значение */
+    }
+
+    .active-status {
+        justify-content: center !important; /* Центрируем точку и статус */
+        width: fit-content; /* Чтобы точка не улетала слишком далеко от текста */
+    }
+
+    .contact-left-side {
+        align-items: center !important;
+        text-align: center;
+    }
+
+    /* ФИКС ВЫЕЗЖАЮЩЕЙ КНОПКИ TELEGRAM */
+    .contact-btns-wrapper {
+        display: flex !important;
+        flex-direction: column !important; /* Выстраиваем кнопки в столбик */
+        align-items: center !important;
+        width: 100% !important;
+        gap: 15px !important;
+        margin-top: 30px;
+        padding: 0 !important; /* Убираем внутренние отступы, которые могли жать */
+    }
+
+    .contact-btns-wrapper .project-link.magnetic {
+        width: 100% !important;   /* Кнопка на всю ширину */
+        max-width: 300px;         /* Ограничиваем, чтобы не была слишком длинной */
+        transform: none !important; /* ОТКЛЮЧАЕМ магнитный сдвиг на мобилках */
+        margin: 0 auto !important;
+        left: 0 !important;       /* Сбрасываем возможные позиционирования */
+        box-sizing: border-box;
+    }
+
+    /* Убираем горизонтальный скролл у родителя, если он появился */
+    .contact-left-side, .contact-container {
+        overflow-x: hidden !important;
+        width: 100% !important;
+        box-sizing: border-box;
+    }
 }
