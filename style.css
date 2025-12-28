@@ -967,3 +967,69 @@ body::after {
         text-align: center;
     }
 }
+
+/* --- МОБИЛЬНАЯ АДАПТАЦИЯ (MOBILE FIXES) --- */
+@media (max-width: 768px) {
+    
+    /* 1. HUD СТОПОЧКОЙ */
+    .hero-hud {
+        flex-direction: column !important; /* Выстраиваем в колонку */
+        gap: 15px !important;            /* Уменьшаем отступ между строками */
+        align-items: center;             /* Центрируем, если заголовок тоже по центру */
+        margin-bottom: 40px;
+    }
+
+    /* 2. SKILLS СТОПОЧКОЙ */
+    .skills-grid {
+        display: flex !important;        /* Переключаем с Grid на Flex */
+        flex-direction: column !important; /* Кладем карточки друг на друга */
+        grid-auto-rows: auto;            /* Сбрасываем фиксированную высоту */
+        gap: 20px;
+    }
+
+    .skill-card {
+        width: 100%;                     /* Карточка на всю ширину */
+        min-height: 120px;               /* Ограничиваем минимальную высоту */
+        grid-column: span 4 !important;  /* На всякий случай сбрасываем сетку */
+    }
+
+    .skill-val {
+        font-size: 2rem !important;      /* Чуть уменьшаем огромные цифры для узких экранов */
+    }
+
+    /* 3. ЭЛЕМЕНТЫ ФУТЕРА СТОПОЧКОЙ */
+    .terminal-footer .footer-content {
+        flex-direction: column !important; /* Левая и правая части футера друг под другом */
+        align-items: flex-start;
+        gap: 30px;
+        padding: 40px 20px;
+    }
+
+    .footer-left, .footer-right {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .footer-right {
+        border-top: 1px solid #1a1a1a;   /* Визуальное разделение в стопке */
+        padding-top: 20px;
+        align-items: flex-start !important; /* Прижимаем текст к левому краю */
+    }
+
+    /* Дополнительно: фикс для секции контактов (чтобы карта не ломала верстку) */
+    .contact-container {
+        flex-direction: column !important;
+    }
+    
+    .contact-btns-wrapper {
+        flex-direction: column;          /* Кнопки EMAIL и TG тоже стопкой */
+        width: 100%;
+    }
+
+    .contact-btns-wrapper .project-link {
+        width: 100%;
+        text-align: center;
+    }
+}
