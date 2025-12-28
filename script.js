@@ -231,15 +231,25 @@ function showModal(node) {
     const modal = document.getElementById('project-modal');
     const overlay = document.getElementById('drawer-overlay');
     
-    document.getElementById('m-title').innerText = node.name;
-    document.getElementById('m-date').innerText = node.date;
-    document.getElementById('m-problem').innerText = node.problem;
-    document.getElementById('m-solution').innerText = node.solution;
-    document.getElementById('m-result').innerText = node.result;
-    document.getElementById('m-link').href = node.link;
+    // Заполняем данные
+    document.getElementById('m-title').innerText = node.name || "Project";
+    document.getElementById('m-problem').innerText = node.problem || "—";
+    document.getElementById('m-solution').innerText = node.solution || "—";
+    document.getElementById('m-result').innerText = node.result || "—";
+    
+    // Подставляем дату (если её нет в объекте, пишем текущую или заглушку)
+    document.getElementById('m-date').innerText = node.date || "DATE: 2024 / Q4";
+    
+    const linkBtn = document.getElementById('m-link');
+    if (node.link) {
+        linkBtn.href = node.link;
+        linkBtn.style.display = "inline-block";
+    } else {
+        linkBtn.style.display = "none";
+    }
     
     modal.classList.add('active');
-    if (overlay) overlay.style.display = 'block';
+    overlay.style.display = 'block';
 }
 
 function closeModal() {
@@ -303,5 +313,23 @@ Graph.onEngineStop(() => {
         Graph.zoom(2.2, 1000);
         Graph.centerAt(0, 0, 1000);
         Graph._initialZoomDone = true;
+    }
+});
+
+// Логика индикатора прокрутки
+window.addEventListener('scroll', () => {
+    // Вычисляем, на сколько пикселей прокручена страница
+    const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+    
+    // Вычисляем общую доступную высоту прокрутки
+    const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    
+    // Переводим в проценты
+    const scrolled = (winScroll / height) * 100;
+    
+    // Применяем ширину к линии
+    const progressBar = document.getElementById('scroll-progress-bar');
+    if (progressBar) {
+        progressBar.style.width = scrolled + "%";
     }
 });
