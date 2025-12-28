@@ -562,20 +562,77 @@ body::after {
 /* Фикс: убираем старые границы, которые могут конфликтовать */
 .hero { border-bottom: none !important; }
 #contact {
-    min-height: 30vh; /* Уменьшили с 50 до 30 */
-    padding-top: 40px;   /* Уменьшили верхний отступ */
-    padding-bottom: 80px; /* Оставили место до футера */
-    display: flex;
-    align-items: center; /* Центрируем контент по вертикали в маленьком блоке */
+    padding-left: 10%;  /* Вот твоя "истина" */
+    padding-right: 10%; /* Вот твоя "истина" */
+    width: 100%;
+    box-sizing: border-box;
 }
 
-/* Контейнер для разделения на лево и право */
+/* Выравнивание КОНТАКТОВ (уже 10%, оставляем) */
 .contact-container {
     display: flex;
     justify-content: space-between;
-    align-items: flex-end; /* Выравнивание по нижней линии */
+    align-items: flex-start;
     gap: 40px;
-    flex-wrap: wrap; /* Чтобы на мобилках блоки встали друг под друга */
+    /* Убираем 10% отсюда, оставляем только вертикальный отступ */
+    padding: 40px 0 !important; 
+    width: 100%;
+    max-width: 100%; /* Убеждаемся, что контейнер не зажат */
+    box-sizing: border-box;
+}
+
+/* Левая часть (Текст и Кнопки) */
+.contact-left-side {
+    flex: 1; 
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+/* Правая часть (Карта) */
+.info-map-side {
+    flex: 0 0 800px; /* Увеличили ширину карты для солидности */
+    display: flex;
+    flex-direction: column;
+    align-self: flex-start;
+}
+
+/* ТЕМНАЯ КАРТА: Добавляем стили для рамки и самой карты */
+.map-frame {
+    position: relative;
+    width: 100%;
+    height: 350px;
+    margin-top: 15px;
+    border: 1px solid #1a1a1a;
+    background: #000;
+    overflow: hidden;
+    /* Глубокая инверсия для полной темноты */
+    filter: grayscale(1) invert(1) contrast(1.2) brightness(0.7);
+    transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.map-frame iframe {
+    width: 100%;
+    height: 100%;
+    opacity: 0.5; /* Смягчаем яркость дорог */
+}
+
+.map-frame:hover {
+    filter: grayscale(1) invert(1) contrast(1.5) brightness(0.9);
+    border-color: var(--accent-red);
+}
+
+/* Стили для текстовых айтемов, чтобы они не слипались */
+.info-text-side {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.info-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
 }
 
 .contact-actions {
@@ -657,8 +714,10 @@ body::after {
     margin-bottom: 24px; /* Регулируй это значение под свой вкус */
 }
 
+/* Выравнивание футера */
 .footer-content {
-    padding: 24px 8vw;
+    /* Тоже меняем на 10%, чтобы линия и текст начинались там же, где и контент сайта */
+    padding: 24px 10% !important;
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
@@ -666,6 +725,7 @@ body::after {
     font-size: 0.65rem;
     color: #444;
     letter-spacing: 0.1em;
+    box-sizing: border-box;
 }
 
 .footer-left, .footer-right {
@@ -721,4 +781,29 @@ body::after {
     opacity: 1;
     background: rgba(255, 0, 0, 0.1);
     box-shadow: 0 0 10px rgba(255, 0, 0, 0.2);
+}
+
+.map-scanner {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 2px;
+    background: var(--accent-red);
+    box-shadow: 0 0 15px var(--accent-red);
+    opacity: 0.4;
+    z-index: 10;
+    pointer-events: none;
+    animation: scan-loop 4s linear infinite;
+}
+
+@keyframes scan-loop {
+    0% { top: -2%; }
+    100% { top: 100%; }
+}
+
+.map-coords {
+    font-size: 0.6rem;
+    color: #333;
+    text-align: right;
+    letter-spacing: 0.1em;
+    margin-top: 5px;
 }
