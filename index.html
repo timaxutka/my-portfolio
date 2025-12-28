@@ -99,11 +99,30 @@
     </section>
 
     <div id="project-modal">
-        <span class="close-btn" onclick="closeModal()">✕</span>
-        <h2 id="m-title">Название проекта</h2>
-        <p id="m-date"></p> 
-        <p id="m-desc">Описание...</p>
-        <a href="#" id="m-link" class="project-link" target="_blank">Перейти к проекту →</a>
+        <div class="modal-header">
+            <h2 id="m-title"></h2>
+            <span id="m-date"></span>
+            <button onclick="closeModal()" class="close-btn">&times;</button>
+        </div>
+        
+        <div class="modal-content">
+            <div class="case-step">
+                <span class="step-label">PROBLEM</span>
+                <p id="m-problem"></p>
+            </div>
+            <div class="case-step">
+                <span class="step-label">SOLUTION</span>
+                <p id="m-solution"></p>
+            </div>
+            <div class="case-step">
+                <span class="step-label">RESULT</span>
+                <p id="m-result"></p>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <a id="m-link" href="#" target="_blank" class="project-link">VIEW PROJECT</a>
+        </div>
     </div>
 
     <div id="contact-drawer" class="drawer">

@@ -3,10 +3,42 @@ const glyphs = "ABCDEFGHIKLMNOPQRSTVXYZ0123456789+=/-_";
 
 const myData = {
     nodes: [
-        { id: 1, name: "Project Virus", date: "Октябрь 2023", desc: "Масштабная игра внутри Telegram с элементами стратегии.", link: "https://google.com" },
-        { id: 2, name: "Virus Infographics", date: "Ноябрь 2023", desc: "Полный брендинг и оформление медиа-ресурсов.", link: "#" },
-        { id: 3, name: "Desktop Trading App", date: "Январь 2024", desc: "Терминал для высокочастотной торговли.", link: "#" },
-        { id: 4, name: "Promo Landing", date: "Февраль 2024", desc: "Высококонверсионная посадочная страница.", link: "#" }
+        { 
+            id: 1, 
+            name: "Project Virus", 
+            date: "Октябрь 2023", 
+            problem: "Низкое удержание игроков в Telegram из-за отсутствия глубокой игровой механики.", 
+            solution: "Внедрение системы захвата территорий с динамическим балансом и визуальной картой.", 
+            result: "Retention 7-го дня вырос до 18%, активная аудитория превысила 50к игроков.", 
+            link: "https://google.com" 
+        },
+        { 
+            id: 2, 
+            name: "Virus Infographics", 
+            date: "Ноябрь 2023", 
+            problem: "Сложные игровые данные были непонятны новым пользователям, что повышало порог входа.", 
+            solution: "Создание набора интерактивных гайдов и брендированной инфографики для комьюнити.", 
+            result: "Снижение количества обращений в поддержку на 35% и виральный охват в соцсетях.", 
+            link: "#" 
+        },
+        { 
+            id: 3, 
+            name: "Desktop Trading App", 
+            date: "Январь 2024", 
+            problem: "Высокая задержка (latency) при отображении котировок в реальном времени на слабых ПК.", 
+            solution: "Оптимизация рендеринга графиков через WebGL и многопоточная обработка данных.", 
+            result: "Стабильные 60 FPS при 100+ активных индикаторах и нулевой задержке интерфейса.", 
+            link: "#" 
+        },
+        { 
+            id: 4, 
+            name: "Promo Landing", 
+            date: "Февраль 2024", 
+            problem: "Старый лендинг имел конверсию 2.1% из-за перегруженности текстом и долгой загрузки.", 
+            solution: "Минималистичный дизайн с фокусом на CTA и оптимизация веса страницы до 1.2мб.", 
+            result: "Конверсия в регистрацию выросла до 8.4%, скорость загрузки по PageSpeed — 98/100.", 
+            link: "#" 
+        }
     ],
     links: [
         { source: 1, target: 2 },
@@ -197,15 +229,34 @@ document.querySelectorAll('.skill-card').forEach(card => {
 // 6. ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ
 function showModal(node) {
     const modal = document.getElementById('project-modal');
+    const overlay = document.getElementById('drawer-overlay');
+    
     document.getElementById('m-title').innerText = node.name;
-    document.getElementById('m-date').innerText = `Срок: ${node.date}`;
-    document.getElementById('m-desc').innerText = node.desc;
+    document.getElementById('m-date').innerText = node.date;
+    document.getElementById('m-problem').innerText = node.problem;
+    document.getElementById('m-solution').innerText = node.solution;
+    document.getElementById('m-result').innerText = node.result;
     document.getElementById('m-link').href = node.link;
+    
     modal.classList.add('active');
+    if (overlay) overlay.style.display = 'block';
 }
 
 function closeModal() {
-    document.getElementById('project-modal').classList.remove('active');
+    const modal = document.getElementById('project-modal');
+    const overlay = document.getElementById('drawer-overlay');
+    
+    modal.classList.remove('active');
+    if (overlay) overlay.style.display = 'none';
+}
+
+// Закрытие при клике на блюр (оверлей)
+const overlay = document.getElementById('drawer-overlay');
+if (overlay) {
+    overlay.addEventListener('click', () => {
+        closeModal();
+        if (typeof closeContactForm === 'function') closeContactForm(); // На случай если форма тоже открыта
+    });
 }
 
 function openContactForm() {
