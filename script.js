@@ -1,3 +1,6 @@
+// 1. КОНСТАНТЫ И ДАННЫЕ (Объявляем в самом начале)
+const glyphs = "ABCDEFGHIKLMNOPQRSTVXYZ0123456789+=/-_";
+
 const myData = {
     nodes: [
         { id: 1, name: "Project Virus", date: "Октябрь 2023", desc: "Масштабная игра внутри Telegram с элементами стратегии.", link: "https://google.com" },
@@ -12,6 +15,7 @@ const myData = {
     ]
 };
 
+// 2. ИНИЦИАЛИЗАЦИЯ ГРАФА
 const container = document.getElementById('graph-container');
 const graphDiv = document.getElementById('graph');
 let dashOffset = 0;
@@ -90,17 +94,107 @@ const Graph = ForceGraph()(graphDiv)
         Graph.centerAt(node.x, node.y, 1000);
     });
 
-container.addEventListener('mousemove', (e) => {
+// 3. ЕДИНЫЙ ОБРАБОТЧИК МЫШИ (Курсор + Координаты + Параллакс + Граф)
+const cursor = document.getElementById('custom-cursor');
+const coords = document.getElementById('mouse-coords');
+const photo = document.getElementById('parallax-photo');
+
+document.addEventListener('mousemove', (e) => {
+    // Двигаем кастомный курсор
+    if (cursor) {
+        cursor.style.left = e.clientX + 'px';
+        cursor.style.top = e.clientY + 'px';
+        
+        const target = e.target;
+        const isInteractive = target.closest('a, button, .skill-card, .nav-item, input, textarea');
+        cursor.classList.toggle('active', !!isInteractive);
+    }
+
+    // Обновляем координаты
+    if (coords) {
+        const x = String(Math.floor(e.clientX)).padStart(3, '0');
+        const y = String(Math.floor(e.clientY)).padStart(3, '0');
+        coords.innerText = `X: ${x} Y: ${y}`;
+    }
+
+    // Обновляем позицию мыши для графа (только если мы внутри контейнера)
     const rect = container.getBoundingClientRect();
-    mousePos = Graph.screen2GraphCoords(e.clientX - rect.left, e.clientY - rect.top);
-    Graph.resume(); 
+    if (e.clientX >= rect.left && e.clientX <= rect.right && e.clientY >= rect.top && e.clientY <= rect.bottom) {
+        mousePos = Graph.screen2GraphCoords(e.clientX - rect.left, e.clientY - rect.top);
+        Graph.resume();
+    } else {
+        mousePos = { x: null, y: null };
+    }
+
+    // Параллакс фото
+    if (photo) {
+        const px = (window.innerWidth - e.pageX * 2) / 100;
+        const py = (window.innerHeight - e.pageY * 2) / 100;
+        photo.style.transform = `translateX(${px}px) translateY(${py}px)`;
+    }
 });
 
-container.addEventListener('mouseleave', () => { mousePos = { x: null, y: null }; });
+// 4. МАГНИТНЫЕ КНОПКИ
+document.querySelectorAll('.cta-btn, .project-link').forEach((el) => {
+    el.addEventListener('mousemove', function(e) {
+        const rect = this.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+        const moveX = (e.clientX - centerX) * 0.3;
+        const moveY = (e.clientY - centerY) * 0.3;
+        this.style.transform = `translate(${moveX}px, ${moveY}px)`;
+    });
+    el.addEventListener('mouseleave', function() {
+        this.style.transform = `translate(0px, 0px)`;
+    });
+});
 
-Graph.d3Force('charge').strength(-250);
-Graph.d3Force('link').distance(70);
+// 5. СКИЛЛЫ (Заполнение + Глитч)
+function glitchPercent(el, target) {
+    let current = 0;
+    const duration = 1500; 
+    const stepTime = Math.floor(duration / target);
+    const interval = setInterval(() => {
+        current++;
+        const randomChar = Math.random() > 0.85 ? glyphs[Math.floor(Math.random() * glyphs.length)] : '';
+        el.innerText = current + "%" + randomChar;
+        if (current >= target) {
+            clearInterval(interval);
+            el.innerText = target + "%";
+        }
+    }, stepTime);
+}
 
+document.querySelectorAll('.skill-card').forEach(card => {
+    card.addEventListener('mouseenter', function() {
+        // Если уже анимировали, выходим
+        if (this.dataset.animated === "true") return;
+        this.dataset.animated = "true";
+
+        // ДОБАВЛЯЕМ КЛАСС ДЛЯ CSS (чтобы проценты не исчезли)
+        this.classList.add('filled');
+
+        const progress = this.querySelector('.skill-progress');
+        const valElement = this.querySelector('.skill-val');
+        
+        // Достаем процент
+        const style = this.getAttribute('style');
+        const match = style ? style.match(/--percent:\s*(\d+%)/) : null;
+        
+        if (match) {
+            const targetPercent = match[1];
+            const targetValue = parseInt(targetPercent);
+            
+            // Запускаем заполнение шкалы
+            progress.style.height = targetPercent;
+            
+            // Запускаем глитч цифр
+            glitchPercent(valElement, targetValue);
+        }
+    });
+});
+
+// 6. ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ
 function showModal(node) {
     const modal = document.getElementById('project-modal');
     document.getElementById('m-title').innerText = node.name;
@@ -114,41 +208,17 @@ function closeModal() {
     document.getElementById('project-modal').classList.remove('active');
 }
 
-Graph.onEngineStop(() => {
-    if (!Graph._initialZoomDone) {
-        Graph.zoom(2.2, 1000);
-        Graph.centerAt(0, 0, 1000);
-        Graph._initialZoomDone = true;
-    }
-});
+function openContactForm() {
+    document.getElementById('contact-drawer').classList.add('active');
+    document.getElementById('drawer-overlay').style.display = 'block';
+    document.body.style.overflow = 'hidden';
+}
 
-// Анимация скиллов
-const skillObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            const cards = entry.target.querySelectorAll('.skill-card');
-            cards.forEach((card, index) => {
-                const progress = card.querySelector('.skill-progress');
-                const style = card.getAttribute('style');
-                if (style) {
-                    const match = style.match(/--percent:\s*(\d+%)/);
-                    if (match) {
-                        const targetHeight = match[1];
-                        setTimeout(() => { progress.style.height = targetHeight; }, index * 100); 
-                    }
-                }
-            });
-            skillObserver.unobserve(entry.target);
-        }
-    });
-}, { threshold: 0.2 });
-
-const skillsGrid = document.querySelector('.skills-grid');
-if (skillsGrid) { skillObserver.observe(skillsGrid); }
-
-// Scramble Text
-const heroTitle = document.getElementById('hero-title');
-const glyphs = "ABCDEFGHIKLMNOPQRSTVXYZ0123456789+=/-_";
+function closeContactForm() {
+    document.getElementById('contact-drawer').classList.remove('active');
+    document.getElementById('drawer-overlay').style.display = 'none';
+    document.body.style.overflow = 'auto';
+}
 
 function scramble(el, word) {
     let iteration = 0;
@@ -162,120 +232,25 @@ function scramble(el, word) {
     }, 30);
 }
 
-window.addEventListener('DOMContentLoaded', () => scramble(heroTitle, "ПОРТФОЛИО"));
-heroTitle.onmouseover = () => scramble(heroTitle, "DEVELOPER");
-heroTitle.onmouseleave = () => scramble(heroTitle, "ПОРТФОЛИО");
-
-// Параллакс
-document.addEventListener('mousemove', (e) => {
-    const photo = document.getElementById('parallax-photo');
-    if (!photo) return;
-    const x = (window.innerWidth - e.pageX * 2) / 100;
-    const y = (window.innerHeight - e.pageY * 2) / 100;
-    photo.style.transform = `translateX(${x}px) translateY(${y}px)`;
+// 7. СОБЫТИЯ ЗАГРУЗКИ И РЕЗАЙЗА
+window.addEventListener('DOMContentLoaded', () => {
+    const heroTitle = document.getElementById('hero-title');
+    if (heroTitle) {
+        scramble(heroTitle, "ПОРТФОЛИО");
+        heroTitle.onmouseover = () => scramble(heroTitle, "DEVELOPER");
+        heroTitle.onmouseleave = () => scramble(heroTitle, "ПОРТФОЛИО");
+    }
 });
 
-// НОВОЕ: Функции для выдвижной формы
-function openContactForm() {
-    document.getElementById('contact-drawer').classList.add('active');
-    document.getElementById('drawer-overlay').style.display = 'block';
-    document.body.style.overflow = 'hidden';
-}
-
-function closeContactForm() {
-    document.getElementById('contact-drawer').classList.remove('active');
-    document.getElementById('drawer-overlay').style.display = 'none';
-    document.body.style.overflow = 'auto';
-}
-
-// Обновление размера графа при ресайзе
 window.addEventListener('resize', () => {
     Graph.width(container.offsetWidth);
     Graph.height(container.offsetHeight);
 });
 
-const contactForm = document.getElementById('email-form');
-
-if (contactForm) {
-    contactForm.addEventListener('submit', async function(e) {
-        // Если используешь Formspree, не вызывай e.preventDefault() здесь, 
-        // иначе форма не отправится без дополнительного JS-кода Fetch API.
-        
-        const submitBtn = contactForm.querySelector('button');
-        const originalText = submitBtn.innerText;
-        
-        // Меняем текст на кнопке для фидбэка
-        submitBtn.innerText = "ОТПРАВЛЯЮ...";
-        submitBtn.style.opacity = "0.5";
-        submitBtn.style.pointerEvents = "none";
-
-        // Если хочешь оставить пользователя на странице без перезагрузки (AJAX):
-        /*
-        e.preventDefault();
-        const data = new FormData(event.target);
-        fetch(event.target.action, {
-            method: contactForm.method,
-            body: data,
-            headers: { 'Accept': 'application/json' }
-        }).then(response => {
-            if (response.ok) {
-                submitBtn.innerText = "ОТПРАВЛЕНО ✓";
-                submitBtn.style.background = "#222";
-                submitBtn.style.color = "#fff";
-                contactForm.reset();
-                setTimeout(closeContactForm, 2000); // Закрываем через 2 сек
-            }
-        });
-        */
-    });
-}
-
-// === ОБНОВЛЕННАЯ ЛОГИКА КУРСОРA И КООРДИНАТ ===
-const cursor = document.getElementById('custom-cursor');
-const coords = document.getElementById('mouse-coords'); // Находим наш счетчик
-
-document.addEventListener('mousemove', (e) => {
-    // 1. Двигаем кружок
-    cursor.style.left = e.clientX + 'px';
-    cursor.style.top = e.clientY + 'px';
-
-    // 2. ОБНОВЛЯЕМ КООРДИНАТЫ (Новое)
-    // padStart(3, '0') делает формат 001, 015 и т.д.
-    const x = String(Math.floor(e.clientX)).padStart(3, '0');
-    const y = String(Math.floor(e.clientY)).padStart(3, '0');
-    coords.innerText = `X: ${x} Y: ${y}`;
-
-    // 3. Проверка ховера
-    const target = e.target;
-    const isInteractive = target.closest('a, button, .skill-card, .nav-item, input, textarea');
-    
-    if (isInteractive) {
-        cursor.classList.add('active');
-    } else {
-        cursor.classList.remove('active');
+Graph.onEngineStop(() => {
+    if (!Graph._initialZoomDone) {
+        Graph.zoom(2.2, 1000);
+        Graph.centerAt(0, 0, 1000);
+        Graph._initialZoomDone = true;
     }
-});
-
-// === 2. ЛОГИКА МАГНИТНЫХ КНОПОК ===
-const magneticElements = document.querySelectorAll('.cta-btn, .project-link');
-
-magneticElements.forEach((el) => {
-    el.addEventListener('mousemove', function(e) {
-        const rect = this.getBoundingClientRect();
-        
-        // Вычисляем центр кнопки
-        const centerX = rect.left + rect.width / 2;
-        const centerY = rect.top + rect.height / 2;
-        
-        // Вычисляем дистанцию от мыши до центра (с коэффициентом силы магнита 0.3)
-        const moveX = (e.clientX - centerX) * 0.3;
-        const moveY = (e.clientY - centerY) * 0.3;
-        
-        this.style.transform = `translate(${moveX}px, ${moveY}px)`;
-    });
-
-    el.addEventListener('mouseleave', function() {
-        // Возвращаем кнопку на место при уходе мыши
-        this.style.transform = `translate(0px, 0px)`;
-    });
 });

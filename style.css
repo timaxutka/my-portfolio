@@ -104,10 +104,16 @@ body::after {
 .about-intro .label { display: block; color: #555; font-size: 0.9rem; letter-spacing: 0.4em; margin-bottom: 15px; text-transform: uppercase; }
 .about-intro h1 { font-family: 'Inter', sans-serif; font-size: 3rem; font-weight: 300; line-height: 1.1; margin: 0; color: #eee; }
 
+/* 1. СЕТКА: Делаем карточки меньше, чтобы влезали в экран */
 .skills-grid {
-    display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; width: 100%;
-    grid-auto-rows: calc((80vw - (3 * 20px)) / 4);
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+    width: 100%;
+    /* Фиксируем высоту ряда, чтобы не раздувало секцию */
+    grid-auto-rows: 180px; 
 }
+
 .skill-card { position: relative; background: #0a0a0a; border: 1px solid #1a1a1a; overflow: hidden; transition: 0.3s; }
 .skill-card:hover { border-color: #333; }
 
@@ -115,12 +121,33 @@ body::after {
 .ratio-3-1 { grid-column: span 3; }
 .ratio-4-1 { grid-column: span 4; }
 
-.skill-progress { position: absolute; left: 0; right: 0; bottom: 0; width: 100%; height: 0; background: #161616; transition: height 1.5s cubic-bezier(0.16, 1, 0.3, 1); z-index: 1; }
+/* 3. ШКАЛА ЗАПОЛНЕНИЯ (Прогресс) */
+.skill-progress {
+    position: absolute;
+    left: 0; bottom: 0; width: 100%;
+    height: 0;
+    background: #222 !important; /* Цвет шкалы вне ховера */
+    transition: height 1.5s cubic-bezier(0.19, 1, 0.22, 1);
+    z-index: 1;
+}
+
 .skill-content { position: absolute; inset: 0; z-index: 2; padding: 20px; }
 .skill-name { position: absolute; top: 20px; left: 20px; font-size: 1rem; text-transform: uppercase; color: #fff; }
+/* Значение процентов */
 .skill-val {
-    position: absolute; bottom: -10px; right: 5px; font-family: 'JetBrains Mono', monospace;
-    color: #222; font-size: 8rem; font-weight: 700; opacity: 0.3; transition: 0.3s;
+    position: absolute;
+    bottom: 5px;   /* Максимально вниз */
+    right: 10px;   /* Максимально вправо */
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 3rem; /* Оптимальный размер */
+    font-weight: 700;
+    color: #fff;
+    pointer-events: none;
+    z-index: 3;
+    
+    /* Изначально скрыты */
+    opacity: 0;
+    transition: opacity 0.3s ease;
 }
 .skill-card:hover .skill-val { color: #fff; opacity: 1; }
 
@@ -201,4 +228,49 @@ body::after {
     z-index: 10000;
     pointer-events: none; /* Чтобы не мешал кликам */
     letter-spacing: 1px;
+}
+
+
+/* Цвет заполнения карточки (акцентный красный) */
+:root {
+    --accent-red: #ff0000; 
+}
+
+/* Базовые настройки шкалы */
+.skill-progress {
+    position: absolute;
+    left: 0; bottom: 0; width: 100%;
+    height: 0; /* Высоту меняет JS и она остается */
+    
+    /* ВОТ ТУТ РЕШЕНИЕ: */
+    background: #222 !important; /* В обычном состоянии она темно-серая (едва заметная) */
+    transition: height 1.5s cubic-bezier(0.19, 1, 0.22, 1), background 0.3s ease;
+    z-index: 1;
+}
+
+/* Ховер на карточку — меняем фон карточки И цвет шкалы внутри неё */
+.skill-card:hover {
+    background-color: #ff0000 !important;
+}
+
+.skill-card:hover .skill-progress {
+    background: rgba(255, 255, 255, 0.3) !important; /* Блик при ховере */
+}
+
+/* Текст и цифры всегда белые при ховере */
+.skill-card:hover .skill-name,
+.skill-card:hover .skill-val {
+    color: #fff !important;
+    opacity: 1 !important;
+    z-index: 2;
+}
+
+/* ЭФФЕКТ СОХРАНЕНИЯ: Если JS добавил класс filled, проценты НЕ исчезают */
+.skill-card.filled .skill-val {
+    opacity: 0.2; /* Видны тускло, когда мышь ушла */
+}
+
+/* При ховере на заполненную карточку проценты светятся ярко */
+.skill-card:hover .skill-val {
+    opacity: 1 !important;
 }
