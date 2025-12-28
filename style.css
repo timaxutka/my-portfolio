@@ -43,6 +43,7 @@ body::after {
 *, *::before, *::after { cursor: none !important; }
 
 /* 2. HERO СЕКЦИЯ */
+/* 2. HERO СЕКЦИЯ */
 .hero {
     height: 100vh;
     display: flex;
@@ -50,22 +51,35 @@ body::after {
     justify-content: space-between;
     position: relative;
     padding: 0 8vw;
-    border-bottom: 1px solid #1a1a1a; 
+    border-bottom: none !important; /* Убираем бордер как договаривались ранее */
+    overflow: hidden; /* Чтобы глитч не создавал полос прокрутки */
 }
 
-.hero-content { flex: 1; display: flex; flex-direction: column; align-items: flex-start; z-index: 10; }
+.hero-content { 
+    flex: 1; 
+    display: flex; 
+    flex-direction: column; 
+    align-items: flex-start; 
+    z-index: 10; 
+    /* Защита: не даем контенту сжимать фото */
+    min-width: 50%; 
+}
 
-/* 2. HERO СЕКЦИЯ — Массивный заголовок с двойным Glow */
+/* 2. HERO СЕКЦИЯ — Массивный заголовок */
 .hero h1 {
     font-family: 'Inter', sans-serif;
-    font-weight: 900; /* Максимальная жирность */
-    font-size: 7rem;  /* Чуть увеличил размер для массивности */
-    letter-spacing: -0.04em; /* Плотное прилегание букв */
+    font-weight: 900;
+    font-size: 7rem;
+    letter-spacing: -0.04em;
     margin: 0 0 40px 0;
     text-transform: uppercase;
     position: relative;
     
-    /* ДО ХОВЕРА: Винно-красный текст и красный Glow */
+    /* СТАБИЛИЗАЦИЯ: Резервируем место под самый длинный текст */
+    min-width: 850px; 
+    white-space: nowrap; /* Текст всегда в одну строку */
+    display: block;
+
     color: rgba(180, 0, 0, 0.6); 
     text-shadow: 
         0 0 15px rgba(139, 0, 0, 0.5),
@@ -75,16 +89,68 @@ body::after {
 }
 
 .hero h1:hover {
-    /* ПРИ ХОВЕРЕ: Текст становится ярко-белым */
     color: #ffffff;
-    
-    /* Мощный БЕЛЫЙ GLOW */
     text-shadow: 
         0 0 10px rgba(255, 255, 255, 0.8),
         0 0 30px rgba(255, 255, 255, 0.4),
         0 0 50px rgba(255, 255, 255, 0.2);
-        
-    transform: scale(1.02); /* Легкое увеличение для эффекта мощи */
+    /* Убираем scale(1.02), если он вызывает микродрожание, либо оставляем только для текста */
+    transform: scale(1.01); 
+}
+
+/* АДАПТИВ ПОД МАКБУКИ И СРЕДНИЕ ЭКРАНЫ */
+@media (max-width: 1100px) {
+    .hero {
+        flex-direction: column !important;
+        align-items: center !important;    /* ЦЕНТРИРУЕМ ВСЁ ВНУТРИ HERO */
+        justify-content: center !important; /* Центрируем по вертикали, если места много */
+        height: auto !important;
+        min-height: 100vh;
+        padding: 100px 8vw 60px 8vw;
+        gap: 30px;
+    }
+
+    .hero-content {
+        order: 1;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center !important;    /* Центрируем текст, кнопки и HUD */
+        text-align: center;
+        flex: none !important;
+    }
+
+    .hero-photo {
+        order: 2;
+        width: 100%;
+        display: flex;
+        justify-content: center !important; /* Центрируем само фото */
+        align-items: center;
+        height: auto !important;
+    }
+
+    .hero-photo img {
+        max-height: 45vh;
+        width: auto;
+        max-width: 90vw;                   /* Чтобы фото не вылезало за края экрана */
+        object-fit: contain;
+    }
+
+    .hero h1 {
+        font-size: clamp(2rem, 8vw, 3.5rem); /* Резиновый размер шрифта */
+        min-width: 0 !important;
+        width: 100%;
+        white-space: normal;
+        text-align: center;
+    }
+
+    .hero-btns {
+        justify-content: center !important; /* Кнопки по центру */
+    }
+
+    .hero-nav {
+        align-items: center !important;    /* Меню по центру */
+    }
 }
 
 /* Выравнивание HUD по центру/началу заголовка */
@@ -179,11 +245,20 @@ body::after {
 .cta-btn.secondary:hover { background: #fff; color: #000; }
 
 .hero-photo {
-    width: 45vw; height: 100vh;
-    display: flex; align-items: flex-end; justify-content: center;
+    width: 45vw; 
+    height: 100vh;
+    display: flex; 
+    align-items: center;    /* ЦЕНТРИРУЕМ ПО ВЕРТИКАЛИ */
+    justify-content: center; /* ЦЕНТРИРУЕМ ПО ГОРИЗОНТАЛИ */
+    position: relative;
 }
+
 .hero-photo img {
-    max-width: 100%; height: 90vh; object-fit: cover;
+    width: auto;             /* Убираем 100%, чтобы не распирало */
+    height: auto;
+    max-width: 100%;         /* Фото сжимается под размер контейнера */
+    max-height: 85vh;
+    object-fit: contain;
     mask-image: linear-gradient(to top, transparent, black 15%, black 85%, transparent);
 }
 
@@ -598,32 +673,40 @@ body::after {
     justify-content: space-between;
 }
 
-/* Правая часть (Карта) */
+/* В блоке .info-map-side */
 .info-map-side {
-    flex: 0 0 800px; /* Увеличили ширину карты для солидности */
+    flex: 1.2;            /* Карта теперь резиновая и занимает доступное место */
+    min-width: 300px;     /* Минимальный порог, чтобы не схлопнулась в ноль */
+    max-width: 800px;     /* Максимальный порог, чтобы не стала слишком огромной */
     display: flex;
     flex-direction: column;
     align-self: flex-start;
 }
 
-/* ТЕМНАЯ КАРТА: Добавляем стили для рамки и самой карты */
+/* В блоке .map-frame */
 .map-frame {
     position: relative;
     width: 100%;
-    height: 350px;
+    /* Используем aspect-ratio или проценты для высоты */
+    height: 0;
+    padding-bottom: 56.25%; /* Соотношение сторон 16:9, карта будет масштабироваться по высоте за шириной */
+    
     margin-top: 15px;
     border: 1px solid #1a1a1a;
     background: #000;
     overflow: hidden;
-    /* Глубокая инверсия для полной темноты */
     filter: grayscale(1) invert(1) contrast(1.2) brightness(0.7);
     transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
 }
 
+/* Фикс для iframe внутри резинового контейнера */
 .map-frame iframe {
+    position: absolute;   /* Привязываем к границам растянутого padding-bottom */
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
-    opacity: 0.5; /* Смягчаем яркость дорог */
+    opacity: 0.5;
 }
 
 .map-frame:hover {
@@ -826,4 +909,61 @@ body::after {
     text-align: right;
     letter-spacing: 0.1em;
     margin-top: 5px;
+}
+
+/* АДАПТИВНОСТЬ ДЛЯ КАРТЫ И КОНТАКТОВ */
+/* --- ФИКС АДАПТИВНОСТИ ДЛЯ КОНТАКТОВ (КАРТА ВНИЗ) --- */
+@media (max-width: 1100px) {
+    #contact {
+        padding-left: 5%;
+        padding-right: 5%;
+    }
+
+    .contact-container {
+        flex-direction: column !important; /* Принудительно ставим в колонку */
+        align-items: center;
+        text-align: center;
+        gap: 60px;
+    }
+
+    .contact-left-side, .contact-actions {
+        width: 100%;
+        min-width: 100%;
+        align-items: center;
+    }
+
+    .contact-btns-wrapper {
+        justify-content: center;
+    }
+
+    .contact-info-block {
+        border-left: none; /* Убираем вертикальную черту */
+        border-top: 1px solid #1a1a1a; /* Ставим горизонтальную */
+        padding-left: 0;
+        padding-top: 40px;
+        width: 100%;
+        align-items: center;
+    }
+
+    .info-map-side {
+        width: 100%;
+        max-width: 100%;
+        flex: none;
+    }
+
+    .map-frame {
+        height: 350px; /* Фиксируем высоту карты на мобильных */
+        padding-bottom: 0; /* Отключаем хак с процентами */
+    }
+
+    .footer-content {
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+        text-align: center;
+    }
+
+    .footer-right {
+        text-align: center;
+    }
 }
