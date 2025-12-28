@@ -3,109 +3,39 @@ const glyphs = "ABCDEFGHIKLMNOPQRSTVXYZ0123456789+=/-_";
 
 const myData = {
     nodes: [
-        { 
-            id: 1, 
-            name: "Project Virus", 
-            date: "Октябрь 2023", 
-            problem: "Низкое удержание игроков в Telegram из-за отсутствия глубокой игровой механики.", 
-            solution: "Внедрение системы захвата территорий с динамическим балансом и визуальной картой.", 
-            result: "Retention 7-го дня вырос до 18%, активная аудитория превысила 50к игроков.", 
-            link: "https://google.com" 
-        },
-        { 
-            id: 2, 
-            name: "Virus Infographics", 
-            date: "Ноябрь 2023", 
-            problem: "Сложные игровые данные были непонятны новым пользователям, что повышало порог входа.", 
-            solution: "Создание набора интерактивных гайдов и брендированной инфографики для комьюнити.", 
-            result: "Снижение количества обращений в поддержку на 35% и виральный охват в соцсетях.", 
-            link: "#" 
-        },
-        { 
-            id: 3, 
-            name: "Desktop Trading App", 
-            date: "Январь 2024", 
-            problem: "Высокая задержка (latency) при отображении котировок в реальном времени на слабых ПК.", 
-            solution: "Оптимизация рендеринга графиков через WebGL и многопоточная обработка данных.", 
-            result: "Стабильные 60 FPS при 100+ активных индикаторах и нулевой задержке интерфейса.", 
-            link: "#" 
-        },
-        { 
-            id: 4, 
-            name: "Promo Landing", 
-            date: "Февраль 2024", 
-            problem: "Старый лендинг имел конверсию 2.1% из-за перегруженности текстом и долгой загрузки.", 
-            solution: "Минималистичный дизайн с фокусом на CTA и оптимизация веса страницы до 1.2мб.", 
-            result: "Конверсия в регистрацию выросла до 8.4%, скорость загрузки по PageSpeed — 98/100.", 
-            link: "#" 
-        },
-        { 
-            id: 5, 
-            name: "Neural Nexus AI", 
-            date: "Март 2024", 
-            problem: "Пользователи долго искали нужную информацию в базе знаний проекта (более 1000 статей).", 
-            solution: "Интеграция LLM-ассистента, обученного на локальных данных, с поиском через векторную базу.", 
-            result: "Среднее время поиска ответа сократилось с 4 минут до 15 секунд.", 
-            link: "#" 
-        },
-        { 
-            id: 6, 
-            name: "Crypto Wallet UI", 
-            date: "Апрель 2024", 
-            problem: "Сложный процесс подтверждения транзакций приводил к ошибкам новичков и потере средств.", 
-            solution: "Переработка UX-потока с визуализацией пути транзакции и превентивными предупреждениями.", 
-            result: "Количество ошибочных транзакций снизилось на 60% в первый месяц после релиза.", 
-            link: "#" 
-        },
-        { 
-            id: 7, 
-            name: "E-com Dashboard", 
-            date: "Июнь 2024", 
-            problem: "Владельцы магазинов не видели корреляцию между рекламным бюджетом и реальной прибылью.", 
-            solution: "Разработка кастомной системы сквозной аналитики с визуализацией воронки в реальном времени.", 
-            result: "ROI клиентов вырос в среднем на 22% благодаря более точному распределению бюджета.", 
-            link: "#" 
-        },
-        { 
-            id: 8, 
-            name: "Security Audit Tool", 
-            date: "Август 2024", 
-            problem: "Ручной аудит безопасности кода занимал слишком много времени у старших разработчиков.", 
-            solution: "Автоматизация базовых проверок безопасности через кастомный статический анализатор.", 
-            result: "Ускорение процесса аудита в 3 раза при сохранении 95% точности выявления уязвимостей.", 
-            link: "#" 
-        },
-        { 
-            id: 9, 
-            name: "VFX Portfolio", 
-            date: "Сентябрь 2024", 
-            problem: "Стандартные платформы для портфолио не позволяли отображать тяжелые видео без потери качества.", 
-            solution: "Self-hosted решение с адаптивной подгрузкой сегментов видео в зависимости от скорости интернета.", 
-            result: "Плавное воспроизведение 4K контента даже на мобильных устройствах с 4G.", 
-            link: "#" 
-        },
-        { 
-            id: 10, 
-            name: "Mobile CRM System", 
-            date: "Ноябрь 2024", 
-            problem: "Менеджеры в полях теряли данные о встречах из-за плохого соединения и сложного интерфейса CRM.", 
-            solution: "Разработка легкого PWA-приложения с приоритетом на Offline-first и синхронизацией данных.", 
-            result: "Полнота заполнения отчетности выросла с 70% до 98%.", 
-            link: "#" 
-        }
+        { id: 1, name: "Project Virus", date: "Октябрь 2023", problem: "Низкое удержание игроков...", solution: "Внедрение системы захвата...", result: "Retention вырос до 18%...", link: "https://google.com" },
+        { id: 2, name: "Virus Infographics", date: "Ноябрь 2023", problem: "Сложные данные...", solution: "Интерактивные гайды...", result: "Снижение обращений на 35%...", link: "#" },
+        { id: 3, name: "Desktop Trading App", date: "Январь 2024", problem: "Высокая задержка...", solution: "WebGL оптимизация...", result: "Стабильные 60 FPS...", link: "#" },
+        { id: 4, name: "Promo Landing", date: "Февраль 2024", problem: "Низкая конверсия...", solution: "Минимализм и CTA...", result: "Конверсия выросла до 8.4%...", link: "#" },
+        { id: 5, name: "Neural Nexus AI", date: "Март 2024", problem: "Долгий поиск инфо...", solution: "LLM-ассистент...", result: "Поиск: 4 мин -> 15 сек...", link: "#" },
+        { id: 6, name: "Crypto Wallet UI", date: "Апрель 2024", problem: "Ошибки транзакций...", solution: "UX-визуализация пути...", result: "Ошибки снизились на 60%...", link: "#" },
+        { id: 7, name: "E-com Dashboard", date: "Июнь 2024", problem: "Слепые зоны прибыли...", solution: "Сквозная аналитика...", result: "ROI вырос на 22%...", link: "#" },
+        { id: 8, name: "Security Audit Tool", date: "Август 2024", problem: "Долгий ручной аудит...", solution: "Статический анализатор...", result: "Ускорение в 3 раза...", link: "#" },
+        { id: 9, name: "VFX Portfolio", date: "Сентябрь 2024", problem: "Тяжелое видео...", solution: "Self-hosted адаптив...", result: "Плавное 4K везде...", link: "#" },
+        { id: 10, name: "Mobile CRM System", date: "Ноябрь 2024", problem: "Потеря данных в полях...", solution: "Offline-first PWA...", result: "Отчетность: 70% -> 98%...", link: "#" }
     ],
     links: [
+        // КЛАСТЕР 1: Игровая экосистема (1, 2, 4)
         { source: 1, target: 2 },
-        { source: 1, target: 4 },
-        { source: 3, target: 1 },
-        { source: 5, target: 8 },
-        { source: 6, target: 3 },
-        { source: 7, target: 4 },
-        { source: 10, target: 7 },
-        { source: 2, target: 9 },
-        { source: 8, target: 6 },
+        { source: 2, target: 4 },
+        { source: 4, target: 1 },
+
+        // КЛАСТЕР 2: Финтех и Инструменты (3, 6, 8)
+        { source: 3, target: 6 },
+        { source: 6, target: 8 },
+        { source: 8, target: 3 },
+
+        // КЛАСТЕР 3: AI и Бизнес-системы (5, 7, 10)
         { source: 5, target: 10 },
-        { source: 9, target: 1 }
+        { source: 10, target: 7 },
+        { source: 7, target: 5 },
+
+        // МОСТИК (Слабая связь, чтобы группы не разлетались слишком далеко)
+        { source: 4, target: 7 }, 
+        
+        // ОДИНОЧНЫЙ УЗЕЛ (9 - VFX Portfolio) 
+        // Он будет висеть отдельно, так как у него только одна связь
+        { source: 9, target: 2 }
     ]
 };
 
@@ -132,9 +62,9 @@ const Graph = ForceGraph()(graphDiv)
     .minZoom(1)
     .maxZoom(5)
     .cooldownTicks(1000000)
-    .cooldownTime(600000)
+    .cooldownTime(600000) // Твой стандарт рендера (10 минут) не меняем
     .onRenderFramePre((ctx, globalScale) => {
-        dashOffset += 0.3;
+        // Оставляем сетку как есть
         const size = 50; const range = 3000;
         ctx.save();
         ctx.beginPath();
@@ -148,49 +78,77 @@ const Graph = ForceGraph()(graphDiv)
         ctx.restore();
     })
     .linkCanvasObject((link, ctx) => {
-        const start = link.source; const end = link.target;
+        const start = link.source;
+        const end = link.target;
         if (typeof start !== 'object' || typeof end !== 'object') return;
+
+        const baseRadius = 4; // Должен совпадать с радиусом из nodeCanvasObject
+
+        // Вычисляем расстояние между центрами
+        const dx = end.x - start.x;
+        const dy = end.y - start.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+
+        if (dist === 0) return;
+
+        // Вычисляем смещение (нормализованный вектор * радиус)
+        const offsetX = (dx / dist) * baseRadius;
+        const offsetY = (dy / dist) * baseRadius;
+
         ctx.save();
         ctx.beginPath();
-        ctx.strokeStyle = '#fff'; 
-        ctx.lineWidth = 0.2; 
-        ctx.setLineDash([30, 90]); 
-        ctx.lineDashOffset = -dashOffset;
-        ctx.moveTo(start.x, start.y);
-        ctx.lineTo(end.x, end.y);
-        ctx.globalAlpha = 0.2; 
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+        ctx.lineWidth = 0.5;
+
+        // Рисуем линию от края первого узла до края второго
+        ctx.moveTo(start.x + offsetX, start.y + offsetY);
+        ctx.lineTo(end.x - offsetX, end.y - offsetY);
+
         ctx.stroke();
         ctx.restore();
     })
     .nodeCanvasObject((node, ctx, globalScale) => {
         const label = node.name;
-        let dist = 10000;
-        if (mousePos.x !== null) {
-            const dx = node.x - mousePos.x; const dy = node.y - mousePos.y;
-            dist = Math.sqrt(dx*dx + dy*dy);
+        const isHovered = mousePos.x !== null && Math.sqrt(Math.pow(node.x - mousePos.x, 2) + Math.pow(node.y - mousePos.y, 2)) < 15;
+        
+        // 2. ИЗМЕНЕНИЕ: Полое кольцо (контур)
+        const baseRadius = 4;
+        const radius = isHovered ? baseRadius * 1.2 : baseRadius;
+        const fontSize = 12 / globalScale;
+
+        ctx.save();
+        
+        // Эффект GLOW при наведении/нажатии
+        if (isHovered) {
+            ctx.shadowBlur = 15;
+            ctx.shadowColor = "rgba(255, 255, 255, 0.8)";
+            ctx.fillStyle = "#ffffff"; // Заполняем белым при взаимодействии
+        } else {
+            ctx.strokeStyle = "#ffffff";
+            ctx.lineWidth = 1.5 / globalScale;
         }
-        const threshold = 50; const maxScale = 1.2; 
-        let magnification = 1;
-        if (dist < threshold) {
-            const power = Math.pow((threshold - dist) / threshold, 2);
-            magnification = 1 + (maxScale - 1) * power;
-        }
-        const baseRadius = 3.5;
-        const radius = baseRadius * magnification;
-        const fontSize = (12 * magnification) / globalScale;
-        ctx.save(); 
+
         ctx.beginPath();
         ctx.arc(node.x, node.y, radius, 0, 2 * Math.PI);
-        ctx.fillStyle = magnification > 1.05 ? '#fff' : 'rgba(255, 255, 255, 0.4)';
-        ctx.fill();
-        const alpha = magnification > 1.1 ? 1 : 0.3;
+        
+        if (isHovered) {
+            ctx.fill(); // При наведении становится белым шаром с GLOW
+        } else {
+            ctx.stroke(); // В обычном состоянии — полое кольцо
+        }
+
+        // Текст названия
+        const alpha = isHovered ? 1 : 0.4;
+        ctx.shadowBlur = 0; // Убираем тень для текста, чтобы не мылил
         ctx.fillStyle = `rgba(255, 255, 255, ${alpha})`;
-        ctx.font = `${magnification > 1.1 ? 'bold' : 'normal'} ${fontSize}px 'JetBrains Mono'`;
+        ctx.font = `${isHovered ? 'bold' : 'normal'} ${fontSize}px 'JetBrains Mono'`;
         ctx.textAlign = 'center';
         ctx.fillText(label, node.x, node.y + radius + (16 / globalScale));
-        ctx.restore(); 
+        
+        ctx.restore();
     })
     .onNodeClick(node => {
+        // При клике открываем модалку и центрируем (нажатый узел уже подсвечен через логику выше)
         showModal(node);
         Graph.zoom(4, 1000);
         Graph.centerAt(node.x, node.y, 1000);
