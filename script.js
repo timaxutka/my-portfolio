@@ -386,3 +386,22 @@ function startTerminal() {
 
 // Запускаем при полной загрузке страницы
 window.addEventListener('load', startTerminal);
+
+function updateHUDTime() {
+    const timeElement = document.getElementById('hud-time');
+    if (timeElement) {
+        const now = new Date();
+        // Смещение для Омска (GMT+6)
+        const offset = 6; 
+        const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
+        const omskTime = new Date(utc + (3600000 * offset));
+        
+        const h = String(omskTime.getHours()).padStart(2, '0');
+        const m = String(omskTime.getMinutes()).padStart(2, '0');
+        const s = String(omskTime.getSeconds()).padStart(2, '0');
+        
+        timeElement.innerText = `TIME: (GMT+6) ${h}:${m}:${s}`;
+    }
+}
+setInterval(updateHUDTime, 1000);
+updateHUDTime(); // Инициализация сразу

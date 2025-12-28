@@ -54,15 +54,102 @@ body::after {
 }
 
 .hero-content { flex: 1; display: flex; flex-direction: column; align-items: flex-start; z-index: 10; }
-.hero h1 { font-family: 'Inter', sans-serif; font-weight: 700; font-size: 5rem; letter-spacing: -0.02em; margin: 0 0 40px 0; }
+/* Пункт 1: Текстовая маска (Outline) */
+.hero h1 {
+    font-family: 'Inter', sans-serif;
+    font-weight: 900;
+    font-size: 6rem;
+    letter-spacing: -0.02em;
+    margin: 0 0 40px 0;
+    
+    /* Делаем текст полым */
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(255, 255, 255, 0.3);
+    transition: all 0.5s ease;
+    position: relative;
+}
+
+.hero h1:hover {
+    -webkit-text-stroke: 1px rgba(255, 255, 255, 1);
+    color: rgba(255, 255, 255, 0.05); /* Легкая заливка при наведении */
+    text-shadow: 0 0 30px rgba(255, 255, 255, 0.1);
+}
+
+/* Выравнивание HUD по центру/началу заголовка */
+.hero-hud {
+    display: flex;
+    flex-direction: row;
+    gap: 40px;
+    margin-bottom: 60px; /* Отступ от HUD до навигации/заголовка */
+    padding-top: 40px;   /* Отступ от самого верха страницы */
+    z-index: 5;
+    pointer-events: none;
+}
+
+.hud-item {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    color: #444;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+}
+
+.hud-item::before {
+    content: "";
+    width: 3px;
+    height: 3px;
+    background: var(--accent-red);
+    display: inline-block;
+}
 
 .hero-nav { display: flex; flex-direction: column; gap: 20px; }
-.nav-item { 
-    color: #fff; text-decoration: none; font-size: 1.1rem; 
-    display: flex; align-items: center; transition: 0.3s; 
+
+/* Базовый стиль пункта меню */
+.nav-item {
+    position: relative;
+    text-decoration: none;
+    padding-bottom: 4px;
+    color: #666; /* Неактивный цвет */
+    transition: color 0.3s ease;
 }
-.nav-item span { font-size: 0.7rem; color: #444; margin-right: 15px; }
-.nav-item:hover { color: #888; transform: translateX(10px); }
+/* Контейнер для линии (подложка) */
+.nav-item::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0%; /* Начинаем с нуля */
+    height: 1px;
+    background: var(--accent-red);
+    box-shadow: 0 0 8px var(--accent-red);
+    transition: width 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+/* Эффект "луча" при наведении */
+.nav-item:hover::after {
+    width: 100%;
+    /* Добавляем анимацию пробегающей искры */
+    background: linear-gradient(90deg, 
+        var(--accent-red) 0%, 
+        #fff 50%, 
+        var(--accent-red) 100%
+    );
+    background-size: 200% 100%;
+    animation: scan-loading 1s linear infinite;
+}
+
+@keyframes scan-loading {
+    0% { background-position: 100% 0; }
+    100% { background-position: -100% 0; }
+}
+
+.nav-item:hover {
+    color: #fff;
+}
 
 .hero-btns { margin-top: 40px; display: flex; gap: 15px; }
 .cta-btn { 
