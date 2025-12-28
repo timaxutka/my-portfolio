@@ -561,7 +561,13 @@ body::after {
 
 /* Фикс: убираем старые границы, которые могут конфликтовать */
 .hero { border-bottom: none !important; }
-#contact { border-top: none !important; }
+#contact {
+    min-height: 30vh; /* Уменьшили с 50 до 30 */
+    padding-top: 40px;   /* Уменьшили верхний отступ */
+    padding-bottom: 80px; /* Оставили место до футера */
+    display: flex;
+    align-items: center; /* Центрируем контент по вертикали в маленьком блоке */
+}
 
 /* Контейнер для разделения на лево и право */
 .contact-container {
@@ -633,4 +639,86 @@ body::after {
     border-radius: 50%;
     box-shadow: 0 0 8px var(--accent-red);
     animation: blink 1s infinite;
+}
+
+.terminal-footer {
+    padding: 40px 0 60px 0;
+    background: #000;
+    opacity: 0.6;
+    transition: opacity 0.5s ease;
+}
+
+.terminal-footer:hover {
+    opacity: 1;
+}
+
+/* Отступ между верхней линией и текстом */
+.footer-divider .divider-line:first-child {
+    margin-bottom: 24px; /* Регулируй это значение под свой вкус */
+}
+
+.footer-content {
+    padding: 24px 8vw;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    color: #444;
+    letter-spacing: 0.1em;
+}
+
+.footer-left, .footer-right {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.footer-right {
+    text-align: right;
+}
+
+.status-block {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--accent-red);
+}
+
+.status-dot {
+    width: 4px;
+    height: 4px;
+    background: var(--accent-red);
+    border-radius: 50%;
+    box-shadow: 0 0 5px var(--accent-red);
+    animation: blink 1s infinite;
+}
+
+.joke-block {
+    color: #666;
+    font-style: italic;
+}
+
+.location {
+    color: #333;
+}
+
+.terminal-link {
+    background: none;
+    border: none;
+    color: var(--accent-red);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6rem;
+    cursor: pointer;
+    margin-left: 10px;
+    padding: 2px 5px;
+    opacity: 0.5;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+}
+
+.terminal-link:hover {
+    opacity: 1;
+    background: rgba(255, 0, 0, 0.1);
+    box-shadow: 0 0 10px rgba(255, 0, 0, 0.2);
 }

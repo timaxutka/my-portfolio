@@ -310,9 +310,9 @@ function scramble(el, word) {
 window.addEventListener('DOMContentLoaded', () => {
     const heroTitle = document.getElementById('hero-title');
     if (heroTitle) {
-        scramble(heroTitle, "WEB-PORTFOLIO");
+        scramble(heroTitle, "PORTFOLIO");
         heroTitle.onmouseover = () => scramble(heroTitle, "DEVELOPER");
-        heroTitle.onmouseleave = () => scramble(heroTitle, "WEB-PORTFOLIO");
+        heroTitle.onmouseleave = () => scramble(heroTitle, "PORTFOLIO");
     }
 });
 
@@ -405,3 +405,44 @@ function updateHUDTime() {
 }
 setInterval(updateHUDTime, 1000);
 updateHUDTime(); // Инициализация сразу
+
+document.addEventListener('DOMContentLoaded', () => {
+    const jokes = [
+        "// Осторожно: код содержит следы магии и костылей.",
+        "// 404: Смысл жизни не найден. Листайте дальше.",
+        "// Сделано в Омске. Да, мы все еще тут.",
+        "// Пиксели ручной работы. Ни одного нейрона не пострадало.",
+        "// Работает? Не трогай.",
+        "// Сварено на кофе и бессоннице.",
+        "// Весь этот сайт — это один большой div.",
+        "// 100% Organic Code. No GMO.",
+        "// Пожалуйста, не смотрите в исходный код. Там страшно.",
+        "// Ctrl+C, Ctrl+V — мои лучшие друзья.",
+        "// Этот текст был сгенерирован в 3 часа ночи."
+    ];
+
+    const jokeElement = document.getElementById('random-joke');
+    const regenBtn = document.getElementById('regen-btn');
+    const yearElement = document.getElementById('footer-year');
+
+    function updateJoke() {
+        // Добавляем эффект "лага" при смене
+        jokeElement.style.opacity = 0;
+        setTimeout(() => {
+            const randomJoke = jokes[Math.floor(Math.random() * jokes.length)];
+            jokeElement.innerText = randomJoke;
+            jokeElement.style.opacity = 1;
+        }, 150);
+    }
+
+    if (regenBtn) {
+        regenBtn.addEventListener('click', updateJoke);
+    }
+
+    // Инициализация
+    updateJoke();
+
+    if (yearElement) {
+        yearElement.innerText = new Date().getFullYear();
+    }
+});
