@@ -311,7 +311,7 @@ window.addEventListener('DOMContentLoaded', () => {
     const heroTitle = document.getElementById('hero-title');
     if (heroTitle) {
         scramble(heroTitle, "PORTFOLIO");
-        heroTitle.onmouseover = () => scramble(heroTitle, "DEVELOPER");
+        heroTitle.onmouseover = () => scramble(heroTitle, "UX/UI DES");
         heroTitle.onmouseleave = () => scramble(heroTitle, "PORTFOLIO");
     }
 });
