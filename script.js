@@ -229,3 +229,53 @@ if (contactForm) {
         */
     });
 }
+
+// === ОБНОВЛЕННАЯ ЛОГИКА КУРСОРA И КООРДИНАТ ===
+const cursor = document.getElementById('custom-cursor');
+const coords = document.getElementById('mouse-coords'); // Находим наш счетчик
+
+document.addEventListener('mousemove', (e) => {
+    // 1. Двигаем кружок
+    cursor.style.left = e.clientX + 'px';
+    cursor.style.top = e.clientY + 'px';
+
+    // 2. ОБНОВЛЯЕМ КООРДИНАТЫ (Новое)
+    // padStart(3, '0') делает формат 001, 015 и т.д.
+    const x = String(Math.floor(e.clientX)).padStart(3, '0');
+    const y = String(Math.floor(e.clientY)).padStart(3, '0');
+    coords.innerText = `X: ${x} Y: ${y}`;
+
+    // 3. Проверка ховера
+    const target = e.target;
+    const isInteractive = target.closest('a, button, .skill-card, .nav-item, input, textarea');
+    
+    if (isInteractive) {
+        cursor.classList.add('active');
+    } else {
+        cursor.classList.remove('active');
+    }
+});
+
+// === 2. ЛОГИКА МАГНИТНЫХ КНОПОК ===
+const magneticElements = document.querySelectorAll('.cta-btn, .project-link');
+
+magneticElements.forEach((el) => {
+    el.addEventListener('mousemove', function(e) {
+        const rect = this.getBoundingClientRect();
+        
+        // Вычисляем центр кнопки
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+        
+        // Вычисляем дистанцию от мыши до центра (с коэффициентом силы магнита 0.3)
+        const moveX = (e.clientX - centerX) * 0.3;
+        const moveY = (e.clientY - centerY) * 0.3;
+        
+        this.style.transform = `translate(${moveX}px, ${moveY}px)`;
+    });
+
+    el.addEventListener('mouseleave', function() {
+        // Возвращаем кнопку на место при уходе мыши
+        this.style.transform = `translate(0px, 0px)`;
+    });
+});

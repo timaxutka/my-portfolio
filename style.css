@@ -159,3 +159,46 @@ body::after {
     .hero h1 { font-size: 3rem; }
     .drawer { width: 100%; }
 }
+
+/* СКРЫВАЕМ СТАНДАРТНЫЙ КУРСОР ВЕЗДЕ */
+*, *::before, *::after {
+    cursor: none !important;
+}
+
+/* СТИЛИ КАСТОМНОГО КУРСОРА */
+#custom-cursor {
+    position: fixed;
+    width: 20px;
+    height: 20px;
+    background-color: #fff;
+    border-radius: 50%;
+    pointer-events: none; /* Чтобы курсор не мешал кликам */
+    z-index: 999999;
+    mix-blend-mode: difference; /* Эффект инверсии цветов */
+    transition: transform 0.1s ease-out, width 0.3s ease, height 0.3s ease;
+    transform: translate(-50%, -50%);
+}
+
+/* Класс для увеличения курсора при наведении на интерактивные элементы */
+#custom-cursor.active {
+    transform: translate(-50%, -50%) scale(2.5);
+}
+
+/* МАГНИТНЫЕ КНОПКИ: базовая настройка плавности */
+.cta-btn, .project-link, .nav-item {
+    display: inline-block;
+    will-change: transform;
+    transition: transform 0.2s ease-out;
+}
+
+#mouse-coords {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: rgba(255, 255, 255, 0.3); /* Тусклый белый, чтобы не отвлекал */
+    z-index: 10000;
+    pointer-events: none; /* Чтобы не мешал кликам */
+    letter-spacing: 1px;
+}
