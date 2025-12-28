@@ -310,9 +310,9 @@ function scramble(el, word) {
 window.addEventListener('DOMContentLoaded', () => {
     const heroTitle = document.getElementById('hero-title');
     if (heroTitle) {
-        scramble(heroTitle, "ПОРТФОЛИО");
+        scramble(heroTitle, "WEB-PORTFOLIO");
         heroTitle.onmouseover = () => scramble(heroTitle, "DEVELOPER");
-        heroTitle.onmouseleave = () => scramble(heroTitle, "ПОРТФОЛИО");
+        heroTitle.onmouseleave = () => scramble(heroTitle, "WEB-PORTFOLIO");
     }
 });
 

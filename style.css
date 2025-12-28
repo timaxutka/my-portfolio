@@ -428,10 +428,14 @@ body::after {
     transition: transform 0.05s linear; /* Минимальная задержка для плавности, но без лага */
 }
 #mouse-coords {
-    position: fixed; top: 20px; left: 20px;
-    font-family: 'JetBrains Mono'; font-size: 10px; color: rgba(255, 255, 255, 0.3);
+    position: fixed; 
+    bottom: 20px; /* Отступ от нижнего края */
+    left: 20px;   /* Отступ от левого края */
+    font-family: 'JetBrains Mono'; 
+    font-size: 10px; 
+    color: rgba(255, 255, 255, 0.3);
+    z-index: 9999; /* Чтобы координаты всегда были поверх других элементов */
 }
-
 /* Контейнер индикатора (всегда закреплен сверху) */
 #scroll-progress-container {
     position: fixed;
@@ -513,4 +517,120 @@ body::after {
 .terminal-line.done {
     border-right: none;
     width: 100%;
+}
+
+/* --- ТЕХНИЧЕСКИЕ РАЗДЕЛИТЕЛЕЙ (BLOCK_01, 02...) --- */
+.section-divider {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.divider-line {
+    height: 1px;
+    width: 100%;
+    background: #1a1a1a;
+    transition: background 0.5s ease;
+}
+
+.divider-labels {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 24px; /* 0 сверху/снизу, 8vw слева/справа для выравнивания с сеткой */
+    box-sizing: border-box; /* Чтобы отступы не распирали ширину блока */
+}
+
+.divider-labels span {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    color: #333; /* Сделал чуть темнее для стиля "чертеж" */
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    transition: color 0.4s ease;
+}
+
+/* Эффект при наведении на весь блок разделителя */
+.section-divider:hover .divider-line {
+    background: #333; /* Линия становится чуть ярче */
+}
+
+.section-divider:hover .divider-labels span:first-child {
+    color: var(--accent-red); /* Первый лейбл краснеет */
+}
+
+/* Фикс: убираем старые границы, которые могут конфликтовать */
+.hero { border-bottom: none !important; }
+#contact { border-top: none !important; }
+
+/* Контейнер для разделения на лево и право */
+.contact-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end; /* Выравнивание по нижней линии */
+    gap: 40px;
+    flex-wrap: wrap; /* Чтобы на мобилках блоки встали друг под друга */
+}
+
+.contact-actions {
+    flex: 1;
+    min-width: 300px;
+}
+
+.contact-btns-wrapper {
+    display: flex;
+    gap: 20px;
+    margin-top: 40px;
+}
+
+/* Правый блок с данными */
+.contact-info-block {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding-bottom: 10px; /* Чтобы быть на одном уровне с кнопками */
+    border-left: 1px solid #1a1a1a; /* Тонкая разделительная линия */
+    padding-left: 40px;
+}
+
+.info-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.info-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6rem;
+    color: #444;
+    letter-spacing: 0.2em;
+}
+
+.info-value {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    color: #888;
+    transition: color 0.3s ease;
+}
+
+.info-item:hover .info-value {
+    color: #fff;
+}
+
+/* Статус "Ready to work" с мигающей точкой */
+.active-status {
+    color: var(--accent-red);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.active-status::before {
+    content: "";
+    width: 4px;
+    height: 4px;
+    background: var(--accent-red);
+    border-radius: 50%;
+    box-shadow: 0 0 8px var(--accent-red);
+    animation: blink 1s infinite;
 }
