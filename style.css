@@ -212,9 +212,15 @@ body::after {
     background: #0a0a0a !important; 
     border: 1px solid #1a1a1a; 
     overflow: hidden; 
-    transition: 0.3s; 
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); 
 }
-.skill-card:hover { background-color: var(--accent-red) !important; border-color: #fff; }
+
+/* При наведении: глубокий темно-красный (почти черный, но с оттенком) */
+.skill-card:hover { 
+    background-color: #1a0505 !important; /* Очень темный красный */
+    border-color: var(--accent-red);      /* Подсвечиваем только рамку */
+    transform: translateY(-5px);         /* Легкий подъем карточки */
+}
 
 .ratio-1-1 { grid-column: span 1; }
 .ratio-3-1 { grid-column: span 3; }
@@ -226,7 +232,11 @@ body::after {
     transition: height 1.5s cubic-bezier(0.19, 1, 0.22, 1);
     z-index: 1;
 }
-.skill-card:hover .skill-progress { background: rgba(255, 255, 255, 0.3) !important; }
+
+/* Эффект заполнения (прогресс-бар) внутри карточки */
+.skill-card:hover .skill-progress { 
+    background: rgba(255, 0, 0, 0.2) !important; /* Делаем полосу прогресса чуть ярче */
+}
 
 .skill-content { position: absolute; inset: 0; z-index: 2; padding: 20px; }
 .skill-name { font-size: 1rem; text-transform: uppercase; color: #fff; }
@@ -237,7 +247,11 @@ body::after {
     color: #fff; opacity: 0; transition: 0.3s; z-index: 3;
 }
 .skill-card.filled .skill-val { opacity: 0.2; }
-.skill-card:hover .skill-val { opacity: 1 !important; }
+/* Значение процентов (90%, 80%...) */
+.skill-card:hover .skill-val { 
+    opacity: 0.8 !important; 
+    color: var(--accent-red); /* Делаем цифры акцентными при наведении */
+}
 
 /* 5. DRAWER (CONTACTS) */
 .drawer {
