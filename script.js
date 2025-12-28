@@ -466,3 +466,19 @@ document.addEventListener('DOMContentLoaded', () => {
         yearElement.innerText = new Date().getFullYear();
     }
 });
+
+// БЕЗОПАСНЫЙ ДРЕЙФ КАМЕРЫ
+let angle = 0;
+function animateCamera() {
+    if (!mousePos.x) { // Двигаем только когда юзер не водит по графу
+        angle += 0.0008;
+        const shiftX = Math.sin(angle) * 0.15;
+        const shiftY = Math.cos(angle) * 0.15;
+        const center = Graph.centerAt();
+        Graph.centerAt(center.x + shiftX, center.y + shiftY);
+    }
+    requestAnimationFrame(animateCamera);
+}
+
+// Запускаем через пару секунд после старта, чтобы всё прогрузилось
+setTimeout(animateCamera, 3000);
