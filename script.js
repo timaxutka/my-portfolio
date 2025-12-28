@@ -58,11 +58,25 @@ const Graph = ForceGraph()(graphDiv)
     .width(container.offsetWidth)
     .height(container.offsetHeight)
     .backgroundColor('#000000')
-    .enableNodeDrag(false)
+    .enableNodeDrag(true)
     .minZoom(1)
     .maxZoom(5)
     .cooldownTicks(1000000)
     .cooldownTime(600000) // Твой стандарт рендера (10 минут) не меняем
+    .onNodeDrag((node, translate) => {
+        // При перетягивании отключаем дрейф камеры, чтобы не дергалось
+        mousePos.x = node.x; 
+        
+        // Фиксируем узел в позиции мыши, чтобы он не "уплывал" обратно под силами графа
+        node.fx = node.x;
+        node.fy = node.y;
+    })
+    .onNodeDragEnd(node => {
+        // Оставляем узел зафиксированным там, куда его бросили
+        // Если хочешь, чтобы он улетал обратно, напиши: node.fx = null; node.fy = null;
+        node.fx = node.x;
+        node.fy = node.y;
+    })
     .onRenderFramePre((ctx, globalScale) => {
         // Оставляем сетку как есть
         const size = 50; const range = 3000;
