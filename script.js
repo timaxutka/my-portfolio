@@ -139,37 +139,42 @@ const cursor = document.getElementById('custom-cursor');
 const coords = document.getElementById('mouse-coords');
 const photo = document.getElementById('parallax-photo');
 
-document.addEventListener('mousemove', (e) => {
-    // Двигаем кастомный курсор
+window.addEventListener('pointermove', (e) => {
+    // 1. Двигаем кастомный курсор
     if (cursor) {
         cursor.style.left = e.clientX + 'px';
         cursor.style.top = e.clientY + 'px';
         
+        // Используем elementFromPoint, чтобы корректно определять цели во время драга
         const target = e.target;
-        const isInteractive = target.closest('a, button, .skill-card, .nav-item, input, textarea');
+        const isInteractive = target.closest('a, button, .skill-card, .nav-item, input, textarea, .project-link');
         cursor.classList.toggle('active', !!isInteractive);
     }
 
-    // Обновляем координаты
+    // 2. Обновляем координаты (с твоим форматированием)
     if (coords) {
         const x = String(Math.floor(e.clientX)).padStart(3, '0');
         const y = String(Math.floor(e.clientY)).padStart(3, '0');
         coords.innerText = `X: ${x} Y: ${y}`;
     }
 
-    // Обновляем позицию мыши для графа (только если мы внутри контейнера)
+    // 3. Обновляем позицию мыши для графа
     const rect = container.getBoundingClientRect();
     if (e.clientX >= rect.left && e.clientX <= rect.right && e.clientY >= rect.top && e.clientY <= rect.bottom) {
-        mousePos = Graph.screen2GraphCoords(e.clientX - rect.left, e.clientY - rect.top);
-        Graph.resume();
+        // Вычисляем координаты внутри контейнера графа
+        const graphX = e.clientX - rect.left;
+        const graphY = e.clientY - rect.top;
+        
+        mousePos = Graph.screen2GraphCoords(graphX, graphY);
+        Graph.resume(); // Продолжаем симуляцию, чтобы узлы реагировали
     } else {
         mousePos = { x: null, y: null };
     }
 
-    // Параллакс фото
+    // 4. Параллакс фото (используем clientX/Y для стабильности)
     if (photo) {
-        const px = (window.innerWidth - e.pageX * 2) / 100;
-        const py = (window.innerHeight - e.pageY * 2) / 100;
+        const px = (window.innerWidth - e.clientX * 2) / 100;
+        const py = (window.innerHeight - e.clientY * 2) / 100;
         photo.style.transform = `translateX(${px}px) translateY(${py}px)`;
     }
 });

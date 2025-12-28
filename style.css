@@ -311,6 +311,8 @@ body::after {
     pointer-events: none; z-index: 999999;
     mix-blend-mode: difference; transition: transform 0.1s ease-out;
     transform: translate(-50%, -50%);
+    pointer-events: none !important; 
+    transition: transform 0.05s linear; /* Минимальная задержка для плавности, но без лага */
 }
 #mouse-coords {
     position: fixed; top: 20px; left: 20px;
