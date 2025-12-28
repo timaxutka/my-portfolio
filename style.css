@@ -523,7 +523,7 @@ body::after {
 .section-divider {
     display: flex;
     flex-direction: column;
-    gap: 24px;
+    gap: 0; /* Убираем зазор, чтобы черная заливка коснулась линий */
 }
 
 .divider-line {
@@ -537,26 +537,35 @@ body::after {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0 24px; /* 0 сверху/снизу, 8vw слева/справа для выравнивания с сеткой */
-    box-sizing: border-box; /* Чтобы отступы не распирали ширину блока */
+    
+    /* Твой оригинальный отступ + 24px вертикально, чтобы вернуть высоту разделителя */
+    padding: 24px 24px; 
+    box-sizing: border-box; 
+    
+    /* Растягиваем черный фон на весь экран */
+    background: #000;
+    width: 100vw;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
 }
 
 .divider-labels span {
     font-family: 'JetBrains Mono', monospace;
     font-size: 0.65rem;
-    color: #333; /* Сделал чуть темнее для стиля "чертеж" */
+    color: #333;
     letter-spacing: 0.3em;
     text-transform: uppercase;
     transition: color 0.4s ease;
 }
 
-/* Эффект при наведении на весь блок разделителя */
+/* Эффект при наведении */
 .section-divider:hover .divider-line {
-    background: #333; /* Линия становится чуть ярче */
+    background: #333;
 }
 
 .section-divider:hover .divider-labels span:first-child {
-    color: var(--accent-red); /* Первый лейбл краснеет */
+    color: var(--accent-red);
 }
 
 /* Фикс: убираем старые границы, которые могут конфликтовать */
@@ -699,24 +708,32 @@ body::after {
 }
 
 .terminal-footer {
+    /* Растягиваем на всю ширину экрана */
+    width: 100vw;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    
     padding: 40px 0 60px 0;
     background: #000;
-    opacity: 0.6;
+    /* Убираем прозрачность, чтобы фон был плотным черным */
+    opacity: 1 !important; 
     transition: opacity 0.5s ease;
+    box-sizing: border-box;
 }
 
+/* Оставляем ховер, если хочешь менять яркость самого текста внутри */
 .terminal-footer:hover {
     opacity: 1;
 }
 
 /* Отступ между верхней линией и текстом */
 .footer-divider .divider-line:first-child {
-    margin-bottom: 24px; /* Регулируй это значение под свой вкус */
+    margin-bottom: 24px;
 }
 
-/* Выравнивание футера */
+/* Выравнивание контента футера */
 .footer-content {
-    /* Тоже меняем на 10%, чтобы линия и текст начинались там же, где и контент сайта */
     padding: 24px 10% !important;
     display: flex;
     justify-content: space-between;
@@ -726,6 +743,9 @@ body::after {
     color: #444;
     letter-spacing: 0.1em;
     box-sizing: border-box;
+    
+    /* Контент остается в рамках своей ширины, пока фон футера тянется во все стороны */
+    max-width: 100%;
 }
 
 .footer-left, .footer-right {
