@@ -1185,4 +1185,40 @@ body::after {
         width: 100% !important;           /* Гарантируем ширину футера */
         box-sizing: border-box !important;
     }
+
+
+    /* 1. СБРОС КУРСОРОВ (как обсуждали) */
+    #custom-cursor, #mouse-coords {
+        display: none !important;
+    }
+    *, *::before, *::after {
+        cursor: auto !important;
+    }
+
+    /* 2. SKILLS НА МОБИЛКАХ (Интерактив по тапу) */
+    .skill-card {
+        background-color: #0a0a0a !important; /* Изначально черная */
+        transition: all 0.2s ease; /* Быстрый отклик на тап */
+    }
+
+    /* Состояние при нажатии (имитация ховера на тачскрине) */
+    .skill-card:active {
+        background-color: #1a0505 !important; /* Твой фирменный темный цвет */
+        border-color: var(--accent-red) !important;
+    }
+
+    .skill-card:active .skill-progress {
+        background: rgba(255, 0, 0, 0.2) !important;
+        height: 60% !important; /* Или твоя стандартная высота */
+    }
+
+    .skill-card:active .skill-val {
+        opacity: 0.8 !important;
+        color: var(--accent-red) !important;
+    }
+
+    /* Фикс: убеждаемся, что контент не пропадает, если палец зажат */
+    .skill-card:active .skill-name {
+        color: #fff !important;
+    }
 }
