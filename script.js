@@ -111,18 +111,31 @@ const Graph = ForceGraph()(graphDiv)
         const label = node.name;
         const isHovered = mousePos.x !== null && Math.sqrt(Math.pow(node.x - mousePos.x, 2) + Math.pow(node.y - mousePos.y, 2)) < 15;
         
-        // 2. ИЗМЕНЕНИЕ: Полое кольцо (контур)
         const baseRadius = 4;
-        const radius = isHovered ? baseRadius * 1.2 : baseRadius;
+        // 1. АНИМАЦИЯ ДЫХАНИЯ: Используем время для плавного изменения размера
+        const t = Date.now() / 1000;
+        const breathe = Math.sin(t * 2) * 0.5; // Колебания +- 0.5px
+        const radius = (isHovered ? baseRadius * 1.2 : baseRadius) + breathe;
+        
         const fontSize = 12 / globalScale;
 
         ctx.save();
         
-        // Эффект GLOW при наведении/нажатии
+        // 2. ПУЛЬСИРУЮЩАЯ АУРА (только для обычного состояния, чтобы не пестрило)
+        if (!isHovered) {
+            const pulse = (Date.now() / 1500) % 1; // Цикл от 0 до 1
+            ctx.beginPath();
+            ctx.arc(node.x, node.y, radius + (pulse * 6), 0, 2 * Math.PI);
+            ctx.strokeStyle = `rgba(255, 255, 255, ${0.3 * (1 - pulse)})`;
+            ctx.lineWidth = 0.5 / globalScale;
+            ctx.stroke();
+        }
+
+        // ОСНОВНОЙ УЗЕЛ
         if (isHovered) {
             ctx.shadowBlur = 15;
             ctx.shadowColor = "rgba(255, 255, 255, 0.8)";
-            ctx.fillStyle = "#ffffff"; // Заполняем белым при взаимодействии
+            ctx.fillStyle = "#ffffff";
         } else {
             ctx.strokeStyle = "#ffffff";
             ctx.lineWidth = 1.5 / globalScale;
@@ -132,14 +145,19 @@ const Graph = ForceGraph()(graphDiv)
         ctx.arc(node.x, node.y, radius, 0, 2 * Math.PI);
         
         if (isHovered) {
-            ctx.fill(); // При наведении становится белым шаром с GLOW
+            ctx.fill(); 
         } else {
-            ctx.stroke(); // В обычном состоянии — полое кольцо
+            ctx.stroke();
+            // Маленькая точка в центре для "технологичности"
+            ctx.beginPath();
+            ctx.arc(node.x, node.y, 1 / globalScale, 0, 2 * Math.PI);
+            ctx.fillStyle = "#ffffff";
+            ctx.fill();
         }
 
-        // Текст названия
+        // ТЕКСТ
         const alpha = isHovered ? 1 : 0.4;
-        ctx.shadowBlur = 0; // Убираем тень для текста, чтобы не мылил
+        ctx.shadowBlur = 0;
         ctx.fillStyle = `rgba(255, 255, 255, ${alpha})`;
         ctx.font = `${isHovered ? 'bold' : 'normal'} ${fontSize}px 'JetBrains Mono'`;
         ctx.textAlign = 'center';
