@@ -47,6 +47,14 @@ const myData = {
     ]
 };
 
+const terminalLines = [
+    "> INITIALIZING INTERFACE...",
+    "> LOADING PROJECT_ECOSYSTEM...",
+    "> CONNECTING TO NEURAL_NODES...",
+    "> STATUS: OPTIMAL",
+    "> WELCOME, USER"
+];
+
 // 2. ИНИЦИАЛИЗАЦИЯ ГРАФА
 const container = document.getElementById('graph-container');
 const graphDiv = document.getElementById('graph');
@@ -333,3 +341,43 @@ window.addEventListener('scroll', () => {
         progressBar.style.width = scrolled + "%";
     }
 });
+
+function startTerminal() {
+    const container = document.getElementById('terminal-content');
+    let lineIndex = 0;
+
+    function addLine() {
+        if (lineIndex < terminalLines.length) {
+            const div = document.createElement('div');
+            div.className = 'terminal-line active';
+            div.innerText = terminalLines[lineIndex];
+            container.appendChild(div);
+
+            // Когда анимация печати строки закончится (через 1 сек)
+            setTimeout(() => {
+                div.classList.remove('active');
+                div.classList.add('done');
+                lineIndex++;
+                // Небольшая пауза перед следующей строкой
+                setTimeout(addLine, 200);
+            }, 1000);
+        } else {
+            // Когда все строки напечатаны, скрываем терминал
+            setTimeout(() => {
+                const loader = document.getElementById('terminal-loader');
+                loader.style.transition = 'opacity 1s cubic-bezier(0.16, 1, 0.3, 1), transform 1s ease';
+                loader.style.opacity = '0';
+                loader.style.transform = 'scale(1.1)'; // Эффект легкого зума при исчезновении
+                
+                setTimeout(() => {
+                    loader.style.display = 'none';
+                }, 1000);
+            }, 800);
+        }
+    }
+
+    addLine();
+}
+
+// Запускаем при полной загрузке страницы
+window.addEventListener('load', startTerminal);

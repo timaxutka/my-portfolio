@@ -351,3 +351,51 @@ body::after {
     90% { transform: translate(2%, 2%); }
     100% { transform: translate(0, 0); }
 }
+
+#terminal-loader {
+    position: fixed;
+    inset: 0;
+    background: #000;
+    z-index: 20000; /* Максимальный приоритет */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    font-family: 'JetBrains Mono', monospace;
+}
+
+#terminal-content {
+    color: var(--accent-red);
+    font-size: 0.9rem;
+    line-height: 1.6;
+    max-width: 400px;
+    width: 100%;
+}
+
+.terminal-line {
+    overflow: hidden;
+    white-space: nowrap;
+    border-right: 2px solid var(--accent-red); /* Мигающий курсор */
+    width: 0;
+    margin-bottom: 8px;
+}
+
+/* Анимация появления строки (печать) */
+@keyframes typing {
+    from { width: 0 }
+    to { width: 100% }
+}
+
+/* Анимация мигания курсора */
+@keyframes blink {
+    50% { border-color: transparent }
+}
+
+.terminal-line.active {
+    animation: typing 1s steps(30, end) forwards, blink 0.5s step-end infinite;
+}
+
+.terminal-line.done {
+    border-right: none;
+    width: 100%;
+}
