@@ -1133,4 +1133,56 @@ body::after {
         width: 100% !important;
         box-sizing: border-box;
     }
+
+    /* 4. МОДАЛЬНОЕ ОКНО ПРОЕКТА (АДАПТИВ) */
+    #project-modal {
+        width: 92vw !important;    /* Занимаем почти всю ширину экрана */
+        max-height: 85vh !important; /* Увеличиваем высоту, чтобы влезло больше текста */
+        top: 50%;
+        left: 50%;
+    }
+
+    .modal-header {
+        padding: 30px 25px 15px 25px !important; /* Уменьшаем огромные отступы */
+    }
+
+    .modal-header h2 {
+        font-size: 1.4rem !important; /* Уменьшаем заголовок, чтобы не переносился криво */
+    }
+
+    .modal-content {
+        padding: 0 25px 30px 25px !important;
+        gap: 20px !important; /* Чуть плотнее контент */
+    }
+
+    .case-step p {
+        font-size: 0.9rem !important; /* Оптимальный размер для чтения с телефона */
+        line-height: 1.6;
+    }
+
+    .modal-footer {
+        padding: 15px 25px 30px 25px !important;
+        flex-direction: column-reverse !important; /* Кнопка сверху, дата снизу */
+        gap: 20px;
+        align-items: center !important;
+    }
+
+    /* ФИКС КНОПКИ В МОДАЛКЕ (чтобы не вылезала за края) */
+    #project-modal .project-link {
+        display: block !important;
+        width: 100% !important; 
+        box-sizing: border-box !important; /* Учитываем padding внутри ширины */
+        text-align: center;
+        padding: 14px 10px !important;    /* Немного уменьшим боковые отступы внутри кнопки */
+        margin: 0 auto !important;
+    }
+
+    .modal-footer {
+        padding: 15px 25px 30px 25px !important;
+        flex-direction: column-reverse !important; 
+        gap: 20px;
+        align-items: center !important;
+        width: 100% !important;           /* Гарантируем ширину футера */
+        box-sizing: border-box !important;
+    }
 }
