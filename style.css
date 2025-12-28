@@ -54,25 +54,37 @@ body::after {
 }
 
 .hero-content { flex: 1; display: flex; flex-direction: column; align-items: flex-start; z-index: 10; }
-/* Пункт 1: Текстовая маска (Outline) */
+
+/* 2. HERO СЕКЦИЯ — Массивный заголовок с двойным Glow */
 .hero h1 {
     font-family: 'Inter', sans-serif;
-    font-weight: 900;
-    font-size: 6rem;
-    letter-spacing: -0.02em;
+    font-weight: 900; /* Максимальная жирность */
+    font-size: 7rem;  /* Чуть увеличил размер для массивности */
+    letter-spacing: -0.04em; /* Плотное прилегание букв */
     margin: 0 0 40px 0;
-    
-    /* Делаем текст полым */
-    color: transparent;
-    -webkit-text-stroke: 1px rgba(255, 255, 255, 0.3);
-    transition: all 0.5s ease;
+    text-transform: uppercase;
     position: relative;
+    
+    /* ДО ХОВЕРА: Винно-красный текст и красный Glow */
+    color: rgba(180, 0, 0, 0.6); 
+    text-shadow: 
+        0 0 15px rgba(139, 0, 0, 0.5),
+        0 0 30px rgba(139, 0, 0, 0.3);
+    
+    transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
 }
 
 .hero h1:hover {
-    -webkit-text-stroke: 1px rgba(255, 255, 255, 1);
-    color: rgba(255, 255, 255, 0.05); /* Легкая заливка при наведении */
-    text-shadow: 0 0 30px rgba(255, 255, 255, 0.1);
+    /* ПРИ ХОВЕРЕ: Текст становится ярко-белым */
+    color: #ffffff;
+    
+    /* Мощный БЕЛЫЙ GLOW */
+    text-shadow: 
+        0 0 10px rgba(255, 255, 255, 0.8),
+        0 0 30px rgba(255, 255, 255, 0.4),
+        0 0 50px rgba(255, 255, 255, 0.2);
+        
+    transform: scale(1.02); /* Легкое увеличение для эффекта мощи */
 }
 
 /* Выравнивание HUD по центру/началу заголовка */
