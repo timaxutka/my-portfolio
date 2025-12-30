@@ -7,6 +7,53 @@
 
 html { scroll-behavior: smooth; }
 
+/* --- МИНИМАЛИСТИЧНЫЙ ЛОГОТИП --- */
+.site-logo {
+    position: absolute;
+    top: 12px;         
+    left: 50%;         
+    transform: translateX(-50%); 
+    z-index: 1000;     
+    display: flex;
+    flex-direction: column; 
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+
+    /* БЕЛЫЙ И ПОЛУПРОЗРАЧНЫЙ */
+    opacity: 0.1; /* Сделал совсем легким, чтобы не отвлекал */
+    transition: all 0.3s ease;
+}
+
+.logo-img {
+    width: 38px;       
+    height: 38px;
+    /* Убираем все цветные фильтры, оставляем оригинал (белый) */
+    filter: none; 
+}
+
+.logo-text {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem; 
+    font-weight: 700;
+    letter-spacing: 0.4em;
+    color: #ffffff;
+    text-transform: uppercase;
+}
+
+/* Эффект при наведении */
+.site-logo:hover {
+    opacity: 0.9; /* Почти полная яркость */
+    transform: translateX(-50%) translateY(-1px);
+}
+
+@media (max-width: 768px) {
+    .site-logo {
+        opacity: 0.5; /* На мобилках чуть виднее */
+        top: 20px;
+    }
+}
+
 body {
     margin: 0; padding: 0;
     background: #000; color: #fff;
