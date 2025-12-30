@@ -371,7 +371,7 @@ body::after {
     letter-spacing: 1px;
 }
 
-/* 1. Общий контейнер (без указания font-size здесь!) */
+/* 1. Базовый контейнер */
 .skill-val {
     position: absolute; 
     bottom: 24px; 
@@ -382,28 +382,31 @@ body::after {
     font-family: 'JetBrains Mono', monospace;
     z-index: 3;
     opacity: 0;
-    transition: 0.3s;
+    transition: opacity 0.3s ease;
     pointer-events: none;
+    text-align: right;
 }
 
-/* 2. Жестко фиксируем размер процентов для всех карточек */
+/* 2. Проценты (КРАСНЫЕ) */
 .skill-val .num-part {
-    font-size: 32px !important; /* Теперь всегда 32px везде */
+    font-size: 2.2rem;
     font-weight: 700;
-    color: var(--accent-red);
+    color: var(--accent-red) !important; /* Принудительно красный */
     line-height: 1;
     margin-bottom: 4px;
+    display: block;
 }
 
-/* 3. Жестко фиксируем размер пояснения */
+/* 3. Пояснение (БАЗА / ПРОДВИНУТЫЙ) */
 .skill-val .status-part {
-    font-size: 11px !important; /* Увеличенное пояснение, фиксировано */
-    color: var(--accent-red);
+    font-size: 0.75rem;
+    color: var(--accent-red) !important; /* Принудительно красный */
     text-transform: uppercase;
     letter-spacing: 2px;
+    display: block;
 }
 
-/* 4. Появление только при ховере */
+/* 4. Появление только при ховере (на ПК) */
 .skill-card:hover .skill-val { 
     opacity: 1 !important;
 }
@@ -413,12 +416,6 @@ body::after {
    .skill-card.filled .skill-val { opacity: 0.2; }
 */
 
-/* 5. Адаптив только для мобильных телефонов (чтобы не вылезало за края) */
-@media (max-width: 768px) {
-    .skill-val .num-part { font-size: 24px !important; }
-    .skill-val .status-part { font-size: 10px !important; }
-    .skill-val { bottom: 15px; right: 15px; }
-}
 
 /* Корректировка для маленьких карточек 1-1 */
 .ratio-1-1 .skill-val .num-part {
@@ -1084,6 +1081,8 @@ body::after {
         font-size: 2rem !important;      /* Чуть уменьшаем огромные цифры для узких экранов */
     }
 
+    
+
     /* 3. ЭЛЕМЕНТЫ ФУТЕРА СТОПОЧКОЙ */
     .terminal-footer .footer-content {
         flex-direction: column !important; /* Левая и правая части футера друг под другом */
@@ -1312,5 +1311,40 @@ body::after {
         /* Берем высоту из инлайнового стиля карточки */
         height: var(--percent) !important; 
         background: rgba(255, 0, 0, 0.2) !important;
+    }
+
+    .skill-content {
+        padding: 15px;
+        justify-content: flex-start; /* Прижимаем контент к верху */
+    }
+
+    .skill-details {
+        max-width: 60%; /* Ограничиваем ширину текста, чтобы не залез под проценты */
+        font-size: 0.7rem;
+        opacity: 0.8; /* Делаем чуть заметнее на мобилке */
+        transform: none; /* Убираем смещение */
+    }
+
+    /* Уменьшаем проценты на мобилке, чтобы не мешали */
+    .skill-val .num-part {
+        font-size: 1.5rem !important; 
+    }
+
+    .skill-val .status-part {
+        font-size: 0.6rem !important;
+    }
+
+    .skill-val {
+        bottom: 15px;
+        right: 15px;
+    }
+
+    /* Убираем "залипание" на мобилке: показываем только при активном классе */
+    .skill-card .skill-val {
+        opacity: 0 !important;
+    }
+    
+    .skill-card.is-tapped .skill-val {
+        opacity: 1 !important;
     }
 }
