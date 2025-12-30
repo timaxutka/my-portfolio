@@ -1273,14 +1273,29 @@ body::after {
         opacity: 0.5;
     }
 
+    /* Убеждаемся, что при наличии класса .is-tapped элементы ВИДИМЫ всегда */
     .skill-card.is-tapped .skill-val {
-        opacity: 0.4 !important; /* Видно, но не ярко */
-        color: var(--accent-red);
+        opacity: 1 !important; /* Показываем статус (БАЗА/ПРОФИ) */
+        visibility: visible !important;
+        color: var(--accent-red) !important;
     }
 
     .skill-card.is-tapped .skill-details {
-        opacity: 1 !important;
+        opacity: 1 !important; /* Показываем описание инструментов */
+        visibility: visible !important;
         transform: translateY(0) !important;
-        height: auto !important;
+        display: block !important;
+    }
+
+    .skill-card.is-tapped .skill-progress {
+        /* Используем инлайновую переменную, которую запишет JS */
+        height: var(--mobile-height, 0%) !important; 
+        background: rgba(255, 0, 0, 0.2) !important;
+        transition: height 0.6s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    }
+
+    /* Мгновенный отклик только в момент касания (вспышка цвета) */
+    .skill-card:active {
+        background-color: #1a0505 !important;
     }
 }
