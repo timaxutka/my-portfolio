@@ -1021,20 +1021,73 @@ body::after {
     }
 
     .contact-container {
-        flex-direction: column !important; /* Принудительно ставим в колонку */
-        align-items: center;
-        text-align: center;
-        gap: 60px;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        width: 100% !important;
+        padding: 0 20px !important; /* Даем небольшие отступы от краев экрана */
+        box-sizing: border-box !important;
+        overflow: hidden !important;
     }
 
     .contact-left-side, .contact-actions {
-        width: 100%;
-        min-width: 100%;
-        align-items: center;
+        width: 100% !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important; /* Центрируем всё содержимое */
+        text-align: center !important;
     }
 
+    /* 2. ЦЕНТРИРОВАНИЕ ТЕКСТА READY_TO_WORK */
+    .info-item {
+        width: 100% !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important; /* Центрируем лейбл STATUS */
+        margin-bottom: 30px !important;
+    }
+
+    .active-status {
+        display: inline-flex !important;
+        justify-content: center !important; /* Центрируем точку и текст внутри */
+        align-items: center !important;
+        width: 100% !important;
+        margin: 0 auto !important;
+        font-size: 1rem !important;
+    }
+
+    /* 3. ФИКС КНОПОК (EMAIL И TELEGRAM) */
     .contact-btns-wrapper {
-        justify-content: center;
+        display: flex !important;
+        flex-direction: column !important; /* Строго в столбик */
+        align-items: center !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        gap: 15px !important;
+        margin-top: 20px !important;
+        padding: 0 !important;
+        box-sizing: border-box !important;
+    }
+
+    /* Одинаковая ширина для обеих кнопок */
+    .contact-btns-wrapper .project-link, 
+    .contact-btns-wrapper .magnetic {
+        width: 100% !important; 
+        max-width: 280px !important; /* Жесткий лимит ширины, чтобы не вылетало */
+        min-width: 280px !important; /* Делаем их визуально одинаковыми */
+        margin: 0 auto !important;
+        text-align: center !important;
+        padding: 15px 0 !important; /* Одинаковые внутренние отступы */
+        box-sizing: border-box !important;
+        transform: none !important; /* Полностью отключаем магнитный сдвиг */
+        left: auto !important;
+        right: auto !important;
+        position: relative !important;
+    }
+
+    /* Убираем специфические стили Telegram, если они были */
+    .contact-btns-wrapper .project-link:last-child {
+        margin-left: 0 !important;
     }
 
     .contact-info-block {
