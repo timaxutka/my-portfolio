@@ -1255,47 +1255,34 @@ body::after {
     }
 
     /* 2. SKILLS НА МОБИЛКАХ (Интерактив по тапу) */
+    /* 1. Сброс состояния: когда палец нажат (вспышка цвета) */
     .skill-card:active {
         background-color: #1a0505 !important;
         border-color: var(--accent-red) !important;
     }
 
-    /* 2. Состояние ПОСЛЕ тапа (данные видны, но фон снова черный) */
+    /* 2. Сохранение данных после тапа (фон снова черный, данные видны) */
     .skill-card.is-tapped {
         background-color: #0a0a0a !important; /* Возвращаем черный фон */
-        border-color: #333; /* Оставляем легкую рамку, чтобы выделить активную карточку */
+        border-color: #333 !important;        /* Легкая рамка для фиксации */
     }
 
-    /* Показываем прогресс-бар и значения при тапе */
-    .skill-card.is-tapped .skill-progress {
-        height: var(--target-height) !important; /* Высота из JS */
-        background: rgba(255, 0, 0, 0.1) !important; 
-        opacity: 0.5;
-    }
-
-    /* Убеждаемся, что при наличии класса .is-tapped элементы ВИДИМЫ всегда */
+    /* Показываем текст и прогресс-бар принудительно через класс */
     .skill-card.is-tapped .skill-val {
-        opacity: 1 !important; /* Показываем статус (БАЗА/ПРОФИ) */
-        visibility: visible !important;
+        opacity: 1 !important; 
         color: var(--accent-red) !important;
+        visibility: visible !important;
     }
 
     .skill-card.is-tapped .skill-details {
-        opacity: 1 !important; /* Показываем описание инструментов */
-        visibility: visible !important;
+        opacity: 1 !important;
         transform: translateY(0) !important;
-        display: block !important;
+        visibility: visible !important;
     }
 
     .skill-card.is-tapped .skill-progress {
-        /* Используем инлайновую переменную, которую запишет JS */
-        height: var(--mobile-height, 0%) !important; 
+        /* Берем высоту из инлайнового стиля карточки */
+        height: var(--percent) !important; 
         background: rgba(255, 0, 0, 0.2) !important;
-        transition: height 0.6s cubic-bezier(0.16, 1, 0.3, 1) !important;
-    }
-
-    /* Мгновенный отклик только в момент касания (вспышка цвета) */
-    .skill-card:active {
-        background-color: #1a0505 !important;
     }
 }
