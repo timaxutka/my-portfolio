@@ -137,10 +137,10 @@ const Graph = ForceGraph()(graphDiv)
         
         // 2. ПУЛЬСИРУЮЩАЯ АУРА (только для обычного состояния, чтобы не пестрило)
         if (!isHovered) {
-            const pulse = (Date.now() / 1500) % 1; // Цикл от 0 до 1
+            const pulse = (Date.now() / 1000) % 1; // Цикл от 0 до 1
             ctx.beginPath();
             ctx.arc(node.x, node.y, radius + (pulse * 6), 0, 2 * Math.PI);
-            ctx.strokeStyle = `rgba(255, 255, 255, ${0.3 * (1 - pulse)})`;
+            ctx.strokeStyle = `rgba(255, 255, 255, ${0.5 * (1 - pulse)})`;
             ctx.lineWidth = 0.5 / globalScale;
             ctx.stroke();
         }
@@ -148,7 +148,7 @@ const Graph = ForceGraph()(graphDiv)
         // ОСНОВНОЙ УЗЕЛ
         if (isHovered) {
             ctx.shadowBlur = 15;
-            ctx.shadowColor = "rgba(255, 255, 255, 0.8)";
+            ctx.shadowColor = "rgba(255, 255, 255)";
             ctx.fillStyle = "#ffffff";
         } else {
             ctx.strokeStyle = "#ffffff";
@@ -505,8 +505,8 @@ let angle = 0;
 function animateCamera() {
     if (!mousePos.x) { // Двигаем только когда юзер не водит по графу
         angle += 0.0008;
-        const shiftX = Math.sin(angle) * 0.15;
-        const shiftY = Math.cos(angle) * 0.15;
+        const shiftX = Math.sin(angle) * 0.05;
+        const shiftY = Math.cos(angle) * 0.05;
         const center = Graph.centerAt();
         Graph.centerAt(center.x + shiftX, center.y + shiftY);
     }
