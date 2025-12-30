@@ -247,46 +247,47 @@ document.querySelectorAll('.cta-btn, .project-link').forEach((el) => {
 });
 
 // 5. СКИЛЛЫ (Заполнение + Глитч)
-function glitchPercent(el, target) {
+function glitchPercent(valElement, target, statusText) {
     let current = 0;
     const duration = 1500; 
     const stepTime = Math.floor(duration / target);
+    
+    // Создаем структуру внутри: один span для цифр, другой для статуса
+    valElement.innerHTML = `<span class="num-part">0%</span><span class="status-part">${statusText}</span>`;
+    const numSpan = valElement.querySelector('.num-part');
+
     const interval = setInterval(() => {
         current++;
         const randomChar = Math.random() > 0.85 ? glyphs[Math.floor(Math.random() * glyphs.length)] : '';
-        el.innerText = current + "%" + randomChar;
+        numSpan.innerText = current + "%" + randomChar;
+        
         if (current >= target) {
             clearInterval(interval);
-            el.innerText = target + "%";
+            numSpan.innerText = target + "%";
         }
     }, stepTime);
 }
 
 document.querySelectorAll('.skill-card').forEach(card => {
     card.addEventListener('mouseenter', function() {
-        // Если уже анимировали, выходим
         if (this.dataset.animated === "true") return;
         this.dataset.animated = "true";
-
-        // ДОБАВЛЯЕМ КЛАСС ДЛЯ CSS (чтобы проценты не исчезли)
         this.classList.add('filled');
 
         const progress = this.querySelector('.skill-progress');
         const valElement = this.querySelector('.skill-val');
         
-        // Достаем процент
+        // Сохраняем "БАЗА" или "ПРОДВИНУТЫЙ" перед тем как JS начнет глитчить
+        const statusText = valElement.innerText; 
+
         const style = this.getAttribute('style');
-        const match = style ? style.match(/--percent:\s*(\d+%)/) : null;
+        const match = style ? style.match(/--percent:\s*(\d+)%/) : null;
         
         if (match) {
-            const targetPercent = match[1];
-            const targetValue = parseInt(targetPercent);
-            
-            // Запускаем заполнение шкалы
-            progress.style.height = targetPercent;
-            
-            // Запускаем глитч цифр
-            glitchPercent(valElement, targetValue);
+            const targetValue = parseInt(match[1]);
+            progress.style.height = targetValue + "%";
+            // Передаем статус в функцию глитча
+            glitchPercent(valElement, targetValue, statusText);
         }
     });
 });

@@ -371,32 +371,60 @@ body::after {
     letter-spacing: 1px;
 }
 
+/* 1. Общий контейнер (без указания font-size здесь!) */
 .skill-val {
     position: absolute; 
-    bottom: 5px; 
-    right: 15px; /* Увеличил отступ, чтобы текст не прилипал к краю */
+    bottom: 24px; 
+    right: 24px; 
+    display: flex;
+    flex-direction: column; 
+    align-items: flex-end;  
     font-family: 'JetBrains Mono', monospace;
-    font-size: 2.2rem; /* Уменьшил с 3rem, чтобы русские слова "ИЗУЧАЮ" влезали */
-    font-weight: 700;
-    color: #fff; 
-    opacity: 0; 
-    transition: 0.3s; 
     z-index: 3;
-    letter-spacing: -1px; /* Сделал шрифт плотнее, в стиле твоего сайта */
+    opacity: 0;
+    transition: 0.3s;
+    pointer-events: none;
 }
 
-.skill-card.filled .skill-val { opacity: 0.2; }
+/* 2. Жестко фиксируем размер процентов для всех карточек */
+.skill-val .num-part {
+    font-size: 32px !important; /* Теперь всегда 32px везде */
+    font-weight: 700;
+    color: var(--accent-red);
+    line-height: 1;
+    margin-bottom: 4px;
+}
 
+/* 3. Жестко фиксируем размер пояснения */
+.skill-val .status-part {
+    font-size: 11px !important; /* Увеличенное пояснение, фиксировано */
+    color: var(--accent-red);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+/* 4. Появление только при ховере */
 .skill-card:hover .skill-val { 
-    opacity: 0.6 !important; /* Чуть приглушил, чтобы не мешало читать детали */
-    color: var(--accent-red); 
+    opacity: 1 !important;
+}
+
+/* УДАЛИ или ЗАКОММЕНТИРУЙ эти блоки ниже, они ломают размеры:
+   .ratio-1-1 .skill-val { font-size: 1.4rem; }
+   .skill-card.filled .skill-val { opacity: 0.2; }
+*/
+
+/* 5. Адаптив только для мобильных телефонов (чтобы не вылезало за края) */
+@media (max-width: 768px) {
+    .skill-val .num-part { font-size: 24px !important; }
+    .skill-val .status-part { font-size: 10px !important; }
+    .skill-val { bottom: 15px; right: 15px; }
 }
 
 /* Корректировка для маленьких карточек 1-1 */
-.ratio-1-1 .skill-val {
+.ratio-1-1 .skill-val .num-part {
     font-size: 1.4rem;
 }
-.ratio-1-1 .skill-details {
+.ratio-1-1 .skill-val .status-part {
     font-size: 0.65rem;
 }
 /* 5. DRAWER (CONTACTS) */
