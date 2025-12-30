@@ -50,7 +50,7 @@ html { scroll-behavior: smooth; }
 @media (max-width: 768px) {
     .site-logo {
         opacity: 0.5; /* На мобилках чуть виднее */
-        top: 20px;
+        top: 12px;
     }
 }
 
