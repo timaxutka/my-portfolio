@@ -315,51 +315,61 @@ body::after {
     transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); 
 }
 
+/* Ховер на саму карточку */
 .skill-card:hover { 
     background-color: #1a0505 !important; 
     border-color: var(--accent-red);      
     transform: translateY(-5px);         
 }
 
-/* --- НОВЫЙ БЛОК: Детализация инструментов --- */
+/* --- Детализация (Описание скилла) --- */
 .skill-details {
     font-size: 0.75rem;
     color: #888;
     margin-top: 12px;
     line-height: 1.4;
-    opacity: 0; /* Скрыто по умолчанию */
+    opacity: 0; 
     transform: translateY(10px);
-    transition: all 0.4s ease 0.1s; /* Задержка появления после наведения */
+    transition: all 0.4s ease 0.1s; 
     max-width: 280px;
     pointer-events: none;
 }
 
-.skill-card:hover .skill-details {
+/* Видна при ховере ИЛИ если карточка уже была активирована (.filled) */
+.skill-card:hover .skill-details,
+.skill-card.filled .skill-details {
     opacity: 1;
     transform: translateY(0);
 }
-/* -------------------------------------------- */
 
 .ratio-1-1 { grid-column: span 1; }
 .ratio-3-1 { grid-column: span 3; }
 .ratio-4-1 { grid-column: span 4; }
 
+/* --- ПРОГРЕСС-БАР --- */
 .skill-progress {
     position: absolute; left: 0; bottom: 0; width: 100%;
-    height: 0; background: #222 !important; 
-    transition: height 1.5s cubic-bezier(0.19, 1, 0.22, 1);
+    height: 0; 
+    background: #222 !important; /* Дефолтный серый */
+    transition: height 1.5s cubic-bezier(0.19, 1, 0.22, 1), background 0.3s ease;
     z-index: 1;
 }
 
+/* При ховере — красный */
 .skill-card:hover .skill-progress { 
-    background: rgba(255, 0, 0, 0.15) !important; 
+    background: rgba(255, 0, 0, 0.2) !important; 
+}
+
+/* Когда заполнено, но мышь ушла — становится темно-серым */
+.skill-card.filled:not(:hover) .skill-progress {
+    background: #1a1a1a !important; 
 }
 
 .skill-content { 
     position: absolute; 
     inset: 0; 
     z-index: 2; 
-    padding: 24px; /* Чуть увеличил отступ для воздуха */
+    padding: 24px; 
     display: flex;
     flex-direction: column;
 }
@@ -371,7 +381,7 @@ body::after {
     letter-spacing: 1px;
 }
 
-/* 1. Базовый контейнер */
+/* --- БЛОК ЦИФР И СТАТУСА --- */
 .skill-val {
     position: absolute; 
     bottom: 24px; 
@@ -382,48 +392,55 @@ body::after {
     font-family: 'JetBrains Mono', monospace;
     z-index: 3;
     opacity: 0;
-    transition: opacity 0.3s ease;
+    transition: opacity 0.3s ease, color 0.3s ease;
     pointer-events: none;
     text-align: right;
 }
 
-/* 2. Проценты (КРАСНЫЕ) */
+/* Фиксированные размеры в PX (не зависят от контейнера) */
 .skill-val .num-part {
-    font-size: 2.2rem;
+    font-size: 32px !important; 
     font-weight: 700;
-    color: var(--accent-red) !important; /* Принудительно красный */
     line-height: 1;
     margin-bottom: 4px;
     display: block;
 }
 
-/* 3. Пояснение (БАЗА / ПРОДВИНУТЫЙ) */
 .skill-val .status-part {
-    font-size: 0.75rem;
-    color: var(--accent-red) !important; /* Принудительно красный */
+    font-size: 11px !important;
     text-transform: uppercase;
     letter-spacing: 2px;
     display: block;
 }
 
-/* 4. Появление только при ховере (на ПК) */
-.skill-card:hover .skill-val { 
+/* ЛОГИКА ОТОБРАЖЕНИЯ: */
+
+/* 1. Показываем при ховере или если уже заполнено */
+.skill-card:hover .skill-val,
+.skill-card.filled .skill-val { 
     opacity: 1 !important;
 }
 
-/* УДАЛИ или ЗАКОММЕНТИРУЙ эти блоки ниже, они ломают размеры:
-   .ratio-1-1 .skill-val { font-size: 1.4rem; }
-   .skill-card.filled .skill-val { opacity: 0.2; }
-*/
-
-
-/* Корректировка для маленьких карточек 1-1 */
-.ratio-1-1 .skill-val .num-part {
-    font-size: 1.4rem;
+/* 2. ЦВЕТ ПРИ ХОВЕРЕ (Активный красный) */
+.skill-card:hover .skill-val .num-part,
+.skill-card:hover .skill-val .status-part {
+    color: var(--accent-red) !important;
 }
-.ratio-1-1 .skill-val .status-part {
-    font-size: 0.65rem;
+
+/* 3. ЦВЕТ ПОСЛЕ ХОВЕРА (Неактивный серый) */
+.skill-card.filled:not(:hover) .skill-val .num-part,
+.skill-card.filled:not(:hover) .skill-val .status-part {
+    color: #444 !important; /* Данные остались, но потухли */
+    transition: color 0.5s ease;
 }
+
+/* Адаптив для карточек 1-1 и мобилок */
+@media (max-width: 768px) {
+    .skill-val .num-part { font-size: 24px !important; }
+    .skill-val .status-part { font-size: 10px !important; }
+    .skill-details { max-width: 65%; }
+}
+
 /* 5. DRAWER (CONTACTS) */
 .drawer {
     position: fixed; top: 0; right: -500px;
