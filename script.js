@@ -514,3 +514,19 @@ function animateCamera() {
 
 // Запускаем через пару секунд после старта, чтобы всё прогрузилось
 setTimeout(animateCamera, 3000);
+
+document.querySelectorAll('.skill-card').forEach(card => {
+    card.addEventListener('click', function() {
+        if (window.innerWidth <= 768) {
+            // Если карточка уже открыта — закрываем
+            if (this.classList.contains('is-tapped')) {
+                this.classList.remove('is-tapped');
+            } else {
+                // Закрываем все остальные, чтобы не было каши
+                document.querySelectorAll('.skill-card').forEach(c => c.classList.remove('is-tapped'));
+                // Открываем текущую
+                this.classList.add('is-tapped');
+            }
+        }
+    });
+});
