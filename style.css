@@ -315,12 +315,30 @@ body::after {
     transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); 
 }
 
-/* При наведении: глубокий темно-красный (почти черный, но с оттенком) */
 .skill-card:hover { 
-    background-color: #1a0505 !important; /* Очень темный красный */
-    border-color: var(--accent-red);      /* Подсвечиваем только рамку */
-    transform: translateY(-5px);         /* Легкий подъем карточки */
+    background-color: #1a0505 !important; 
+    border-color: var(--accent-red);      
+    transform: translateY(-5px);         
 }
+
+/* --- НОВЫЙ БЛОК: Детализация инструментов --- */
+.skill-details {
+    font-size: 0.75rem;
+    color: #888;
+    margin-top: 12px;
+    line-height: 1.4;
+    opacity: 0; /* Скрыто по умолчанию */
+    transform: translateY(10px);
+    transition: all 0.4s ease 0.1s; /* Задержка появления после наведения */
+    max-width: 280px;
+    pointer-events: none;
+}
+
+.skill-card:hover .skill-details {
+    opacity: 1;
+    transform: translateY(0);
+}
+/* -------------------------------------------- */
 
 .ratio-1-1 { grid-column: span 1; }
 .ratio-3-1 { grid-column: span 3; }
@@ -333,26 +351,54 @@ body::after {
     z-index: 1;
 }
 
-/* Эффект заполнения (прогресс-бар) внутри карточки */
 .skill-card:hover .skill-progress { 
-    background: rgba(255, 0, 0, 0.2) !important; /* Делаем полосу прогресса чуть ярче */
+    background: rgba(255, 0, 0, 0.15) !important; 
 }
 
-.skill-content { position: absolute; inset: 0; z-index: 2; padding: 20px; }
-.skill-name { font-size: 1rem; text-transform: uppercase; color: #fff; }
+.skill-content { 
+    position: absolute; 
+    inset: 0; 
+    z-index: 2; 
+    padding: 24px; /* Чуть увеличил отступ для воздуха */
+    display: flex;
+    flex-direction: column;
+}
+
+.skill-name { 
+    font-size: 0.9rem; 
+    text-transform: uppercase; 
+    color: #fff; 
+    letter-spacing: 1px;
+}
+
 .skill-val {
-    position: absolute; bottom: 5px; right: 10px;
+    position: absolute; 
+    bottom: 5px; 
+    right: 15px; /* Увеличил отступ, чтобы текст не прилипал к краю */
     font-family: 'JetBrains Mono', monospace;
-    font-size: 3rem; font-weight: 700;
-    color: #fff; opacity: 0; transition: 0.3s; z-index: 3;
-}
-.skill-card.filled .skill-val { opacity: 0.2; }
-/* Значение процентов (90%, 80%...) */
-.skill-card:hover .skill-val { 
-    opacity: 0.8 !important; 
-    color: var(--accent-red); /* Делаем цифры акцентными при наведении */
+    font-size: 2.2rem; /* Уменьшил с 3rem, чтобы русские слова "ИЗУЧАЮ" влезали */
+    font-weight: 700;
+    color: #fff; 
+    opacity: 0; 
+    transition: 0.3s; 
+    z-index: 3;
+    letter-spacing: -1px; /* Сделал шрифт плотнее, в стиле твоего сайта */
 }
 
+.skill-card.filled .skill-val { opacity: 0.2; }
+
+.skill-card:hover .skill-val { 
+    opacity: 0.6 !important; /* Чуть приглушил, чтобы не мешало читать детали */
+    color: var(--accent-red); 
+}
+
+/* Корректировка для маленьких карточек 1-1 */
+.ratio-1-1 .skill-val {
+    font-size: 1.4rem;
+}
+.ratio-1-1 .skill-details {
+    font-size: 0.65rem;
+}
 /* 5. DRAWER (CONTACTS) */
 .drawer {
     position: fixed; top: 0; right: -500px;
@@ -1209,29 +1255,32 @@ body::after {
     }
 
     /* 2. SKILLS НА МОБИЛКАХ (Интерактив по тапу) */
-    .skill-card {
-        background-color: #0a0a0a !important; /* Изначально черная */
-        transition: all 0.2s ease; /* Быстрый отклик на тап */
-    }
-
-    /* Состояние при нажатии (имитация ховера на тачскрине) */
     .skill-card:active {
-        background-color: #1a0505 !important; /* Твой фирменный темный цвет */
+        background-color: #1a0505 !important;
         border-color: var(--accent-red) !important;
     }
 
-    .skill-card:active .skill-progress {
-        background: rgba(255, 0, 0, 0.2) !important;
-        height: 60% !important; /* Или твоя стандартная высота */
+    /* 2. Состояние ПОСЛЕ тапа (данные видны, но фон снова черный) */
+    .skill-card.is-tapped {
+        background-color: #0a0a0a !important; /* Возвращаем черный фон */
+        border-color: #333; /* Оставляем легкую рамку, чтобы выделить активную карточку */
     }
 
-    .skill-card:active .skill-val {
-        opacity: 0.8 !important;
-        color: var(--accent-red) !important;
+    /* Показываем прогресс-бар и значения при тапе */
+    .skill-card.is-tapped .skill-progress {
+        height: var(--target-height) !important; /* Высота из JS */
+        background: rgba(255, 0, 0, 0.1) !important; 
+        opacity: 0.5;
     }
 
-    /* Фикс: убеждаемся, что контент не пропадает, если палец зажат */
-    .skill-card:active .skill-name {
-        color: #fff !important;
+    .skill-card.is-tapped .skill-val {
+        opacity: 0.4 !important; /* Видно, но не ярко */
+        color: var(--accent-red);
+    }
+
+    .skill-card.is-tapped .skill-details {
+        opacity: 1 !important;
+        transform: translateY(0) !important;
+        height: auto !important;
     }
 }
