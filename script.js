@@ -531,3 +531,54 @@ document.querySelectorAll('.skill-card').forEach(card => {
         }
     });
 });
+
+const ctx = document.getElementById('businessChart').getContext('2d');
+
+// Создаем градиент для "заливки" успеха
+const gradient = ctx.createLinearGradient(0, 0, 0, 400);
+gradient.addColorStop(0, 'rgba(155, 17, 30, 0.2)');
+gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
+
+new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: ['Старт', '1 мес', '3 мес', '6 мес', '12 мес'],
+        datasets: [
+            {
+                label: 'Мое решение',
+                data: [20, 45, 75, 90, 98],
+                borderColor: '#9b111e',
+                borderWidth: 4,
+                fill: true,
+                backgroundColor: gradient,
+                tension: 0.4,
+                pointRadius: 0
+            },
+            {
+                label: 'Без оптимизации',
+                data: [20, 22, 25, 24, 26],
+                borderColor: '#333',
+                borderDash: [5, 5], // Пунктирная линия
+                borderWidth: 2,
+                fill: false,
+                tension: 0,
+                pointRadius: 0
+            }
+        ]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+            y: { 
+                grid: { color: '#111' },
+                ticks: { color: '#555', font: { family: 'JetBrains Mono' } }
+            },
+            x: { 
+                grid: { display: false },
+                ticks: { color: '#555', font: { family: 'JetBrains Mono' } }
+            }
+        }
+    }
+});

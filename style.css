@@ -1348,3 +1348,130 @@ body::after {
         text-align: center;
     }
 }
+
+/* --- СЕКЦИЯ АНАЛИТИКИ --- */
+.analytics-section {
+    width: 100%;
+    padding: 100px 10%; /* Выравнивание по твоей сетке (как в контактах) */
+    box-sizing: border-box;
+    background: #000;
+}
+
+.analytics-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr; /* На ПК график шире текста */
+    gap: 60px;
+    align-items: stretch; /* ВАЖНО: Растягивает обе колонки по высоте самой длинной */
+}
+
+/* ЛЕВАЯ ЧАСТЬ */
+.analytics-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.analytics-text h2 {
+    font-size: clamp(2rem, 3vw, 2.5rem);
+    line-height: 1.1;
+    margin: 15px 0 35px;
+    font-weight: 800;
+}
+
+.metrics-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.metric-card {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid #111;
+    border-left: 3px solid #333;
+    padding: 20px 25px;
+    transition: 0.4s;
+}
+
+.metric-card:hover {
+    border-left-color: var(--accent-red);
+    background: rgba(155, 17, 30, 0.05); /* Твой темный фирменный */
+}
+
+/* Текст в карточках */
+.m-title { font-family: 'JetBrains Mono'; font-size: 0.65rem; color: #444; text-transform: uppercase; }
+.m-value-row { margin: 8px 0; display: flex; align-items: baseline; gap: 10px; }
+.m-old { color: #333; text-decoration: line-through; font-size: 0.9rem; }
+.m-new { color: #fff; font-size: 1.5rem; font-weight: 700; }
+.m-arrow { color: var(--accent-red); }
+.m-desc { font-size: 0.75rem; color: #555; line-height: 1.4; margin: 0; }
+
+/* ПРАВАЯ ЧАСТЬ (ГРАФИК) */
+.analytics-visual {
+    background: #050505;
+    border: 1px solid #1a1a1a;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    height: 100%; /* Занимает всю высоту grid-row */
+    box-sizing: border-box;
+}
+
+/* Контейнер для Chart.js */
+.chart-inner-container {
+    flex-grow: 1; /* Забирает всё свободное пространство между хедером и футером */
+    position: relative;
+    min-height: 0; /* Фикс для корректного flex-растяжения */
+}
+
+#businessChart {
+    position: absolute; /* Чтобы не распирало родителя */
+    top: 0; left: 0;
+    width: 100% !important;
+    height: 100% !important;
+}
+
+.chart-header {
+    display: flex; 
+    justify-content: space-between; 
+    margin-bottom: 20px;
+    font-family: 'JetBrains Mono'; font-size: 0.65rem; color: #444;
+}
+
+.chart-footer-info {
+    margin-top: 20px;
+    font-family: 'JetBrains Mono'; font-size: 0.6rem; color: #222;
+    display: flex; justify-content: space-between;
+}
+
+.lg-old { 
+    color: hwb(0 35% 65%); /* Тусклый серый для стандарта */
+    position: relative;
+    padding-left: 12px;
+}
+
+.lg-new { 
+    color: var(--accent-red, #9b111e); /* Акцентный красный */
+    text-shadow: 0 0 8px rgba(155, 17, 30, 0.3);
+    position: relative;
+    padding-left: 12px;
+}
+
+/* --- АДАПТИВ (768px) --- */
+@media (max-width: 1100px) {
+    .analytics-section { padding: 80px 5%; }
+    .analytics-grid { grid-template-columns: 1fr; gap: 40px; }
+    
+    .analytics-visual {
+        height: 400px; /* Фиксированная высота для мобилок, чтобы не схлопнулся */
+    }
+    
+    .metrics-list {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+    }
+}
+
+@media (max-width: 600px) {
+    .metrics-list { grid-template-columns: 1fr; }
+    .analytics-visual { height: 300px; }
+}

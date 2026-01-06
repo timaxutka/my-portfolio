@@ -7,6 +7,7 @@
     <link rel="icon" type="image/svg+xml" href="logo.svg">
     <link rel="stylesheet" href="style.css">
     <script src="https://unpkg.com/force-graph"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <div class="site-logo">
@@ -40,7 +41,7 @@
         
         <div class="hero-content">
             <div class="hero-hud">
-                <div class="hud-item">BUILD: 2025.12.30</div>
+                <div class="hud-item">BUILD: 2026.01.06</div>
                 <div class="hud-item">LOC: RUSSIA, OMSK</div>
                 <div class="hud-item" id="hud-time">TIME: (GMT+6) 00:00:00</div>
             </div>
@@ -83,59 +84,122 @@
     </div>
 
     <section class="skills-section" id="skills">
-    <div class="about-intro">
-        <span class="label">UX/UI Designer & Analyst</span>
-        <h1>Я создаю цифровые продукты, <br>используя опыт в дизайне, AI и коде</h1>
-    </div>
-    <div class="skills-grid">
-        <div class="skill-card ratio-1-1" style="--percent: 95%;">
-            <div class="skill-progress"></div>
-            <div class="skill-content">
-                <span class="skill-name">Figma</span>
-                <div class="skill-details">Дизайн-системы, прототипы, компоненты</div>
+        <div class="about-intro">
+            <span class="label">UX/UI Designer & Analyst</span>
+            <h1>Я создаю цифровые продукты, <br>используя опыт в дизайне, AI и коде</h1>
+        </div>
+        <div class="skills-grid">
+            <div class="skill-card ratio-1-1" style="--percent: 95%;">
+                <div class="skill-progress"></div>
+                <div class="skill-content">
+                    <span class="skill-name">Figma</span>
+                    <div class="skill-details">Дизайн-системы, прототипы, компоненты</div>
 
+                    
+                    <span class="skill-val">БАЗА</span>
+                </div>
+            </div>
+
+            <div class="skill-card ratio-3-1" style="--percent: 85%;">
+                <div class="skill-progress"></div>
+                <div class="skill-content">
+                    <span class="skill-name">Adobe CC (Ae, Ps, Ai)</span>
+                    <div class="skill-details">Моушн-дизайн, ретушь, векторная графика</div>
+                    <span class="skill-val">ПРОДВИНУТЫЙ</span>
+                </div>
+            </div>
+
+            <div class="skill-card ratio-4-1" style="--percent: 75%;">
+                <div class="skill-progress"></div>
+                <div class="skill-content">
+                    <span class="skill-name">AI-Инструменты</span>
+                    <div class="skill-details">Prompt Engineering (GPT, Midjourney, Flux)</div>
+                    <span class="skill-val">ПРОДВИНУТЫЙ</span>
+                </div>
+            </div>
+
+            <div class="skill-card ratio-3-1" style="--percent: 55%;">
+                <div class="skill-progress"></div>
+                <div class="skill-content">
+                    <span class="skill-name">Разработка (Django, React)</span>
+                    <div class="skill-details">Логика интерфейсов, верстка, работа с API</div>
+                    <span class="skill-val">ИЗУЧАЮ</span>
+                </div>
+            </div>
+
+            <div class="skill-card ratio-1-1" style="--percent: 80%;">
+                <div class="skill-progress"></div>
+                <div class="skill-content">
+                    <span class="skill-name">Lottie</span>
+                    <div class="skill-details">Анимация интерфейсов для Web/App</div>
+                    <span class="skill-val">ПРОДВИНУТЫЙ</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="analytics-section">
+        <div class="analytics-grid">
+            
+            <div class="analytics-text">
+                <div class="analytics-header">
+                    <span class="label">// SYSTEM_UPGRADE_REPORT</span>
+                    <h2>Результат внедрения <br><span class="highlight">UX + AI LOGIC</span></h2>
+                </div>
                 
-                <span class="skill-val">БАЗА</span>
+                <div class="metrics-list">
+                    <div class="metric-card">
+                        <span class="m-title">Process Speed // TIME_EFFICIENCY</span>
+                        <div class="m-value-row">
+                            <span class="m-old">15m</span><span class="m-arrow">→</span><span class="m-new">2.5m</span>
+                        </div>
+                        <p class="m-desc">Автоматизация рутины и AI-интеграция в рабочие процессы.</p>
+                    </div>
+                    <div class="metric-card">
+                        <span class="m-title">Conversion Rate // REVENUE_UP</span>
+                        <div class="m-value-row">
+                            <span class="m-old">3.2%</span><span class="m-arrow">→</span><span class="m-new">11.8%</span>
+                        </div>
+                        <p class="m-desc">Оптимизация UX-воронок и устранение фрикций.</p>
+                    </div>
+                    <div class="metric-card">
+                        <span class="m-title">User Retention // LTV_GROWTH</span>
+                        <div class="m-value-row">
+                            <span class="m-old">14%</span><span class="m-arrow">→</span><span class="m-new">42%</span>
+                        </div>
+                        <p class="m-desc">Глубокая проработка CJM и системы касаний.</p>
+                    </div>
+                    <div class="metric-card">
+                        <span class="m-title">Error Rate // SYSTEM_STABILITY</span>
+                        <div class="m-value-row">
+                            <span class="m-old">8.5%</span><span class="m-arrow">→</span><span class="m-new">0.4%</span>
+                        </div>
+                        <p class="m-desc">Переход на строгую логику и контроль качества.</p>
+                    </div>
+                </div>
             </div>
-        </div>
 
-        <div class="skill-card ratio-3-1" style="--percent: 85%;">
-            <div class="skill-progress"></div>
-            <div class="skill-content">
-                <span class="skill-name">Adobe CC (Ae, Ps, Ai)</span>
-                <div class="skill-details">Моушн-дизайн, ретушь, векторная графика</div>
-                <span class="skill-val">ПРОДВИНУТЫЙ</span>
+            <div class="analytics-visual">
+                <div class="chart-header">
+                    <div class="chart-status">LIVE_METRICS: ACTIVE</div>
+                    <div class="chart-legend">
+                        <span class="lg-old">Стандарт</span>
+                        <span class="lg-new">Мое решение</span>
+                    </div>
+                </div>
+                
+                <div class="chart-inner-container">
+                    <canvas id="businessChart"></canvas>
+                </div>
+                
+                <div class="chart-footer-info">
+                    <span>DATA_SOURCE: INTERNAL_ANALYTICS</span>
+                    <span>STABILITY: 99.9%</span>
+                </div>
             </div>
-        </div>
 
-        <div class="skill-card ratio-4-1" style="--percent: 75%;">
-            <div class="skill-progress"></div>
-            <div class="skill-content">
-                <span class="skill-name">AI-Инструменты</span>
-                <div class="skill-details">Prompt Engineering (GPT, Midjourney, Flux)</div>
-                <span class="skill-val">ПРОДВИНУТЫЙ</span>
-            </div>
         </div>
-
-        <div class="skill-card ratio-3-1" style="--percent: 55%;">
-            <div class="skill-progress"></div>
-            <div class="skill-content">
-                <span class="skill-name">Разработка (Django, React)</span>
-                <div class="skill-details">Логика интерфейсов, верстка, работа с API</div>
-                <span class="skill-val">ИЗУЧАЮ</span>
-            </div>
-        </div>
-
-        <div class="skill-card ratio-1-1" style="--percent: 80%;">
-            <div class="skill-progress"></div>
-            <div class="skill-content">
-                <span class="skill-name">Lottie</span>
-                <div class="skill-details">Анимация интерфейсов для Web/App</div>
-                <span class="skill-val">ПРОДВИНУТЫЙ</span>
-            </div>
-        </div>
-    </div>
-</section>
+    </section>
 
     <div class="section-divider">
         <div class="divider-line"></div>
