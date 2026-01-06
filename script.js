@@ -532,14 +532,41 @@ document.querySelectorAll('.skill-card').forEach(card => {
     });
 });
 
-const ctx = document.getElementById('businessChart').getContext('2d');
+const canvas = document.getElementById('businessChart');
+const ctx = canvas.getContext('2d');
 
-// Создаем градиент для "заливки" успеха
-const gradient = ctx.createLinearGradient(0, 0, 0, 400);
-gradient.addColorStop(0, 'rgba(155, 17, 30, 0.2)');
-gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
+let offset = 0; 
 
-new Chart(ctx, {
+// 1. ДИНАМИЧЕСКАЯ ЗАЛИВКА (подстраивается под высоту мобилки/пк)
+function getAreaGradient(chart) {
+    const {ctx, chartArea} = chart;
+    if (!chartArea) return null;
+
+    // Градиент от верхней точки контента до нижней точки контента
+    const gradient = ctx.createLinearGradient(0, chartArea.top, 0, chartArea.bottom);
+    gradient.addColorStop(0, 'rgba(155, 17, 30, 0.25)'); // Твой красный сверху
+    gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');        // Уходит в ноль строго внизу
+    return gradient;
+}
+
+// 2. БЕГУЩИЙ ИМПУЛЬС (на самой линии)
+function getMovingGradient(chart) {
+    const {ctx, chartArea} = chart;
+    if (!chartArea) return;
+
+    // Широкий световой сгусток (300px)
+    const gradient = ctx.createLinearGradient(chartArea.left + offset, 0, chartArea.left + offset - 300, 0);
+    
+    gradient.addColorStop(0, '#9b111e');      
+    gradient.addColorStop(0.3, '#9b111e');    
+    gradient.addColorStop(0.5, '#ffffff'); // БЕЛЫЙ ЦЕНТР ИМПУЛЬСА
+    gradient.addColorStop(0.7, '#9b111e');    
+    gradient.addColorStop(1, '#9b111e');      
+    
+    return gradient;
+}
+
+const businessChart = new Chart(ctx, {
     type: 'line',
     data: {
         labels: ['Старт', '1 мес', '3 мес', '6 мес', '12 мес'],
@@ -547,10 +574,16 @@ new Chart(ctx, {
             {
                 label: 'Мое решение',
                 data: [20, 45, 75, 90, 98],
-                borderColor: '#9b111e',
+                // Цвет линии вычисляется динамически
+                borderColor: function(context) {
+                    return getMovingGradient(context.chart);
+                },
+                // Заливка вычисляется динамически
+                backgroundColor: function(context) {
+                    return getAreaGradient(context.chart);
+                },
                 borderWidth: 4,
                 fill: true,
-                backgroundColor: gradient,
                 tension: 0.4,
                 pointRadius: 0
             },
@@ -558,7 +591,7 @@ new Chart(ctx, {
                 label: 'Без оптимизации',
                 data: [20, 22, 25, 24, 26],
                 borderColor: '#333',
-                borderDash: [5, 5], // Пунктирная линия
+                borderDash: [5, 5],
                 borderWidth: 2,
                 fill: false,
                 tension: 0,
@@ -569,6 +602,7 @@ new Chart(ctx, {
     options: {
         responsive: true,
         maintainAspectRatio: false,
+        animation: false, // Отключаем, чтобы не конфликтовать с requestAnimationFrame
         plugins: { legend: { display: false } },
         scales: {
             y: { 
@@ -580,5 +614,37 @@ new Chart(ctx, {
                 ticks: { color: '#555', font: { family: 'JetBrains Mono' } }
             }
         }
-    }
+    },
+    plugins: [{
+        // Добавляем GLOW свечение для всей красной линии
+        beforeDraw: (chart) => {
+            const { ctx } = chart;
+            ctx.save();
+            ctx.shadowColor = 'rgba(155, 17, 30, 0.4)';
+            ctx.shadowBlur = 15;
+        },
+        afterDraw: (chart) => {
+            chart.ctx.restore();
+        }
+    }]
 });
+
+// 3. ПЛАВНАЯ АНИМАЦИЯ
+function animate() {
+    if (businessChart.chartArea) {
+        const chartWidth = businessChart.chartArea.width;
+        
+        offset += 1.2; // Слегка замедлил для солидности
+        
+        // Перезапуск импульса
+        if (offset > chartWidth + 400) {
+            offset = -100;
+        }
+        
+        businessChart.update('none'); // Обновление без лишних перерисовок
+    }
+    requestAnimationFrame(animate);
+}
+
+// Запуск с небольшой задержкой, чтобы chartArea успел инициализироваться
+setTimeout(animate, 200);
