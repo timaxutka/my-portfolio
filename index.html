@@ -48,6 +48,14 @@
 
             <h1 id="hero-title">PORTFOLIO</h1>
 
+            <div class="hero-value-terminal">
+                <span class="v-prefix">VALUE_PROP:</span>
+                <p>
+                    Я увеличиваю эффективность цифровых продуктов<br>
+                    через UX, аналитику и AI
+                </p>
+            </div>
+
             <nav class="hero-nav">
                 <a href="#projects-divider" class="nav-item"><span>01</span> ПРОЕКТЫ</a>
                 <a href="#skills" class="nav-item"><span>02</span> НАВЫКИ</a>
@@ -263,22 +271,36 @@
         </div>
         
         <div class="modal-content">
-            <div class="case-step">
-                <span class="step-label">Проблема</span>
-                <p id="m-problem"></p>
+            <div class="project-spec-bar">
+                <div class="spec-col"><span>PRODUCT:</span> <b id="m-product"></b></div>
+                <div class="spec-col"><span>ROLE:</span> <b id="m-role"></b></div>
+                <div class="spec-col"><span>TIMELINE:</span> <b id="m-timeline"></b></div>
             </div>
-            <div class="case-step">
-                <span class="step-label">Решение</span>
-                <p id="m-solution"></p>
+
+            <div class="modal-preview">
+                <div class="preview-overlay">LOADING_MEDIA...</div>
+                <img id="m-img" src="" alt="Project Preview">
             </div>
-            <div class="case-step">
-                <span class="step-label">Результат</span>
-                <p id="m-result"></p>
+
+            <div class="case-grid">
+                <div class="case-column">
+                    <span class="step-label">01_PROBLEM</span>
+                    <p id="m-problem"></p>
+                </div>
+                <div class="case-column">
+                    <span class="step-label">02_SOLUTION</span>
+                    <p id="m-solution"></p>
+                </div>
+                <div class="case-column">
+                    <span class="step-label">03_RESULT</span>
+                    <p id="m-result"></p>
+                </div>
             </div>
         </div>
 
         <div class="modal-footer">
-            <span id="m-date"></span> <a id="m-link" href="#" target="_blank" class="project-link">ПЕРЕЙТИ К ПРОЕКТУ →</a>
+            <span id="m-date"></span> 
+            <a id="m-link" href="#" target="_blank" class="project-link">LAUNCH_PROJECT_</a>
         </div>
     </div>
 

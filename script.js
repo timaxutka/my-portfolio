@@ -3,39 +3,105 @@ const glyphs = "ABCDEFGHIKLMNOPQRSTVXYZ0123456789+=/-_";
 
 const myData = {
     nodes: [
-        { id: 1, name: "Project Virus", date: "Октябрь 2023", problem: "Низкое удержание игроков...", solution: "Внедрение системы захвата...", result: "Retention вырос до 18%...", link: "https://google.com" },
-        { id: 2, name: "Virus Infographics", date: "Ноябрь 2023", problem: "Сложные данные...", solution: "Интерактивные гайды...", result: "Снижение обращений на 35%...", link: "#" },
-        { id: 3, name: "Desktop Trading App", date: "Январь 2024", problem: "Высокая задержка...", solution: "WebGL оптимизация...", result: "Стабильные 60 FPS...", link: "#" },
-        { id: 4, name: "Promo Landing", date: "Февраль 2024", problem: "Низкая конверсия...", solution: "Минимализм и CTA...", result: "Конверсия выросла до 8.4%...", link: "#" },
-        { id: 5, name: "Neural Nexus AI", date: "Март 2024", problem: "Долгий поиск инфо...", solution: "LLM-ассистент...", result: "Поиск: 4 мин -> 15 сек...", link: "#" },
-        { id: 6, name: "Crypto Wallet UI", date: "Апрель 2024", problem: "Ошибки транзакций...", solution: "UX-визуализация пути...", result: "Ошибки снизились на 60%...", link: "#" },
-        { id: 7, name: "E-com Dashboard", date: "Июнь 2024", problem: "Слепые зоны прибыли...", solution: "Сквозная аналитика...", result: "ROI вырос на 22%...", link: "#" },
-        { id: 8, name: "Security Audit Tool", date: "Август 2024", problem: "Долгий ручной аудит...", solution: "Статический анализатор...", result: "Ускорение в 3 раза...", link: "#" },
-        { id: 9, name: "VFX Portfolio", date: "Сентябрь 2024", problem: "Тяжелое видео...", solution: "Self-hosted адаптив...", result: "Плавное 4K везде...", link: "#" },
-        { id: 10, name: "Mobile CRM System", date: "Ноябрь 2024", problem: "Потеря данных в полях...", solution: "Offline-first PWA...", result: "Отчетность: 70% -> 98%...", link: "#" }
+        // КЛАСТЕР 1: Геймдев и Промо
+        { 
+            id: 1, name: "Project Virus", date: "Октябрь 2023", 
+            img: "img/projects/1.png",
+            product: "WebGL Game", role: "Solo Dev / UX", timeline: "3 Weeks",
+            problem: "Низкое удержание игроков на уровне обучения (отвал 40%).", 
+            solution: "Редизайн туториала через динамический UI и систему быстрых наград.", 
+            result: "Retention D1 вырос до 18%, время первой сессии +12%.", 
+            link: "https://google.com" 
+        },
+        { 
+            id: 2, name: "Virus Infographics", date: "Ноябрь 2023", 
+            img: "img/projects/2.webp",
+            product: "EdTech Dashboard", role: "UI/UX Designer", timeline: "10 Days",
+            problem: "Пользователи не считывали иерархию данных в сложных графиках.", 
+            solution: "Интерактивная визуализация слоев с фильтрацией по клику на узел.", 
+            result: "Снижение обращений в саппорт на 35%.", 
+            link: "#" 
+        },
+        { 
+            id: 4, name: "Promo Landing", date: "Февраль 2024", 
+            img: "img/projects/4.webp",
+            product: "Marketing Page", role: "Lead UI", timeline: "1 Week",
+            problem: "Высокий показатель отказов на первом экране (Bounce Rate 70%).", 
+            solution: "Внедрение скролл-анимаций и четкого Value Proposition.", 
+            result: "Конверсия в целевое действие выросла до 8.4%.", 
+            link: "#" 
+        },
+        { 
+            id: 9, name: "VFX Portfolio", date: "Сентябрь 2024", 
+            img: "img/projects/9.webp",
+            product: "Video Showcase", role: "Frontend Dev", timeline: "12 Days",
+            problem: "Тяжелый видео-контент тормозил загрузку на мобильных устройствах.", 
+            solution: "Self-hosted адаптивный плеер с ленивой загрузкой чанков.", 
+            result: "Плавное 4K воспроизведение, PageSpeed Score 95+.", 
+            link: "#" 
+        },
+        // КЛАСТЕР 2: Финтех и Инструменты
+        { 
+            id: 3, name: "Desktop Trading App", date: "Январь 2024", 
+            img: "img/projects/3.webp",
+            product: "Trading Terminal", role: "UX/UI / Analyst", timeline: "1 Month",
+            problem: "Задержка отображения свечей приводила к ошибкам трейдеров.", 
+            solution: "Оптимизация рендеринга через WebGL и буферизацию данных.", 
+            result: "Стабильные 60 FPS при 1000+ активных объектов.", 
+            link: "#" 
+        },
+        { 
+            id: 6, name: "Crypto Wallet UI", date: "Апрель 2024", 
+            img: "img/projects/6.webp",
+            product: "Mobile App", role: "UX Researcher", timeline: "3 Weeks",
+            problem: "Пользователи путали сети (BSC/ETH) и теряли транзакции.", 
+            solution: "Визуальное разделение путей через цветовые мосты.", 
+            result: "Количество ошибочных транзакций снизилось на 60%.", 
+            link: "#" 
+        },
+        { 
+            id: 8, name: "Security Audit Tool", date: "Август 2024", 
+            img: "img/projects/8.webp",
+            product: "Cybersecurity B2B", role: "Fullstack / UX", timeline: "5 Weeks",
+            problem: "Ручной аудит безопасности занимал 48+ часов.", 
+            solution: "Автоматизация через статический анализатор логов.", 
+            result: "Ускорение процесса аудита в 3 раза.", 
+            link: "#" 
+        },
+        // КЛАСТЕР 3: AI и Бизнес-системы
+        { 
+            id: 5, name: "Neural Nexus AI", date: "Март 2024", 
+            img: "img/projects/5.webp",
+            product: "LLM Interface", role: "Product Designer", timeline: "4 Weeks",
+            problem: "Сложность формирования промптов для сотрудников.", 
+            solution: "Система умных подсказок и библиотека шаблонов.", 
+            result: "Поиск и генерация ответа: 4 мин -> 15 сек.", 
+            link: "#" 
+        },
+        { 
+            id: 7, name: "E-com Dashboard", date: "Июнь 2024", 
+            img: "img/projects/7.webp",
+            product: "Analytics SaaS", role: "BI Analyst", timeline: "1 Month",
+            problem: "Нет связи между рекламным бюджетом и возвратом товара.", 
+            solution: "Сквозная аналитика с кастомными дашбордами прибыли.", 
+            result: "ROI рекламных кампаний вырос на 22%.", 
+            link: "#" 
+        },
+        { 
+            id: 10, name: "Mobile CRM System", date: "Ноябрь 2024", 
+            img: "img/projects/10.webp",
+            product: "Enterprise PWA", role: "Solo Developer", timeline: "6 Weeks",
+            problem: "Потеря данных при работе в зонах без интернета.", 
+            solution: "Offline-first архитектура с фоновой синхронизацией.", 
+            result: "Полнота отчетности выросла с 70% до 98.5%.", 
+            link: "#" 
+        }
     ],
     links: [
-        // КЛАСТЕР 1: Игровая экосистема (1, 2, 4)
-        { source: 1, target: 2 },
-        { source: 2, target: 4 },
-        { source: 4, target: 1 },
-
-        // КЛАСТЕР 2: Финтех и Инструменты (3, 6, 8)
-        { source: 3, target: 6 },
-        { source: 6, target: 8 },
-        { source: 8, target: 3 },
-
-        // КЛАСТЕР 3: AI и Бизнес-системы (5, 7, 10)
-        { source: 5, target: 10 },
-        { source: 10, target: 7 },
-        { source: 7, target: 5 },
-
-        // МОСТИК (Слабая связь, чтобы группы не разлетались слишком далеко)
-        { source: 4, target: 7 }, 
-        
-        // ОДИНОЧНЫЙ УЗЕЛ (9 - VFX Portfolio) 
-        // Он будет висеть отдельно, так как у него только одна связь
-        { source: 9, target: 2 }
+        { source: 1, target: 2 }, { source: 2, target: 4 }, { source: 4, target: 1 },
+        { source: 3, target: 6 }, { source: 6, target: 8 }, { source: 8, target: 3 },
+        { source: 5, target: 10 }, { source: 10, target: 7 }, { source: 7, target: 5 },
+        { source: 4, target: 7 }, { source: 9, target: 2 }
     ]
 };
 
@@ -296,24 +362,35 @@ document.querySelectorAll('.skill-card').forEach(card => {
 function showModal(node) {
     const modal = document.getElementById('project-modal');
     const overlay = document.getElementById('drawer-overlay');
-    
-    // Заполняем данные
-    document.getElementById('m-title').innerText = node.name || "Project";
-    document.getElementById('m-problem').innerText = node.problem || "—";
-    document.getElementById('m-solution').innerText = node.solution || "—";
-    document.getElementById('m-result').innerText = node.result || "—";
-    
-    // Подставляем дату (если её нет в объекте, пишем текущую или заглушку)
-    document.getElementById('m-date').innerText = node.date || "DATE: 2024 / Q4";
-    
+    const imgElement = document.getElementById('m-img');
+
+    // Заполнение текста
+    document.getElementById('m-title').innerText = node.name;
+    document.getElementById('m-product').innerText = node.product;
+    document.getElementById('m-role').innerText = node.role;
+    document.getElementById('m-timeline').innerText = node.timeline;
+    document.getElementById('m-problem').innerText = node.problem;
+    document.getElementById('m-solution').innerText = node.solution;
+    document.getElementById('m-result').innerText = node.result;
+    document.getElementById('m-date').innerText = node.date;
+
+    // Подстановка изображения
+    if (node.img) {
+        imgElement.src = node.img;
+        imgElement.parentElement.style.display = "flex"; // Показываем контейнер
+    } else {
+        imgElement.parentElement.style.display = "none"; // Прячем, если нет фото
+    }
+
+    // Ссылка
     const linkBtn = document.getElementById('m-link');
-    if (node.link) {
+    if (node.link && node.link !== "#") {
         linkBtn.href = node.link;
         linkBtn.style.display = "inline-block";
     } else {
         linkBtn.style.display = "none";
     }
-    
+
     modal.classList.add('active');
     overlay.style.display = 'block';
 }

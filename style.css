@@ -555,37 +555,100 @@ body::after {
     z-index: 1999; display: none; 
 }
 
-/* 6. PROJECT MODAL (CLEAN STYLE) */
+/* 6. PROJECT MODAL (CLEAN & WIDESCREEN STYLE) */
 #project-modal {
     position: fixed;
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    width: 50vw; max-height: 70vh;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* Центрируем строго по центру */
+    width: 50vw;
+    max-height: 85vh; /* Высота под широкоформатное фото */
     background: #050505;
     border: 1px solid #1a1a1a;
     z-index: 5000;
-    display: none;
+    display: none; /* По умолчанию скрыто */
     flex-direction: column;
+    box-sizing: border-box;
+    overflow: hidden;
 }
 
-#project-modal.active { display: flex; }
+/* Класс активации (должен быть ниже основного селектора) */
+#project-modal.active { 
+    display: flex !important; 
+}
 
 .modal-header {
     padding: 40px 40px 20px 40px;
-    display: flex; justify-content: space-between; align-items: baseline;
+    display: flex; 
+    justify-content: space-between; 
+    align-items: baseline;
 }
 
 .modal-header h2 {
     font-family: 'Inter', sans-serif;
-    font-size: 1.8rem; font-weight: 700;
-    margin: 0; color: #fff;
+    font-size: 1.8rem; 
+    font-weight: 700;
+    margin: 0; 
+    color: #fff;
 }
 
 .modal-content {
     padding: 0 40px 40px 40px;
-    display: flex; flex-direction: column;
+    overflow-y: auto; /* Вертикальный скролл если контента много */
+    overflow-x: hidden; /* Защита от горизонтальной линии */
+    display: flex;
+    flex-direction: column;
     gap: 30px;
-    overflow-y: auto;
+    box-sizing: border-box;
+}
+
+/* --- ШИРОКОФОРМАТНОЕ ПРЕВЬЮ (21:9) --- */
+.modal-preview {
+    width: 100%;
+    aspect-ratio: 21 / 9;
+    background: #0a0a0a;
+    border: 1px solid #1a1a1a;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
+    flex-shrink: 0; /* Не дает картинке сплющиваться */
+
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #050505;
+}
+
+.preview-overlay {
+    position: absolute;
+    z-index: 1; /* Текст на нижнем слое */
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    color: #222; /* Сделаем его тусклым */
+}
+
+.modal-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.9;
+    filter: contrast(1.1) brightness(0.9);
+    transition: 0.5s ease;
+
+    position: relative;
+    z-index: 2; /* Картинка перекрывает текст */
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.modal-preview:hover img {
+    opacity: 1;
+    filter: contrast(1) brightness(1);
+    transform: scale(1.03);
 }
 
 /* Стилизация текста Case Study */
@@ -593,7 +656,7 @@ body::after {
 
 .step-label {
     font-size: 0.65rem;
-    color: var(--accent-red); /* Красный акцент только на заголовках этапов */
+    color: var(--accent-red);
     letter-spacing: 0.2em;
     text-transform: uppercase;
     font-weight: 700;
@@ -1328,19 +1391,23 @@ body::after {
     #project-modal {
         width: 92vw !important;
         max-height: 85vh !important;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%) !important;
     }
 
-    .modal-header h2 { font-size: 1.4rem !important; }
+    .project-spec-bar {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .modal-preview {
+        aspect-ratio: 16 / 9; /* На мобилках чуть выше, чтобы было видно */
+    }
+
+    .modal-header h2 { font-size: 1.4rem; }
     
     .modal-footer {
-        flex-direction: column-reverse !important;
+        flex-direction: column-reverse;
         gap: 20px;
-        align-items: center !important;
-        width: 100% !important;
-        box-sizing: border-box !important;
+        text-align: center;
     }
 
     #project-modal .project-link {
@@ -1503,4 +1570,141 @@ body::after {
 
     .metrics-list { grid-template-columns: 1fr; }
     .analytics-visual { height: 300px; }
+}
+
+.hero-value-terminal {
+    margin: -25px 0 40px 0;
+    font-family: 'JetBrains Mono', monospace;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.v-prefix {
+    font-size: 0.7rem;
+    color: var(--accent-red);
+    letter-spacing: 0.2em;
+    font-weight: 700;
+    opacity: 0.8;
+}
+
+.hero-value-terminal p {
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #ffffff; /* Цвет комментария в IDE */
+    margin: 0;
+    letter-spacing: 0.2em;
+    position: relative;
+}
+
+/* Эффект "печатающейся" каретки в конце текста */
+.hero-value-terminal p::after {
+    content: "_";
+    animation: terminal-blink 1s steps(2) infinite;
+    color: var(--accent-red);
+    margin-left: 5px;
+}
+
+@keyframes terminal-blink {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+/* Адаптив */
+@media (max-width: 1100px) {
+    .hero-value-terminal {
+        margin: 20px auto 30px auto;
+        align-items: center;
+        text-align: center;
+    }
+    .hero-value-terminal p {
+        font-size: 0.85rem;
+    }
+}
+
+/* --- SPEC BAR (PRODUCT, ROLE, TIMELINE) --- */
+.project-spec-bar {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    padding-bottom: 25px;
+    border-bottom: 1px solid #111;
+    margin-bottom: 10px;
+}
+
+.spec-col {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.spec-col span {
+    font-size: 0.6rem;
+    color: #444;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+}
+
+.spec-col b {
+    font-size: 0.85rem;
+    color: #eee;
+    font-weight: 600;
+}
+
+/* Колонки кейса */
+.case-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.case-column {
+    display: grid;
+    grid-template-columns: 120px 1fr; /* Фиксированная ширина под заголовок */
+    align-items: baseline;
+    gap: 20px;
+}
+
+.step-label {
+    font-size: 0.65rem;
+    color: #444;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.case-column p {
+    font-size: 0.95rem;
+    color: #ccc;
+    line-height: 1.4;
+    margin: 0;
+}
+
+@media (max-width: 768px) {
+    .case-column {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+    .project-spec-bar {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .modal-content {
+        padding: 0 20px 20px 20px; /* Уменьшаем отступы на мобилках */
+    }
+
+    .project-spec-bar {
+        flex-direction: column; /* Спеки в столбик, чтобы не сжимались */
+        gap: 15px;
+        padding-bottom: 20px;
+    }
+
+    .modal-preview {
+        aspect-ratio: 16 / 9; /* На мобилках 21:9 будет слишком узким, делаем чуть выше */
+        margin-bottom: 20px;
+    }
+
+    .case-step p {
+        font-size: 0.9rem; /* Чуть меньше текст для читаемости */
+    }
 }
