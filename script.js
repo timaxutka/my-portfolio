@@ -134,6 +134,13 @@ window.addEventListener('pointermove', (e) => {
         cursor.classList.toggle('active', !!isInteractive);
     }
 
+    // 2. ДОБАВЬ ЭТО: Движение карточки проекта
+    if (hoverCard && hoverCard.style.display === 'block') {
+        // Смещаем на +20px, чтобы она не перекрывала узел под курсором
+        hoverCard.style.left = (e.clientX + 20) + 'px';
+        hoverCard.style.top = (e.clientY + 20) + 'px';
+    }
+
     // 2. Обновляем координаты (с твоим форматированием)
     if (coords) {
         const x = String(Math.floor(e.clientX)).padStart(3, '0');
@@ -160,11 +167,18 @@ window.addEventListener('pointermove', (e) => {
         const py = (window.innerHeight - e.clientY * 2) / 100;
         photo.style.transform = `translateX(${px}px) translateY(${py}px)`;
     }
+
+    if (hoverCard && hoverCard.style.display === 'block') {
+        hoverCard.style.left = (e.clientX + 20) + 'px'; // Смещение вправо
+        hoverCard.style.top = (e.clientY + 10) + 'px';  // Смещение вниз
+    }
+
 });
 
 // 2. ИНИЦИАЛИЗАЦИЯ ГРАФА
 const container = document.getElementById('graph-container');
 const graphDiv = document.getElementById('graph');
+const hoverCard = document.getElementById('graph-hover-card');
 let dashOffset = 0;
 let mousePos = { x: null, y: null };
 
@@ -177,23 +191,78 @@ const Graph = ForceGraph()(graphDiv)
     .minZoom(1)
     .maxZoom(5)
     .cooldownTicks(1000000)
-    .cooldownTime(600000) // Твой стандарт рендера (10 минут) не меняем
-    .onNodeDrag((node, translate) => {
-        // При перетягивании отключаем дрейф камеры, чтобы не дергалось
+    .cooldownTime(600000) // Твои 10 минут
+    // --- НОВОЕ: ЧАСТИЦЫ НА СВЯЗЯХ ---
+    .linkDirectionalParticles(2)
+    .linkDirectionalParticleWidth(1.5)
+    .linkDirectionalParticleSpeed(0.005)
+    .linkDirectionalParticleColor(() => '#ffffff')
+    // -------------------------------
+    .onNodeDrag((node) => {
         mousePos.x = node.x; 
-        
-        // Фиксируем узел в позиции мыши, чтобы он не "уплывал" обратно под силами графа
         node.fx = node.x;
         node.fy = node.y;
     })
     .onNodeDragEnd(node => {
-        // Оставляем узел зафиксированным там, куда его бросили
-        // Если хочешь, чтобы он улетал обратно, напиши: node.fx = null; node.fy = null;
         node.fx = node.x;
         node.fy = node.y;
     })
+    .nodeLabel(null) // ОТКЛЮЧАЕМ ДЕФОЛТНЫЙ ТУЛТИП
+    .onNodeHover(node => {
+        if (node) {
+            cursor.classList.add('active');
+            hoverCard.style.display = 'block';
+            hoverCard.style.pointerEvents = 'none'; // Чтобы не мешала клику
+            
+            hoverCard.innerHTML = `
+                <div style="
+                    background: rgba(10, 10, 10, 0.95);
+                    backdrop-filter: blur(15px);
+                    border: 1px solid rgba(255, 255, 255, 0.1);
+                    width: 320px;
+                    font-family: 'JetBrains Mono', monospace;
+                    box-shadow: 0 25px 50px rgba(0,0,0,0.9);
+                    display: flex;
+                    flex-direction: column;
+                ">
+                    <div style="width: 100%; height: 180px; background: #000; overflow: hidden; border-bottom: 1px solid rgba(255, 255, 255, 0.05);">
+                        <img src="${node.img}" style="width: 100%; height: 100%; object-fit: cover;" 
+                             onerror="this.src='https://via.placeholder.com/320x180?text=IMAGE_NOT_FOUND'">
+                    </div>
+
+                    <div style="padding: 20px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                            <span style="color: #666; font-size: 12px; text-transform: uppercase;">// ${node.product}</span>
+                            <span style="color: #444; font-size: 12px;">ID: 00${node.id}</span>
+                        </div>
+                        
+                        <div style="color: #fff; font-size: 18px; font-weight: bold; margin-bottom: 12px; letter-spacing: -0.5px;">
+                            ${node.name.toUpperCase()}
+                        </div>
+
+                        <div style="color: #aaa; font-size: 14px; line-height: 1.5; margin-bottom: 20px; height: 3.3em; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;">
+                            ${node.problem}
+                        </div>
+
+                        <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255, 255, 255, 0.05); padding-top: 15px;">
+                            <div style="display: flex; flex-direction: column; gap: 2px;">
+                                <span style="color: #555; font-size: 10px;">ROLE</span>
+                                <span style="color: #eee; font-size: 10px;">${node.role}</span>
+                            </div>
+                            <div style="color: #fff; font-size: 12px; font-weight: bold; border: 1px solid #fff; padding: 4px 8px; opacity: 0.8;">
+                                ЖМИ, ЧТОБЫ УВИДЕТЬ
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        } else {
+            cursor.classList.remove('active');
+            hoverCard.style.display = 'none';
+        }
+    })
     .onRenderFramePre((ctx, globalScale) => {
-        // Оставляем сетку как есть
+        // Твоя сетка
         const size = 50; const range = 3000;
         ctx.save();
         ctx.beginPath();
@@ -206,99 +275,70 @@ const Graph = ForceGraph()(graphDiv)
         ctx.stroke();
         ctx.restore();
     })
-    .linkCanvasObject((link, ctx) => {
-        const start = link.source;
-        const end = link.target;
-        if (typeof start !== 'object' || typeof end !== 'object') return;
-
-        const baseRadius = 4; // Должен совпадать с радиусом из nodeCanvasObject
-
-        // Вычисляем расстояние между центрами
-        const dx = end.x - start.x;
-        const dy = end.y - start.y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-
-        if (dist === 0) return;
-
-        // Вычисляем смещение (нормализованный вектор * радиус)
-        const offsetX = (dx / dist) * baseRadius;
-        const offsetY = (dy / dist) * baseRadius;
-
-        ctx.save();
-        ctx.beginPath();
-        ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
-        ctx.lineWidth = 0.5;
-
-        // Рисуем линию от края первого узла до края второго
-        ctx.moveTo(start.x + offsetX, start.y + offsetY);
-        ctx.lineTo(end.x - offsetX, end.y - offsetY);
-
-        ctx.stroke();
-        ctx.restore();
-    })
     .nodeCanvasObject((node, ctx, globalScale) => {
         const label = node.name;
         const isHovered = mousePos.x !== null && Math.sqrt(Math.pow(node.x - mousePos.x, 2) + Math.pow(node.y - mousePos.y, 2)) < 15;
-        
         const baseRadius = 4;
-        // 1. АНИМАЦИЯ ДЫХАНИЯ: Используем время для плавного изменения размера
         const t = Date.now() / 1000;
-        const breathe = Math.sin(t * 2) * 0.5; // Колебания +- 0.5px
+        const breathe = Math.sin(t * 2) * 0.5;
         const radius = (isHovered ? baseRadius * 1.2 : baseRadius) + breathe;
-        
-        const fontSize = 12 / globalScale;
+        const fontSize = 11 / globalScale;
 
         ctx.save();
-        
-        // 2. ПУЛЬСИРУЮЩАЯ АУРА (только для обычного состояния, чтобы не пестрило)
+
+        // Аура
         if (!isHovered) {
-            const pulse = (Date.now() / 1000) % 1; // Цикл от 0 до 1
+            const pulse = (Date.now() / 1000) % 1;
             ctx.beginPath();
             ctx.arc(node.x, node.y, radius + (pulse * 6), 0, 2 * Math.PI);
-            ctx.strokeStyle = `rgba(255, 255, 255, ${0.5 * (1 - pulse)})`;
+            ctx.strokeStyle = `rgba(255, 255, 255, ${0.3 * (1 - pulse)})`;
             ctx.lineWidth = 0.5 / globalScale;
             ctx.stroke();
         }
 
-        // ОСНОВНОЙ УЗЕЛ
-        if (isHovered) {
-            ctx.shadowBlur = 15;
-            ctx.shadowColor = "rgba(255, 255, 255)";
-            ctx.fillStyle = "#ffffff";
-        } else {
-            ctx.strokeStyle = "#ffffff";
-            ctx.lineWidth = 1.5 / globalScale;
-        }
-
+        // Тело узла (Glass style)
         ctx.beginPath();
         ctx.arc(node.x, node.y, radius, 0, 2 * Math.PI);
-        
         if (isHovered) {
-            ctx.fill(); 
-        } else {
-            ctx.stroke();
-            // Маленькая точка в центре для "технологичности"
-            ctx.beginPath();
-            ctx.arc(node.x, node.y, 1 / globalScale, 0, 2 * Math.PI);
+            ctx.shadowBlur = 15;
+            ctx.shadowColor = "#ffffff";
             ctx.fillStyle = "#ffffff";
+            ctx.fill();
+        } else {
+            ctx.strokeStyle = "#ffffff";
+            ctx.lineWidth = 1.2 / globalScale;
+            ctx.stroke();
+            ctx.fillStyle = "rgba(0,0,0,0.8)";
             ctx.fill();
         }
 
-        // ТЕКСТ
-        const alpha = isHovered ? 1 : 0.4;
-        ctx.shadowBlur = 0;
-        ctx.fillStyle = `rgba(255, 255, 255, ${alpha})`;
-        ctx.font = `${isHovered ? 'bold' : 'normal'} ${fontSize}px 'JetBrains Mono'`;
+        // --- GLASSMORPHISM LABEL ---
+        const textY = node.y + radius + (14 / globalScale);
+        
+        // Рисуем подложку текста (размытый фон)
+        ctx.font = `${fontSize}px 'JetBrains Mono'`;
+        const textWidth = ctx.measureText(label).width;
+        ctx.fillStyle = isHovered ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.4)";
+        ctx.fillRect(node.x - (textWidth/2) - 4, textY - (fontSize/2) - 2, textWidth + 8, fontSize + 4);
+
+        // Сам текст
+        ctx.fillStyle = isHovered ? "#ffffff" : "rgba(255, 255, 255, 0.6)";
         ctx.textAlign = 'center';
-        ctx.fillText(label, node.x, node.y + radius + (16 / globalScale));
+        ctx.fillText(label, node.x, textY + 4);
         
         ctx.restore();
     })
     .onNodeClick(node => {
-        // При клике открываем модалку и центрируем (нажатый узел уже подсвечен через логику выше)
-        showModal(node);
-        Graph.zoom(4, 1000);
-        Graph.centerAt(node.x, node.y, 1000);
+        // Переход на страницу проекта вместо просто модалки
+        window.location.href = `project.html?id=${node.id}`;
+    })
+
+    .nodePointerAreaPaint((node, color, ctx, globalScale) => {
+        const areaRadius = 18; // Увеличили зону клика (базовый радиус был ~4)
+        ctx.fillStyle = color;
+        ctx.beginPath();
+        ctx.arc(node.x, node.y, areaRadius / globalScale, 0, 2 * Math.PI);
+        ctx.fill();
     });
 
 

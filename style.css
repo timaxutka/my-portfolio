@@ -1025,18 +1025,25 @@ body::after {
 }
 
 .terminal-footer {
-    /* Растягиваем на всю ширину экрана */
-    width: 100vw;
+    /* Меняем 100vw на 100%, чтобы он не лез на скроллбар */
+    width: 100%; 
+    
+    /* Если футер находится внутри контейнера с padding, 
+       эти строки оставь, они выравнивают его по краям экрана */
     position: relative;
     left: 50%;
-    transform: translateX(-50%);
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+    width: 100vw;
+
+    /* ГЛАВНОЕ: скрываем то, что вылезло за края */
+    box-sizing: border-box;
+    overflow-x: hidden;
     
     padding: 40px 0 60px 0;
     background: #000;
-    /* Убираем прозрачность, чтобы фон был плотным черным */
     opacity: 1 !important; 
-    transition: opacity 0.5s ease;
-    box-sizing: border-box;
 }
 
 /* Оставляем ховер, если хочешь менять яркость самого текста внутри */
