@@ -68,6 +68,9 @@
 
         <div class="project-visuals">
             <div class="visual-container">
+                <div class="case-media active" data-index="top">
+                    <img src="" id="img-preview" alt="Preview">
+                </div>
                 <div class="case-media active" data-index="0">
                     <img src="" id="img-problem" alt="Problem view">
                     <div class="media-overlay"></div>
@@ -85,8 +88,12 @@
 
     </main>
 
+    <div id="mouse-coords" style="position: fixed; bottom: 20px; right: 20px; font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #444; pointer-events: none; z-index: 100;">
+        X: <span id="coord-x">000</span> Y: <span id="coord-y">000</span>
+    </div>
     <div id="custom-cursor"></div>
 
-    <script src="js/project-view.js"></script>
+    <script src="assets/js/data.js"></script>
+    <script src="assets/js/project-view.js"></script>
 </body>
 </html>
