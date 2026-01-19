@@ -3,105 +3,109 @@ const glyphs = "ABCDEFGHIKLMNOPQRSTVXYZ0123456789+=/-_";
 
 const myData = {
     nodes: [
-        // КЛАСТЕР 1: Геймдев и Промо
+        // КЛАСТЕР: ТЕЛЕГРАМ И ГЕЙМДЕВ (ЕСТЬ СВЯЗИ)
         { 
-            id: 1, name: "Project Virus", date: "Октябрь 2023", 
-            img: "img/projects/1.png",
-            product: "WebGL Game", role: "Solo Dev / UX", timeline: "3 Weeks",
-            problem: "Низкое удержание игроков на уровне обучения (отвал 40%).", 
-            solution: "Редизайн туториала через динамический UI и систему быстрых наград.", 
-            result: "Retention D1 вырос до 18%, время первой сессии +12%.", 
-            link: "https://google.com" 
-        },
-        { 
-            id: 2, name: "Virus Infographics", date: "Ноябрь 2023", 
-            img: "img/projects/2.webp",
-            product: "EdTech Dashboard", role: "UI/UX Designer", timeline: "10 Days",
-            problem: "Пользователи не считывали иерархию данных в сложных графиках.", 
-            solution: "Интерактивная визуализация слоев с фильтрацией по клику на узел.", 
-            result: "Снижение обращений в саппорт на 35%.", 
+            id: 1, name: "Project Virus", date: "2024", 
+            img: "img/1.png",
+            product: "WebApp Telegram Game", role: "Full Product Design", timeline: "4 Weeks",
+            problem: "Однообразный геймплей и отсутствие мотивации возвращаться в приложение после первого дня.", 
+            solution: "Разработка системы ежедневных квестов и визуализация прогресса через эволюционирующий UI.", 
+            result: "Рост DAU на 40%, успешная интеграция механик удержания (Retention D7).", 
             link: "#" 
         },
         { 
-            id: 4, name: "Promo Landing", date: "Февраль 2024", 
-            img: "img/projects/4.webp",
-            product: "Marketing Page", role: "Lead UI", timeline: "1 Week",
-            problem: "Высокий показатель отказов на первом экране (Bounce Rate 70%).", 
-            solution: "Внедрение скролл-анимаций и четкого Value Proposition.", 
-            result: "Конверсия в целевое действие выросла до 8.4%.", 
+            id: 2, name: "Virus Promo Banner", date: "2024", 
+            img: "img/projects/virus_banner.webp",
+            product: "Graphic Design", role: "Visual Designer", timeline: "2 Days",
+            problem: "Низкий CTR рекламных объявлений в Telegram-каналах из-за визуального шума.", 
+            solution: "Создание высококонтрастного баннера с акцентом на ключевой геймплейный элемент.", 
+            result: "Увеличение кликабельности (CTR) на 25% относительно стандартных креативов.", 
+            link: "#" 
+        },
+
+        // ВЕБ-ПРИЛОЖЕНИЯ
+        { 
+            id: 3, name: "Trafflow", date: "2024", 
+            img: "img/projects/trafflow.webp",
+            product: "SaaS Platform", role: "Lead UX/UI Designer", timeline: "2 Months",
+            problem: "Сложный порог входа для байеров; перегруженные интерфейсы аналитики замедляли работу.", 
+            solution: "Разработка модульного дашборда с кастомными фильтрами и системой «быстрых действий».", 
+            result: "Скорость работы оператора +30%, когнитивная нагрузка снижена.", 
+            link: "#" 
+        },
+
+        // РЕКЛАМНЫЕ ЛЕНДИНГИ
+        { 
+            id: 4, name: "ЖК ЛЕГЕНДА", date: "2024", 
+            img: "img/projects/legenda.webp",
+            product: "Real Estate Landing", role: "UI Designer", timeline: "2 Weeks",
+            problem: "Низкая конверсия в запись на просмотр из-за неинформативности планировок.", 
+            solution: "Внедрение интерактивного выбора этажей и эмоциональный визуальный сторителлинг.", 
+            result: "Рост CR в целевое действие на 2.5%, повышение премиальности бренда.", 
             link: "#" 
         },
         { 
-            id: 9, name: "VFX Portfolio", date: "Сентябрь 2024", 
-            img: "img/projects/9.webp",
-            product: "Video Showcase", role: "Frontend Dev", timeline: "12 Days",
-            problem: "Тяжелый видео-контент тормозил загрузку на мобильных устройствах.", 
-            solution: "Self-hosted адаптивный плеер с ленивой загрузкой чанков.", 
-            result: "Плавное 4K воспроизведение, PageSpeed Score 95+.", 
-            link: "#" 
-        },
-        // КЛАСТЕР 2: Финтех и Инструменты
-        { 
-            id: 3, name: "Desktop Trading App", date: "Январь 2024", 
-            img: "img/projects/3.webp",
-            product: "Trading Terminal", role: "UX/UI / Analyst", timeline: "1 Month",
-            problem: "Задержка отображения свечей приводила к ошибкам трейдеров.", 
-            solution: "Оптимизация рендеринга через WebGL и буферизацию данных.", 
-            result: "Стабильные 60 FPS при 1000+ активных объектов.", 
+            id: 5, name: "Spider-Man vs Venom", date: "2024", 
+            img: "img/projects/marvel_vote.webp",
+            product: "Promo / Voting App", role: "UX/UI & Interaction", timeline: "1 Week",
+            problem: "Высокий риск дропа пользователей на этапе сложной авторизации.", 
+            solution: "Геймифицированный интерфейс с мгновенной обратной связью и zero-click взаимодействием.", 
+            result: "Виральный охват >10k участников за 48 часов, 85% завершенных сессий.", 
             link: "#" 
         },
         { 
-            id: 6, name: "Crypto Wallet UI", date: "Апрель 2024", 
-            img: "img/projects/6.webp",
-            product: "Mobile App", role: "UX Researcher", timeline: "3 Weeks",
-            problem: "Пользователи путали сети (BSC/ETH) и теряли транзакции.", 
-            solution: "Визуальное разделение путей через цветовые мосты.", 
-            result: "Количество ошибочных транзакций снизилось на 60%.", 
+            id: 6, name: "Construction USA", date: "2024", 
+            img: "img/projects/usa_landing.webp",
+            product: "B2B Landing", role: "UX Researcher", timeline: "3 Weeks",
+            problem: "Недоверие западной аудитории к локальному дизайну; несоответствие UX-паттернов рынку США.", 
+            solution: "Ресерч конкурентов, внедрение системы Trust-блоков и формы быстрого расчета Quote.", 
+            result: "Успешная валидация гипотез на иностранном трафике, получен первый контракт.", 
+            link: "#" 
+        },
+
+        // МОБИЛЬНЫЕ ПРИЛОЖЕНИЯ
+        { 
+            id: 7, name: "AI Basketball Training", date: "2024", 
+            img: "img/projects/ball_ai.webp",
+            product: "SportTech App", role: "UX/UI Designer", timeline: "1 Month",
+            problem: "Сложность интеграции видео-аналитики без отвлечения атлета от тренировки.", 
+            solution: "Интерфейс с голосовым управлением и минимизированным UI для фокусировки на нейросети.", 
+            result: "Сокращение времени настройки сессии до 15 секунд.", 
             link: "#" 
         },
         { 
-            id: 8, name: "Security Audit Tool", date: "Август 2024", 
-            img: "img/projects/8.webp",
-            product: "Cybersecurity B2B", role: "Fullstack / UX", timeline: "5 Weeks",
-            problem: "Ручной аудит безопасности занимал 48+ часов.", 
-            solution: "Автоматизация через статический анализатор логов.", 
-            result: "Ускорение процесса аудита в 3 раза.", 
+            id: 8, name: "City Quests", date: "2024", 
+            img: "img/projects/city_quest.webp",
+            product: "Mobile App", role: "UI/UX Designer", timeline: "3 Weeks",
+            problem: "Пользователи теряли интерес к квестам из-за отсутствия прогрессии и карты.", 
+            solution: "Внедрение интерактивной карты города с элементами AR и системой ачивок.", 
+            result: "Среднее время сессии выросло на 20%.", 
             link: "#" 
         },
-        // КЛАСТЕР 3: AI и Бизнес-системы
+
+        // ЛОГОТИПЫ И ГРАФИКА
         { 
-            id: 5, name: "Neural Nexus AI", date: "Март 2024", 
-            img: "img/projects/5.webp",
-            product: "LLM Interface", role: "Product Designer", timeline: "4 Weeks",
-            problem: "Сложность формирования промптов для сотрудников.", 
-            solution: "Система умных подсказок и библиотека шаблонов.", 
-            result: "Поиск и генерация ответа: 4 мин -> 15 сек.", 
-            link: "#" 
-        },
-        { 
-            id: 7, name: "E-com Dashboard", date: "Июнь 2024", 
-            img: "img/projects/7.webp",
-            product: "Analytics SaaS", role: "BI Analyst", timeline: "1 Month",
-            problem: "Нет связи между рекламным бюджетом и возвратом товара.", 
-            solution: "Сквозная аналитика с кастомными дашбордами прибыли.", 
-            result: "ROI рекламных кампаний вырос на 22%.", 
+            id: 9, name: "EggOnTon Logo", date: "2024", 
+            img: "img/projects/eggon.webp",
+            product: "WebApp Branding", role: "Brand Designer", timeline: "1 Week",
+            problem: "Отсутствие идентичности в экосистеме TON, бренд сливался с конкурентами.", 
+            solution: "Разработка уникального маскота и шрифтового начертания в стиле кибер-панк.", 
+            result: "Узнаваемость проекта выросла, сформирован четкий бренд-бук.", 
             link: "#" 
         },
         { 
-            id: 10, name: "Mobile CRM System", date: "Ноябрь 2024", 
-            img: "img/projects/10.webp",
-            product: "Enterprise PWA", role: "Solo Developer", timeline: "6 Weeks",
-            problem: "Потеря данных при работе в зонах без интернета.", 
-            solution: "Offline-first архитектура с фоновой синхронизацией.", 
-            result: "Полнота отчетности выросла с 70% до 98.5%.", 
+            id: 10, name: "Premiere Track (Video)", date: "2024", 
+            img: "img/projects/video_preview.webp",
+            product: "Music Video", role: "Motion Designer", timeline: "2 Months",
+            problem: "Необходимость тяжелого визуального ряда при ограниченном бюджете на съемки.", 
+            solution: "Использование сложного CGI-монтажа, цветокоррекции и динамических переходов.", 
+            result: "Готовый продукт для релиза на стриминговых платформах.", 
             link: "#" 
         }
     ],
     links: [
-        { source: 1, target: 2 }, { source: 2, target: 4 }, { source: 4, target: 1 },
-        { source: 3, target: 6 }, { source: 6, target: 8 }, { source: 8, target: 3 },
-        { source: 5, target: 10 }, { source: 10, target: 7 }, { source: 7, target: 5 },
-        { source: 4, target: 7 }, { source: 9, target: 2 }
+        // Только одна связь, как ты и просил
+        { source: 1, target: 2 } 
     ]
 };
 
