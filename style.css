@@ -1708,3 +1708,133 @@ body::after {
         font-size: 0.9rem; /* Чуть меньше текст для читаемости */
     }
 }
+
+/* MANIFEST-SECTION */
+
+.manifest-section {
+    padding: 100px 10%;
+    background: #000;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    box-sizing: border-box;
+}
+
+/* Карточки */
+.manifest-section .m-card {
+    padding: 50px;
+    position: relative;
+}
+
+.manifest-section .white-mode {
+    background: #fff;
+    color: #000;
+}
+
+.manifest-section .dark-mode {
+    background: #000;
+    color: #fff;
+    border: 1px solid #1a1a1a;
+}
+
+/* Header */
+.manifest-section .m-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 30px;
+}
+
+.manifest-section .m-status-indicator {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+
+.manifest-section .status-green {
+    background: #00ff41;
+    box-shadow: 0 0 10px rgba(0,255,65,0.5);
+}
+
+.manifest-section .status-red {
+    background: #ff0000;
+    box-shadow: 0 0 10px rgba(255,0,0,0.5);
+    animation: blink 1.5s infinite;
+}
+
+/* ⚠️ КЛЮЧЕВОЙ ФИКС */
+/* ПЕРЕОПРЕДЕЛЯЕМ .m-title ТОЛЬКО В MANIFEST */
+
+.manifest-section .m-title {
+    font-family: 'Inter', sans-serif;
+    font-size: 2rem;
+    font-weight: 900;
+    margin-bottom: 40px;
+    text-transform: uppercase;
+    color: inherit;
+}
+
+/* Теги */
+.manifest-section .m-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    color: #444;
+}
+
+/* Список */
+.manifest-section .m-list {
+    display: flex;
+    flex-direction: column;
+}
+
+.manifest-section .m-row {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 15px 0;
+    border-bottom: 1px solid rgba(128,128,128,0.1);
+}
+
+.manifest-section .m-row span {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    opacity: 0.4;
+    min-width: 24px;
+}
+
+.manifest-section .m-row p {
+    margin: 0;
+    font-size: 1.1rem;
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+
+
+/* HOVER для WHITE и DARK */
+.manifest-section .white-mode .m-row:hover p {
+    transform: translateX(15px);
+    color: #000;
+}
+
+/* Небольшой акцент-штрих для white */
+.manifest-section .white-mode .m-row:hover span {
+    opacity: 0.8;
+}
+
+.manifest-section .dark-mode .m-row:hover p {
+    transform: translateX(15px);
+    color: var(--accent-red);
+}
+
+/* АДАПТИВ */
+@media (max-width: 900px) {
+    .manifest-section {
+        grid-template-columns: 1fr;
+        gap: 40px;
+        padding: 80px 5%;
+    }
+
+    .manifest-section .m-title {
+        font-size: 1.6rem;
+    }
+}
