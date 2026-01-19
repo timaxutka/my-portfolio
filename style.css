@@ -309,15 +309,38 @@ body::after {
     mask-image: linear-gradient(to top, transparent, black 15%, black 85%, transparent);
 }
 
+
+
 /* 3. ПРОЕКТЫ (ГРАФ) И МЕТКИ */
+
+#show-all-projects-btn {
+    /* Убираем абсолюты, чтобы она не плавала поверх карты */
+    display: block;
+    position: relative; 
+    
+    /* Центрируем как блочный элемент */
+    margin: 40px auto 20px auto; 
+    
+    /* Слой ниже прелоадера */
+    z-index: 50; 
+    
+    /* Твои стили */
+    width: fit-content;
+    white-space: nowrap;
+    text-align: center;
+    cursor: pointer;
+    pointer-events: auto !important;
+}
+
 #graph-wrapper {
     width: 80vw; 
     height: 80vh; 
-    margin: 10vh auto; 
-    position: relative;
+    margin: 0vh auto 10vh; 
     /* Рамку переносим на внешний слой, чтобы маска её не трогала */
     border: 1px solid #1a1a1a; 
     background: #000;
+    z-index: 1; 
+    position: relative;
 }
 
 #graph-container {
@@ -1838,3 +1861,187 @@ body::after {
         font-size: 1.6rem;
     }
 }
+
+.projects-page {
+    padding: 80px 40px;
+    background: #050505;
+    min-height: 100vh;
+}
+
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 60px;
+    border-bottom: 1px solid #1a1a1a;
+    padding-bottom: 20px;
+}
+
+.grid-layout {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(450px, 1fr)); /* Адаптивная сетка */
+    gap: 30px;
+}
+
+/* Используй те же стили карточек .project-card, что мы писали выше */
+.project-card {
+    background: #0a0a0a;
+    border: 1px solid #1a1a1a;
+    transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.project-card:hover {
+    background: #0f0f0f; /* Твой фирменный темный */
+    border-color: var(--accent-red); /* Подсветка границ красным при наведении */
+}
+
+/* Контейнер сетки — ограничиваем ширину, чтобы не расползалось на ультрашироких мониторах */
+.projects-page-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+#hub-grid-container {
+    display: grid;
+    /* Фиксируем 3 колонки. 1fr значит, что они делят место поровну */
+    grid-template-columns: repeat(3, 1fr) !important; 
+    gap: 30px;
+    width: 100%;
+    margin-top: 40px;
+}
+
+/* Адаптив: на планшетах 2, на телефонах 1 */
+@media (max-width: 1024px) {
+    #hub-grid-container { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 768px) {
+    #hub-grid-container { grid-template-columns: 1fr; }
+}
+
+/* Сама карточка */
+.project-card {
+    background: #0a0a0a;
+    border: 1px solid #1a1a1a;
+    overflow: hidden; /* Чтобы картинка не вылезала за скругления/границы */
+    transition: transform 0.3s cubic-bezier(0.2, 0, 0.2, 1);
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+}
+
+.project-card:hover {
+    transform: translateY(-8px);
+    border-color: #333;
+}
+
+/* ПРЕВЬЮ (Главный фикс) */
+.card-preview {
+    width: 100%;
+    /* Твое соотношение 1920x920 примерно равно 21:10 или 2.1/1 */
+    aspect-ratio: 1920 / 920; 
+    background: #fff; /* Белая заглушка, если нет фото */
+    overflow: hidden;
+    position: relative;
+}
+
+.card-preview img {
+    width: 100%;
+    height: 100%;
+    /* ВАЖНО: картинка заполняет блок, обрезаясь по краям, но не деформируясь */
+    object-fit: cover; 
+    object-position: center;
+    transition: transform 0.6s ease;
+}
+
+.project-card:hover .card-preview img {
+    transform: scale(1.05); /* Легкий зум при наведении */
+}
+
+/* Инфо-блок */
+.card-info {
+    padding: 24px;
+    background: #0a0a0a;
+}
+
+.card-info p {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--accent-red, #ff0000);
+    text-transform: uppercase;
+    margin: 0 0 8px 0;
+}
+
+.card-info h3 {
+    font-family: 'Inter', sans-serif;
+    font-size: 1.3rem;
+    color: #fff;
+    margin: 0 0 12px 0;
+}
+
+.card-result {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    color: #555;
+    line-height: 1.4;
+}
+
+
+/* Обертка для навигации/кнопок над сеткой */
+.projects-controls {
+    max-width: 1400px; /* Должно совпадать с шириной сетки из прошлого шага */
+    margin: 0 auto 30px auto;
+    padding: 0 20px;
+    display: flex;
+    justify-content: space-between; /* Разносит заголовок и кнопку по краям */
+    align-items: flex-end;
+}
+
+
+
+.page-title-area {
+    display: flex;
+    flex-wrap: wrap;       /* Позволяет описанию уйти на вторую строку */
+    align-items: center;   /* Центрирует кнопку по высоте заголовка */
+    margin-bottom: 60px;
+}
+
+/* Блок с Label и H1 */
+.page-title-area .header-main {
+    flex: 0 1 auto;        /* Занимает столько места, сколько нужно тексту */
+}
+
+/* КНОПКА — Самый важный момент */
+.back-btn {
+    margin-left: auto;     /* МАГИЯ: толкает кнопку в крайний правый угол */
+    padding: 14px 28px; 
+    color: #fff;
+    text-decoration: none; 
+    border: 1px solid #fff; 
+    font-family: 'JetBrains Mono', monospace; 
+    font-size: 0.8rem; font-weight: 700; 
+    letter-spacing: 0.1em;
+    transition: all 0.2s ease;
+    cursor: pointer; transition: 0.3s;
+    
+}
+
+.back-btn:hover {
+    background: #fff;
+    color: #000;
+}
+
+/* Описание под заголовком */
+.page-title-area p {
+    flex-basis: 100%;      /* Занимает всю ширину под заголовком и кнопкой */
+    margin-top: 15px;      /* Отступ от H1 */
+    color: #666;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+}
+
+
+    
+    
+    
+

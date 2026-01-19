@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PROJECT_DATABASE // EXPORT</title>
+    <link rel="icon" type="image/svg+xml" href="logo.svg">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .projects-page-container { padding: 60px 20px; max-width: 1400px; margin: 0 auto; }
+        .page-title-area { 
+            margin-bottom: 40px; 
+            display: flex; 
+            flex-wrap: wrap; 
+            align-items: center; 
+        }
+        /* СЕТКА СТРОГО ПО 3 */
+        #hub-grid-container { 
+            display: grid; 
+            grid-template-columns: repeat(3, 1fr); /* Явно 3 колонки */
+            gap: 30px; 
+        }
+        /* Чтобы на мобилках не ломалось */
+        @media (max-width: 1000px) {
+            #hub-grid-container { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 700px) {
+            #hub-grid-container { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body class="dark-mode">
+
+    <div id="scroll-progress-container">
+        <div id="scroll-progress-bar"></div>
+    </div>
+    <div id="custom-cursor"></div>
+    <div id="mouse-coords">X: 000 Y: 000</div>
+
+
+    <div class="section-divider" id="projects-divider">
+        <div class="divider-line"></div>
+        <div class="divider-labels">
+            <span>BLOCK_##</span>
+            <span>PROJECTS_ARCHIVE</span>
+        </div>
+        <div class="divider-line"></div>
+    </div>
+
+    <nav style="padding: 20px 40px; display: flex; justify-content: space-between; align-items: center;">
+        <div class="site-logo">
+            <img src="logo.svg" alt="Logo" class="logo-img" style="width: 40px;">
+        </div>
+    </nav>
+
+    
+    <main class="projects-page-container">
+        <header class="page-title-area">
+            <div class="header-main">
+                <span class="label" style="display: block; font-size: 0.7rem; color: #555; margin-bottom: 5px;">
+                    DATABASE_EXPLORER_V1.0
+                </span>
+                <h1 style="font-size: 3rem; margin: 0; line-height: 1;">PROJECT_ARCHIVE</h1>
+            </div>
+
+            <a href="index.html" class="back-btn cta-btn">ВЕРНУТЬСЯ НА ГЛАВНУЮ</a>
+
+            <p>// Полный список кейсов с детальной аналитикой Problem/Solution/Result</p>
+        </header>
+        
+        <div id="hub-grid-container"></div>
+    </main>
+
+    <div id="project-modal">
+        <div class="modal-header">
+            <h2 id="m-title"></h2>
+            <button onclick="closeModal()" class="close-btn">✕</button>
+        </div>
+        <div class="modal-content">
+            </div>
+    </div>
+    <div id="drawer-overlay" onclick="closeModal()"></div>
+
+    <footer class="terminal-footer">
+        <div class="footer-divider">
+            <div class="divider-line"></div>
+            <div class="divider-labels">
+                <span>END_OF_TRANSMISSION</span>
+                <span>SYS_LOG_v1.0.4</span>
+            </div>
+        </div>
+
+        <div class="footer-content">
+            <div class="footer-left">
+                <div class="status-block">
+                    <span class="status-dot"></span>
+                    <span class="status-text">COFFEE_LEVEL: 14% (CRITICAL)</span>
+                </div>
+            </div>
+
+            <div class="footer-right">
+                <div class="timestamp">OS_TIME: <span id="footer-year">2025</span></div>
+                <div class="location">OMSK_STATION // NO_EXIT_FOUND</div>
+            </div>
+        </div>
+        
+    </footer>
+
+
+    <script src="script.js"></script> 
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Сначала рисуем карточки
+            renderProjectsPage();
+            
+            // Теперь, когда кнопки ФИЗИЧЕСКИ появились в HTML, включаем магнит
+            activateMagnets();
+        });
+
+        function renderProjectsPage() {
+            const container = document.getElementById('hub-grid-container');
+            // Проверяем, загрузились ли данные из script.js
+            if (!container || typeof myData === 'undefined') {
+                console.error("Данные myData не найдены! Проверь путь к script.js");
+                return;
+            }
+
+            container.innerHTML = myData.nodes.map(node => `
+                <div class="project-card" onclick="showModalById(${node.id})">
+                    <div class="card-preview">
+                        ${node.img ? `<img src="${node.img}" alt="${node.name}">` : ''}
+                    </div>
+                    <div class="card-info">
+                        <p style="color: var(--accent-red); font-size: 0.7rem; font-family: 'JetBrains Mono'">${node.product}</p>
+                        <h3 style="color: #fff; margin: 5px 0;">${node.name}</h3>
+                        <div style="color: #555; font-family: 'JetBrains Mono'; font-size: 0.8rem;">// ${node.result}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function activateMagnets() {
+            // Находим и "Вернуться", и новые карточки
+            const elements = document.querySelectorAll('.cta-btn, .back-btn, .project-card');
+            
+            elements.forEach(el => {
+                el.onmousemove = function(e) {
+                    const rect = this.getBoundingClientRect();
+                    const centerX = rect.left + rect.width / 2;
+                    const centerY = rect.top + rect.height / 2;
+                    
+                    // Смещение (0.2 - мягко, 0.4 - сильно)
+                    const x = (e.clientX - centerX) * 0.25;
+                    const y = (e.clientY - centerY) * 0.25;
+                    
+                    this.style.transform = `translate(${x}px, ${y}px)`;
+                    this.style.transition = "transform 0.1s ease-out";
+                    this.style.zIndex = "100";
+                };
+                
+                el.onmouseleave = function() {
+                    this.style.transform = `translate(0px, 0px)`;
+                    this.style.transition = "transform 0.5s ease-out";
+                };
+            });
+        }
+
+        function showModalById(id) {
+            const node = myData.nodes.find(n => n.id === id);
+            if (node && typeof showModal === 'function') showModal(node);
+        }
+    </script>
+</body>
+</html>

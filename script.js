@@ -113,6 +113,51 @@ const terminalLines = [
     "> WELCOME, USER"
 ];
 
+// 3. ЕДИНЫЙ ОБРАБОТЧИК МЫШИ (Курсор + Координаты + Параллакс + Граф)
+const cursor = document.getElementById('custom-cursor');
+const coords = document.getElementById('mouse-coords');
+const photo = document.getElementById('parallax-photo');
+
+window.addEventListener('pointermove', (e) => {
+    // 1. Двигаем кастомный курсор
+    if (cursor) {
+        cursor.style.left = e.clientX + 'px';
+        cursor.style.top = e.clientY + 'px';
+        
+        // Используем elementFromPoint, чтобы корректно определять цели во время драга
+        const target = e.target;
+        const isInteractive = target.closest('a, button, .skill-card, .nav-item, input, textarea, .project-link');
+        cursor.classList.toggle('active', !!isInteractive);
+    }
+
+    // 2. Обновляем координаты (с твоим форматированием)
+    if (coords) {
+        const x = String(Math.floor(e.clientX)).padStart(3, '0');
+        const y = String(Math.floor(e.clientY)).padStart(3, '0');
+        coords.innerText = `X: ${x} Y: ${y}`;
+    }
+
+    // 3. Обновляем позицию мыши для графа
+    const rect = container.getBoundingClientRect();
+    if (e.clientX >= rect.left && e.clientX <= rect.right && e.clientY >= rect.top && e.clientY <= rect.bottom) {
+        // Вычисляем координаты внутри контейнера графа
+        const graphX = e.clientX - rect.left;
+        const graphY = e.clientY - rect.top;
+        
+        mousePos = Graph.screen2GraphCoords(graphX, graphY);
+        Graph.resume(); // Продолжаем симуляцию, чтобы узлы реагировали
+    } else {
+        mousePos = { x: null, y: null };
+    }
+
+    // 4. Параллакс фото (используем clientX/Y для стабильности)
+    if (photo) {
+        const px = (window.innerWidth - e.clientX * 2) / 100;
+        const py = (window.innerHeight - e.clientY * 2) / 100;
+        photo.style.transform = `translateX(${px}px) translateY(${py}px)`;
+    }
+});
+
 // 2. ИНИЦИАЛИЗАЦИЯ ГРАФА
 const container = document.getElementById('graph-container');
 const graphDiv = document.getElementById('graph');
@@ -252,65 +297,40 @@ const Graph = ForceGraph()(graphDiv)
         Graph.centerAt(node.x, node.y, 1000);
     });
 
-// 3. ЕДИНЫЙ ОБРАБОТЧИК МЫШИ (Курсор + Координаты + Параллакс + Граф)
-const cursor = document.getElementById('custom-cursor');
-const coords = document.getElementById('mouse-coords');
-const photo = document.getElementById('parallax-photo');
 
-window.addEventListener('pointermove', (e) => {
-    // 1. Двигаем кастомный курсор
-    if (cursor) {
-        cursor.style.left = e.clientX + 'px';
-        cursor.style.top = e.clientY + 'px';
-        
-        // Используем elementFromPoint, чтобы корректно определять цели во время драга
-        const target = e.target;
-        const isInteractive = target.closest('a, button, .skill-card, .nav-item, input, textarea, .project-link');
-        cursor.classList.toggle('active', !!isInteractive);
-    }
 
-    // 2. Обновляем координаты (с твоим форматированием)
-    if (coords) {
-        const x = String(Math.floor(e.clientX)).padStart(3, '0');
-        const y = String(Math.floor(e.clientY)).padStart(3, '0');
-        coords.innerText = `X: ${x} Y: ${y}`;
-    }
+// 4. УНИВЕРСАЛЬНЫЙ МАГНИТ
+function initMagnets() {
+    // Ищем все интерактивные элементы
+    const magneticElements = document.querySelectorAll('.cta-btn, .project-link, .back-btn');
+    
+    magneticElements.forEach((el) => {
+        // Очищаем старые слушатели, чтобы не было конфликтов
+        el.onmousemove = function(e) {
+            const rect = this.getBoundingClientRect();
+            // Расчет центра
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+            // Сила магнита (0.3)
+            const moveX = (e.clientX - centerX) * 0.3;
+            const moveY = (e.clientY - centerY) * 0.3;
+            
+            this.style.transform = `translate(${moveX}px, ${moveY}px)`;
+            this.style.transition = "transform 0.1s ease-out"; // Быстрый отклик
+        };
 
-    // 3. Обновляем позицию мыши для графа
-    const rect = container.getBoundingClientRect();
-    if (e.clientX >= rect.left && e.clientX <= rect.right && e.clientY >= rect.top && e.clientY <= rect.bottom) {
-        // Вычисляем координаты внутри контейнера графа
-        const graphX = e.clientX - rect.left;
-        const graphY = e.clientY - rect.top;
-        
-        mousePos = Graph.screen2GraphCoords(graphX, graphY);
-        Graph.resume(); // Продолжаем симуляцию, чтобы узлы реагировали
-    } else {
-        mousePos = { x: null, y: null };
-    }
-
-    // 4. Параллакс фото (используем clientX/Y для стабильности)
-    if (photo) {
-        const px = (window.innerWidth - e.clientX * 2) / 100;
-        const py = (window.innerHeight - e.clientY * 2) / 100;
-        photo.style.transform = `translateX(${px}px) translateY(${py}px)`;
-    }
-});
-
-// 4. МАГНИТНЫЕ КНОПКИ
-document.querySelectorAll('.cta-btn, .project-link').forEach((el) => {
-    el.addEventListener('mousemove', function(e) {
-        const rect = this.getBoundingClientRect();
-        const centerX = rect.left + rect.width / 2;
-        const centerY = rect.top + rect.height / 2;
-        const moveX = (e.clientX - centerX) * 0.3;
-        const moveY = (e.clientY - centerY) * 0.3;
-        this.style.transform = `translate(${moveX}px, ${moveY}px)`;
+        el.onmouseleave = function() {
+            this.style.transform = `translate(0px, 0px)`;
+            this.style.transition = "transform 0.5s ease-out"; // Плавный возврат
+        };
     });
-    el.addEventListener('mouseleave', function() {
-        this.style.transform = `translate(0px, 0px)`;
-    });
-});
+}
+
+// Запускаем сразу
+initMagnets();
+
+// И ПОВТОРНО запускаем через секунду (на случай, если карточки подгрузились позже)
+setTimeout(initMagnets, 1000);
 
 // 5. СКИЛЛЫ (Заполнение + Глитч)
 function glitchPercent(valElement, target, statusText) {
