@@ -69,11 +69,21 @@ window.addEventListener('pointermove', (e) => {
 
 });
 
+
+// Предзагрузка превьюшек в кэш (чтобы не мигали при отрисовке)
+const imgCache = {};
+myData.nodes.forEach(node => {
+    if (node.img) {
+        const img = new Image();
+        img.src = node.img;
+        imgCache[node.id] = img;
+    }
+});
+
 // 2. ИНИЦИАЛИЗАЦИЯ ГРАФА
 const container = document.getElementById('graph-container');
 const graphDiv = document.getElementById('graph');
 const hoverCard = document.getElementById('graph-hover-card');
-let dashOffset = 0;
 let mousePos = { x: null, y: null };
 
 const Graph = ForceGraph()(graphDiv)
@@ -85,67 +95,55 @@ const Graph = ForceGraph()(graphDiv)
     .minZoom(1)
     .maxZoom(5)
     .cooldownTicks(1000000)
-    .cooldownTime(600000) // Твои 10 минут
-    // --- НОВОЕ: ЧАСТИЦЫ НА СВЯЗЯХ ---
+    .cooldownTime(600000)
+    
+    // --- ЧАСТИЦЫ НА СВЯЗЯХ ---
     .linkDirectionalParticles(2)
     .linkDirectionalParticleWidth(1.5)
     .linkDirectionalParticleSpeed(0.005)
     .linkDirectionalParticleColor(() => '#ffffff')
-    // -------------------------------
+
+
+    .d3AlphaDecay(0.02) // Как быстро затухает движение (чем выше, тем быстрее стоп)
+    .d3VelocityDecay(0.3) // Трение (0.3 — узлы становятся вязкими)
+    
+    
+    // ФИКСАЦИЯ: Это заставит их НЕ разлетаться
     .onNodeDrag((node) => {
-        mousePos.x = node.x; 
         node.fx = node.x;
         node.fy = node.y;
+        node.vx = 0; // Обнуляем скорость, чтобы не «стрелял»
+        node.vy = 0;
     })
     .onNodeDragEnd(node => {
         node.fx = node.x;
         node.fy = node.y;
+        node.vx = 0;
+        node.vy = 0;
     })
-    .nodeLabel(null) // ОТКЛЮЧАЕМ ДЕФОЛТНЫЙ ТУЛТИП
+
+    .nodeLabel(null) 
     .onNodeHover(node => {
         if (node) {
             cursor.classList.add('active');
             hoverCard.style.display = 'block';
-            hoverCard.style.pointerEvents = 'none'; // Чтобы не мешала клику
+            hoverCard.style.pointerEvents = 'none';
             
             hoverCard.innerHTML = `
-                <div style="
-                    background: rgba(10, 10, 10, 0.95);
-                    backdrop-filter: blur(15px);
-                    border: 1px solid rgba(255, 255, 255, 0.1);
-                    width: 320px;
-                    font-family: 'JetBrains Mono', monospace;
-                    box-shadow: 0 25px 50px rgba(0,0,0,0.9);
-                    display: flex;
-                    flex-direction: column;
-                ">
+                <div style="background: rgba(10, 10, 10, 0.95); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.1); width: 320px; font-family: 'JetBrains Mono', monospace; box-shadow: 0 25px 50px rgba(0,0,0,0.9); display: flex; flex-direction: column;">
                     <div style="width: 100%; height: 180px; background: #000; overflow: hidden; border-bottom: 1px solid rgba(255, 255, 255, 0.05);">
-                        <img src="${node.img}" style="width: 100%; height: 100%; object-fit: cover;" 
-                             onerror="this.src='https://via.placeholder.com/320x180?text=IMAGE_NOT_FOUND'">
+                        <img src="${node.img}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.src='https://via.placeholder.com/320x180?text=IMAGE_NOT_FOUND'">
                     </div>
-
                     <div style="padding: 20px;">
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
                             <span style="color: #666; font-size: 12px; text-transform: uppercase;">// ${node.product}</span>
                             <span style="color: #444; font-size: 12px;">ID: 00${node.id}</span>
                         </div>
-                        
-                        <div style="color: #fff; font-size: 18px; font-weight: bold; margin-bottom: 12px; letter-spacing: -0.5px;">
-                            ${node.name.toUpperCase()}
-                        </div>
-
-                        <div style="color: #aaa; font-size: 14px; line-height: 1.5; margin-bottom: 20px; height: 3.3em; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;">
-                            ${node.problem}
-                        </div>
-
+                        <div style="color: #fff; font-size: 18px; font-weight: bold; margin-bottom: 12px;">${node.name.toUpperCase()}</div>
+                        <div style="color: #aaa; font-size: 14px; line-height: 1.5; margin-bottom: 20px;">${node.problem}</div>
                         <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255, 255, 255, 0.05); padding-top: 15px;">
-                            <div style="display: flex; flex-direction: column; gap: 2px;">
-                                <span style="color: #555; font-size: 10px;">ROLE</span>
-                                <span style="color: #eee; font-size: 10px;">${node.role}</span>
-                            </div>
-                            <div style="color: #fff; font-size: 12px; font-weight: bold; border: 1px solid #fff; padding: 4px 8px; opacity: 0.8;">
-                                ЖМИ, ЧТОБЫ УВИДЕТЬ
-                            </div>
+                            <div style="color: #eee; font-size: 10px;">${node.role}</div>
+                            <div style="color: #fff; font-size: 12px; font-weight: bold; border: 1px solid #fff; padding: 4px 8px;">ЖМИ</div>
                         </div>
                     </div>
                 </div>
@@ -155,6 +153,7 @@ const Graph = ForceGraph()(graphDiv)
             hoverCard.style.display = 'none';
         }
     })
+
     .onRenderFramePre((ctx, globalScale) => {
         // Твоя сетка
         const size = 50; const range = 3000;
@@ -169,82 +168,66 @@ const Graph = ForceGraph()(graphDiv)
         ctx.stroke();
         ctx.restore();
     })
+    
     .nodeCanvasObject((node, ctx, globalScale) => {
-        const label = node.name;
+        const label = node.name || '';
         const isHovered = mousePos.x !== null && Math.sqrt(Math.pow(node.x - mousePos.x, 2) + Math.pow(node.y - mousePos.y, 2)) < 15;
-        
-        // Проверяем, является ли проект топовым (добавь featured: true в data.js для Trafflow)
         const isFeatured = node.featured === true;
         
-        // Параметры геометрии
-        const baseRadius = isFeatured ? 7 : 4; 
+        const baseRadius = isFeatured ? 8 : 5; 
         const t = Date.now() / 1000;
         const breathe = Math.sin(t * (isFeatured ? 3 : 2)) * (isFeatured ? 1.2 : 0.5);
-        const radius = (isHovered ? baseRadius * 1.3 : baseRadius) + breathe;
+        const radius = (isHovered ? baseRadius * 1.4 : baseRadius) + breathe;
         
         ctx.save();
 
-        // 1. АНИМИРОВАННАЯ АУРА
+        // 1. АУРА
         const pulse = (Date.now() / (isFeatured ? 800 : 1200)) % 1;
         ctx.beginPath();
         ctx.arc(node.x, node.y, radius + (pulse * (isFeatured ? 12 : 6)), 0, 2 * Math.PI);
-        
-        // Для Trafflow используем красный акцент, для остальных — белый
         const auraColor = isFeatured ? '155, 17, 30' : '255, 255, 255';
-        ctx.strokeStyle = `rgba(${auraColor}, ${0.4 * (1 - pulse)})`;
-        ctx.lineWidth = (isFeatured ? 1.5 : 0.5) / globalScale;
+        ctx.strokeStyle = `rgba(${auraColor}, ${0.3 * (1 - pulse)})`;
+        ctx.lineWidth = 1 / globalScale;
         ctx.stroke();
 
-        // 2. ТЕЛО УЗЛА (Glass style)
+        // 2. КРУГЛОЕ ТЕЛО (Черная подложка, чтобы картинка не просвечивала)
         ctx.beginPath();
         ctx.arc(node.x, node.y, radius, 0, 2 * Math.PI);
-        
-        if (isFeatured) {
-            // Trafflow: Красный светящийся центр
-            ctx.shadowBlur = isHovered ? 25 : 15;
-            ctx.shadowColor = "#9b111e";
-            ctx.fillStyle = isHovered ? "#ff1a2d" : "#9b111e";
-            ctx.fill();
-            // Тонкий белый ободок для контраста
-            ctx.strokeStyle = "rgba(255,255,255,0.8)";
-            ctx.lineWidth = 1 / globalScale;
-            ctx.stroke();
-        } else if (isHovered) {
-            // Обычный узел при наведении: Белый глянец
-            ctx.shadowBlur = 15;
-            ctx.shadowColor = "#ffffff";
-            ctx.fillStyle = "#ffffff";
-            ctx.fill();
-        } else {
-            // Обычный узел в покое: Прозрачный с бортом
-            ctx.strokeStyle = "rgba(255, 255, 255, 0.8)";
-            ctx.lineWidth = 1.2 / globalScale;
-            ctx.stroke();
-            ctx.fillStyle = "rgba(0,0,0,0.8)";
-            ctx.fill();
+        ctx.fillStyle = '#000';
+        ctx.fill();
+
+        // 3. РИСУЕМ КАРТИНКУ (Безопасный метод через паттерн или обрезку)
+        const img = imgCache[node.id];
+        if (img && img.complete && img.width > 0) {
+            ctx.save();
+            ctx.beginPath();
+            ctx.arc(node.x, node.y, radius, 0, 2 * Math.PI);
+            ctx.clip(); // Используем только здесь и сразу закрываем
+            ctx.drawImage(img, node.x - radius, node.y - radius, radius * 2, radius * 2);
+            ctx.restore();
         }
 
-        // 3. ПОДПИСЬ (Glassmorphism Label)
-        const fontSize = (isFeatured ? 13 : 11) / globalScale;
+        // 4. ОБОДОК (Свечение поверх картинки)
+        ctx.beginPath();
+        ctx.arc(node.x, node.y, radius, 0, 2 * Math.PI);
+        if (isFeatured) {
+            ctx.strokeStyle = isHovered ? "#ff1a2d" : "#9b111e";
+            ctx.shadowBlur = 10;
+            ctx.shadowColor = "#9b111e";
+        } else {
+            ctx.strokeStyle = isHovered ? "#fff" : "rgba(255,255,255,0.6)";
+        }
+        ctx.lineWidth = (isFeatured ? 2 : 1) / globalScale;
+        ctx.stroke();
+
+        // 5. ТЕКСТ (Сдвинут чуть ниже, чтобы не слипаться)
+        const fontSize = (isFeatured ? 12 : 10) / globalScale;
         ctx.font = `${isFeatured ? 'bold' : 'normal'} ${fontSize}px 'JetBrains Mono'`;
-        
-        const textY = node.y + radius + (14 / globalScale);
-        const textWidth = ctx.measureText(label).width;
-        const padding = 4 / globalScale;
-
-        // Подложка текста
-        ctx.fillStyle = isFeatured ? "rgba(155, 17, 30, 0.15)" : (isHovered ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.5)");
-        ctx.fillRect(
-            node.x - (textWidth/2) - padding, 
-            textY - (fontSize/2) - padding/2, 
-            textWidth + padding*2, 
-            fontSize + padding
-        );
-
-        // Текст
-        ctx.fillStyle = (isFeatured || isHovered) ? "#ffffff" : "rgba(255, 255, 255, 0.7)";
         ctx.textAlign = 'center';
-        ctx.fillText(label, node.x, textY + (fontSize/2.5));
+        ctx.fillStyle = (isFeatured || isHovered) ? "#ffffff" : "rgba(255, 255, 255, 0.7)";
+        
+        // Рисуем текст капсом
+        ctx.fillText(label.toUpperCase(), node.x, node.y + radius + (15 / globalScale));
         
         ctx.restore();
     })
