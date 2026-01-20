@@ -195,15 +195,28 @@ const Graph = ForceGraph()(graphDiv)
         ctx.arc(node.x, node.y, radius, 0, 2 * Math.PI);
         ctx.fillStyle = '#000';
         ctx.fill();
+        
 
-        // 3. РИСУЕМ КАРТИНКУ (Безопасный метод через паттерн или обрезку)
+        // 3. РИСУЕМ КАРТИНКУ С БЛЮРОМ
         const img = imgCache[node.id];
         if (img && img.complete && img.width > 0) {
             ctx.save();
+            
+            // 1. Создаем маску-круг
             ctx.beginPath();
             ctx.arc(node.x, node.y, radius, 0, 2 * Math.PI);
-            ctx.clip(); // Используем только здесь и сразу закрываем
-            ctx.drawImage(img, node.x - radius, node.y - radius, radius * 2, radius * 2);
+            ctx.clip(); 
+
+            // 2. ВКЛЮЧАЕМ БЛЮР
+            // Если узел не в фокусе — блюрим картинку, если наведен — делаем четче
+            ctx.filter = isHovered ? 'blur(0px)' : 'blur(1px)'; 
+            
+            // 3. Рисуем саму картинку
+            const d = radius * 2;
+            ctx.drawImage(img, node.x - radius, node.y - radius, d, d);
+            
+            // 4. СБРАСЫВАЕМ ВСЁ
+            ctx.filter = 'none';
             ctx.restore();
         }
 
