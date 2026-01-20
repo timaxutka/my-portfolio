@@ -23,6 +23,7 @@ window.myData = {
         // --- КЛАСТЕР: ВЕБ-ПРИЛОЖЕНИЯ (SAAS) ---
         { 
             id: 3, name: "Trafflow", date: "2024", 
+            featured: true, // Метка для выделения
             img: "assets/media/projects/trafflow.webp",
             product: "SaaS Platform", role: "Lead UX/UI Designer", timeline: "2 Months",
             problem: "Сложный порог входа для байеров; перегруженные интерфейсы аналитики замедляли работу.", 

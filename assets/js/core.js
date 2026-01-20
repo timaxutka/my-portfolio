@@ -172,53 +172,79 @@ const Graph = ForceGraph()(graphDiv)
     .nodeCanvasObject((node, ctx, globalScale) => {
         const label = node.name;
         const isHovered = mousePos.x !== null && Math.sqrt(Math.pow(node.x - mousePos.x, 2) + Math.pow(node.y - mousePos.y, 2)) < 15;
-        const baseRadius = 4;
+        
+        // Проверяем, является ли проект топовым (добавь featured: true в data.js для Trafflow)
+        const isFeatured = node.featured === true;
+        
+        // Параметры геометрии
+        const baseRadius = isFeatured ? 7 : 4; 
         const t = Date.now() / 1000;
-        const breathe = Math.sin(t * 2) * 0.5;
-        const radius = (isHovered ? baseRadius * 1.2 : baseRadius) + breathe;
-        const fontSize = 11 / globalScale;
-
+        const breathe = Math.sin(t * (isFeatured ? 3 : 2)) * (isFeatured ? 1.2 : 0.5);
+        const radius = (isHovered ? baseRadius * 1.3 : baseRadius) + breathe;
+        
         ctx.save();
 
-        // Аура
-        if (!isHovered) {
-            const pulse = (Date.now() / 1000) % 1;
-            ctx.beginPath();
-            ctx.arc(node.x, node.y, radius + (pulse * 6), 0, 2 * Math.PI);
-            ctx.strokeStyle = `rgba(255, 255, 255, ${0.3 * (1 - pulse)})`;
-            ctx.lineWidth = 0.5 / globalScale;
-            ctx.stroke();
-        }
+        // 1. АНИМИРОВАННАЯ АУРА
+        const pulse = (Date.now() / (isFeatured ? 800 : 1200)) % 1;
+        ctx.beginPath();
+        ctx.arc(node.x, node.y, radius + (pulse * (isFeatured ? 12 : 6)), 0, 2 * Math.PI);
+        
+        // Для Trafflow используем красный акцент, для остальных — белый
+        const auraColor = isFeatured ? '155, 17, 30' : '255, 255, 255';
+        ctx.strokeStyle = `rgba(${auraColor}, ${0.4 * (1 - pulse)})`;
+        ctx.lineWidth = (isFeatured ? 1.5 : 0.5) / globalScale;
+        ctx.stroke();
 
-        // Тело узла (Glass style)
+        // 2. ТЕЛО УЗЛА (Glass style)
         ctx.beginPath();
         ctx.arc(node.x, node.y, radius, 0, 2 * Math.PI);
-        if (isHovered) {
+        
+        if (isFeatured) {
+            // Trafflow: Красный светящийся центр
+            ctx.shadowBlur = isHovered ? 25 : 15;
+            ctx.shadowColor = "#9b111e";
+            ctx.fillStyle = isHovered ? "#ff1a2d" : "#9b111e";
+            ctx.fill();
+            // Тонкий белый ободок для контраста
+            ctx.strokeStyle = "rgba(255,255,255,0.8)";
+            ctx.lineWidth = 1 / globalScale;
+            ctx.stroke();
+        } else if (isHovered) {
+            // Обычный узел при наведении: Белый глянец
             ctx.shadowBlur = 15;
             ctx.shadowColor = "#ffffff";
             ctx.fillStyle = "#ffffff";
             ctx.fill();
         } else {
-            ctx.strokeStyle = "#ffffff";
+            // Обычный узел в покое: Прозрачный с бортом
+            ctx.strokeStyle = "rgba(255, 255, 255, 0.8)";
             ctx.lineWidth = 1.2 / globalScale;
             ctx.stroke();
             ctx.fillStyle = "rgba(0,0,0,0.8)";
             ctx.fill();
         }
 
-        // --- GLASSMORPHISM LABEL ---
-        const textY = node.y + radius + (14 / globalScale);
+        // 3. ПОДПИСЬ (Glassmorphism Label)
+        const fontSize = (isFeatured ? 13 : 11) / globalScale;
+        ctx.font = `${isFeatured ? 'bold' : 'normal'} ${fontSize}px 'JetBrains Mono'`;
         
-        // Рисуем подложку текста (размытый фон)
-        ctx.font = `${fontSize}px 'JetBrains Mono'`;
+        const textY = node.y + radius + (14 / globalScale);
         const textWidth = ctx.measureText(label).width;
-        ctx.fillStyle = isHovered ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.4)";
-        ctx.fillRect(node.x - (textWidth/2) - 4, textY - (fontSize/2) - 2, textWidth + 8, fontSize + 4);
+        const padding = 4 / globalScale;
 
-        // Сам текст
-        ctx.fillStyle = isHovered ? "#ffffff" : "rgba(255, 255, 255, 0.6)";
+        // Подложка текста
+        ctx.fillStyle = isFeatured ? "rgba(155, 17, 30, 0.15)" : (isHovered ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.5)");
+        ctx.fillRect(
+            node.x - (textWidth/2) - padding, 
+            textY - (fontSize/2) - padding/2, 
+            textWidth + padding*2, 
+            fontSize + padding
+        );
+
+        // Текст
+        ctx.fillStyle = (isFeatured || isHovered) ? "#ffffff" : "rgba(255, 255, 255, 0.7)";
         ctx.textAlign = 'center';
-        ctx.fillText(label, node.x, textY + 4);
+        ctx.fillText(label, node.x, textY + (fontSize/2.5));
         
         ctx.restore();
     })
